@@ -67,7 +67,7 @@ ReadTogether的检索统计子系统中，设置了多种搜索方法，用户�
 UML设计图
 ---------
 
-![image](ReadTogetherSys.jpg)
+![ReadTogetherSys.jpg](https://git.net9.org/markasread/readtogether/raw/master/docs/ReadTogetherSys.jpg)
 
 注：上图标明了用户与管理员分别与各子系统的关系。
 
@@ -268,7 +268,7 @@ API设置登陆验证码，并且在用户忘记密码后，由于注册时已�
 逻辑UML图
 ---------
 
-![image](UserSystem.jpg)
+![UserSystem.jpg](https://git.net9.org/markasread/readtogether/raw/master/docs/UserSystem.jpg)
 
 注：上图体现了图书馆的基本功能需求，其中实线箭头代表操作，虚线箭头为包含关系。
 
