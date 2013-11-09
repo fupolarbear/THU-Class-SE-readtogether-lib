@@ -1,0 +1,23 @@
+body {
+  padding-top: 50px;
+}
+
+/*
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+*/
+
+
+/*
+.panel-body .btn:not(.btn-block){ width:120px;margin-bottom:10px; }
+*/
+
+.show_grid {
+	margin-bottom: 15px;
+}
+
+.show_grid [class^="col-"] {
+  padding: 8px 8px 8px 8px;
+}
