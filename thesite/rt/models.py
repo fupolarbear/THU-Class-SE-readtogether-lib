@@ -27,16 +27,16 @@ class Book(models.Model):
         return self.name_cn+" "+self.author+": "+str(self.duartion)
 
 
-class BookCopy(models.Models):
+class BookCopy(models.Model):
     status_choice = (
         (0, 'ready'),
         (1, 'unreturned'),
-        (2, 'over time')
+        (2, 'over time'),
         (3, 'arranging'),
         (4, 'off shelf')
     )
     status = models.IntegerField(choices=status_choice)
-    book = models.ForeignKey(BookCopy)
+    book = models.ForeignKey(Book)
     reborrow_time = models.SmallIntegerField(default=0)
 
 
