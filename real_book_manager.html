@@ -109,7 +109,7 @@
 
 		<!-- Tab panes -->
 		<div class="tab-content">
-		  <div class="tab-pane fade" id="borrowing">
+		  <div class="tab-pane fade in active" id="borrowing">
 				<div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading"><span class="glyphicon glyphicon-eye-open"></span> 选择用户</div>
@@ -412,7 +412,9 @@
 			
 			<div class="panel panel-default">
 				  <!-- Default panel contents -->
-				  <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span> 待添加的书籍一览</div>
+				  <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span> 待添加的书籍一览
+				  <span class="label label-info"  style="float:right;">12 件</span>
+				  </div>
 				  <!--
 				  <div class="panel-body">
 					<div class="alert alert-info">...</div>
@@ -466,7 +468,7 @@
 		  
 		  <!-- 下面是addnewbook -->
 		  
-		  <div class="tab-pane fade in active" id="editabook">
+		  <div class="tab-pane fade" id="editabook">
 			 <div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
@@ -581,6 +583,12 @@
 					  </tbody>
 				  </table>
 				  </div>
+				  <div class="panel-footer">
+						<div class="row">
+							<button class="btn btn-lg btn-info col-md-8 col-md-offset-2" type="submit">
+						完成修改上述书籍</button>
+						</div>
+				  </div>
 				</div>			 
 		  </div>
 		  
@@ -589,9 +597,79 @@
 		  <div class="tab-pane fade" id="deloldbook">
 				<div class="panel panel-default">
 				  <!-- Default panel contents -->
-				  <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span> 用户 yoyo 的借阅历史</div>
+				  <div class="panel-heading">
+					<span class="glyphicon glyphicon-import"></span> 选择待删除书籍
+					<span class="label label-warning"  style="float:right;">22 件</span>
+				  </div>
 				  <div class="panel-body">
-					当前预约 <strong>6</strong> 本。最近一本可于 <strong>2013-11-19</strong> 来图书馆取.
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 input-group">
+						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
+						  <span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="magic">选择</button>
+						  </span>
+						</div><!-- /input-group -->
+					</div>
+				  </div>
+				  
+				  <!-- Table -->
+				  <div class="table-responsive" id="usertable">
+				  <table class="table table-hover "> <!-- table-bordered? -->
+					   <thead>
+						<tr>
+						  <th>#</th>
+						  <th>ID</th>
+						  <th>姓名</th>
+						  <th>邮箱</th>
+						  <th>借书权限</th>
+						  <th>选择用户</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <td>1</td>
+						  <td>Mark</td>
+						  <td>Otto</td>
+						  <td>@mdo</td>
+						  <td>@mdo</td>
+						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
+						</tr>
+						<tr class="danger">
+						  <td>2</td>
+						  <td>Jacob</td>
+						  <td>Thornton</td>
+						  <td>@fat</td>
+						  <td>@mdo</td>
+						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
+						</tr>
+						<tr>
+						  <td>3</td>
+						  <td>Larry</td>
+						  <td>the Bird</td>
+						  <td>@twitter</td>
+						  <td>@mdo</td>
+						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
+						</tr>
+					  </tbody>
+				  </table>
+				  </div>
+				</div>
+				
+				<div class="panel panel-default">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading">
+					<span class="glyphicon glyphicon-saved"></span> 待确认删除的书籍
+					<span class="label label-info"  style="float:right;">12 件</span>
+				  </div>
+				  <div class="panel-body">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 input-group">
+						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
+						  <span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="magic">选择</button>
+						  </span>
+						</div><!-- /input-group -->
+					</div>
 				  </div>
 
 				  <!-- Table -->
@@ -614,7 +692,7 @@
 						  <td>@mdo</td>
 						  <td>@mdo</td>
 						</tr>
-						<tr class="success">
+						<tr>
 						  <td>2</td>
 						  <td>Jacob</td>
 						  <td>Thornton</td>
@@ -631,7 +709,13 @@
 					  </tbody>
 				  </table>
 				  </div>
-				</div>
+				  <div class="panel-footer">
+						<div class="row">
+							<button class="btn btn-lg btn-info col-md-8 col-md-offset-2" type="submit">
+						完成下架上述书籍</button>
+						</div>
+				  </div>
+				</div>	
 		  </div>
 	</div>
 	
