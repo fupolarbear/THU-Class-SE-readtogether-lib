@@ -9,10 +9,50 @@ body {
 }
 */
 
+/*
+.row.book-info {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+*/
 
 /*
 .panel-body .btn:not(.btn-block){ width:120px;margin-bottom:10px; }
 */
+.book-info {
+	margin-bottom: 20px;
+}
+
+.book-info .displayk {
+	color: #666;
+}
+
+.book-info .displayv {
+	
+}
+
+.rate-star-panel .big-star {
+	margin-bottom: 6px;
+	font-size: 17px;
+}
+
+.rate-star-panel .big-star .rate-score {
+	color: #FF4500;
+}
+
+.rate-star-panel .glyphicon.glyphicon-star {
+	color: #FF4500;
+}
+
+.rate-star-panel .glyphicon.glyphicon-star-empty {
+	color: #D3D3D3;
+}
+
+.rate-star-panel .glyphicon.rate-bar {
+	height:14px;
+	background-color:#f5cbad;
+}
 
 .show_grid {
 	margin-bottom: 15px;
