@@ -1,7 +1,8 @@
 from django.db import models
 import datetime
 from django.utils import timezone
-
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth import authenticate
 # Create your models here.
 
 
@@ -56,3 +57,42 @@ class Borrowing(models.Model):
 
     def date_expired(self):
         return date_borrowing + datetime.timedelta(days=book.duartion)
+
+
+class MyUser(models.Model):
+    user = models.OneToOneField(User)
+    name = models.CharField(max_length=100)
+    group_list = ['NormalUser', 'AdvancedUser', 'Blacklist', 'Admin']  # guest
+    permission_list = ['can_search', 'can_comment', 'can_manage']
+    """
+    'can_manage' includes ('can_midify_book', 'can_change_perm',
+    'can_generate_tempuser', 'can_manage_blacklist', 'can_delete_user')
+    """
+
+    def register(self, username, password, email, name, group):
+        '''
+            >>> myuser = MyUser()
+            >>> myuser.register(username, password, email, name, group)
+        '''
+        self.user = User.objects.create_user(username, email, password)
+        self.name = name
+        if group in self.group_list:
+            self.set_group(group)
+        else:
+            raise TypeError() 
+        self.save()
+
+    def set_group(self, group):
+        g = Group.objects.get(name=group)
+        self.user.groups = [g]
+        self.user.save()
+
+    def get_group(self):
+        return self.user.groups.all()
+
+    def delete():
+        user.delete()
+        self.delete()
+
+    def __unicode__(self):
+        return self.name
