@@ -69,17 +69,20 @@ class MyUser(models.Model):
     'can_generate_tempuser', 'can_manage_blacklist', 'can_delete_user')
     """
 
-    def register(self, username, password, email, name, group):
+    def register(self, username, password, email, name, group='NormalUser'):
         '''
             >>> myuser = MyUser()
             >>> myuser.register(username, password, email, name, group)
         '''
-        self.user = User.objects.create_user(username, email, password)
+        u = User(username=username, email=email, password=password)
+        u.save()
+        self.user = u
         self.name = name
         if group in self.group_list:
             self.set_group(group)
         else:
-            raise TypeError() 
+            raise TypeError()
+        self.user.save()
         self.save()
 
     def set_group(self, group):
@@ -90,9 +93,12 @@ class MyUser(models.Model):
     def get_group(self):
         return self.user.groups.all()
 
-    def delete():
-        user.delete()
-        self.delete()
+    def delete(self):
+        self.user.delete()
+        super(MyUser, self).delete()
+
+    def has_perm(self, str):
+        return self.user.has_perm('rt.'+str)
 
     def __unicode__(self):
         return self.name
