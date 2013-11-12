@@ -6,6 +6,10 @@
 
 下周一（11-18）展示~ 大家加油么么哒o(*￣3￣)o 
 
+咦，不行！我要PUSH你们文档菌…
+
+## <span style="color:red">喂喂喂文档菌你们可以准备下周一的展示了= =！</span>
+
 ## 1. Wiki
 
 [请移步Wiki页面;-)](https://git.net9.org/markasread/readtogether/wikis/home)
@@ -25,4 +29,6 @@ They all come from CST-14.
 
 -------------
 
-_DO NOT PANIC ;-)_ _（纯吐槽）你们文档菌快去学写markdown吧多有趣=w=_
+_DO NOT PANIC ;-)_ 
+
+by _yoyo_. _<span style="background-color:black;" title="你知道的太多了">（纯吐槽）你们文档菌快去学写markdown吧多有趣=w=</span>_
