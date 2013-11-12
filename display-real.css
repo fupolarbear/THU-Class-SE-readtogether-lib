@@ -21,7 +21,7 @@ body {
 .panel-body .btn:not(.btn-block){ width:120px;margin-bottom:10px; }
 */
 .book-info {
-	margin-bottom: 20px;
+	margin-bottom: 3px;
 }
 
 .book-info .displayk {
@@ -30,6 +30,10 @@ body {
 
 .book-info .displayv {
 	
+}
+
+.media-list.signle-item {
+	margin-bottom: 0px;
 }
 
 .rate-star-panel .big-star {

@@ -60,16 +60,21 @@
 	</div><!-- /.container -->
 	
 	<div class="container">
+	  <!-- <h3>Harry Potter - The Philosopher Stone</h3> -->
 	  <div class="panel panel-default">
 		  <div class="panel-heading">
-			<h3 class="panel-title"><strong>Harry Potter - The Philosopher Stone</strong></h3>
+			<span class="glyphicon glyphicon-book"></span>
+			<strong>Harry Potter - The Philosopher Stone</strong>
+			<button type="button" class="btn btn-default btn-xs" style="float:right;">我要纠错</button>
 		  </div>
 		  <div class="panel-body">
-			<ul class="media-list">
+			<ul class="media-list signle-item">
 			  <li class="media">
-				<a class="pull-left" href="#">
-				  <img class="media-object" src="http://placekitten.com/90/130" alt="...">
-				</a>
+				<div class="pull-left">
+					<a  href="#">
+					  <img class="media-object" src="http://placekitten.com/90/130" alt="...">
+					</a>
+				</div>
 				<div class="media-body">
 				  <!-- <h4 class="media-heading">Media heading</h4> -->
 				  <div class="row">
@@ -82,7 +87,7 @@
 							<span class="displayv"><a href="...">机械工业出版社</a></span>
 							<br>
 							<span class="displayk">副标题:</span>
-							<span class="displayv">Use this document as a way to quickly start any new project. All you get is this text and a mostly barebones HTML document.</span>
+							<span class="displayv">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</span>
 							<br>
 							<span class="displayk">译者:</span>
 							<span class="displayv"><a href="...">梁小明</a></span>
@@ -144,15 +149,19 @@
 								<span class="glyphicon rate-bar" style="width:1px;"></span>
 								<span class="rate-per">1.0%</span>
 							</li>
+							
+							
 						</ul>
 						</div>
 						</div>
 						
+						<!--
 						<div class="panel panel-default">
 						<div class="panel-body">
-						
+							<button type="button" class="btn btn-default btn-xs">预约</button>
 						</div>
 						</div>
+						-->
 					</div>
 				  </div>
 				</div>
@@ -163,64 +172,51 @@
 	</div>
 	
 	<div class="container">
-	  
-	  <div class="starter-template">
-		<h3>Harry Potter - The Philosopher Stone</h3>
-		<!-- <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p> -->
-	  </div>
-	  
-	  <ul class="media-list">
-		  <li class="media">
-			<a class="pull-left" href="#">
-			  <img class="media-object" src="http://placekitten.com/90/130" alt="...">
-			</a>
-			<div class="media-body">
-			  <!-- <h4 class="media-heading">Media heading</h4> -->
-			  <div class="meow">
-					<span class="displayk">作者:</span>
-					<span class="displayv">梁小明</span>
-					<br>
-					<span class="displayk">出版社:</span>
-					<span class="displayv">机械工业出版社</span>
-					<br>
-					<span class="displayk">副标题:</span>
-					<span class="displayv">喵喵</span>
-					<br>
-					<span class="displayk">译者:</span>
-					<span class="displayv">梁小明</span>
-					<br>
-					<span class="displayk">出版年:</span>
-					<span class="displayv">2005-11-10</span>
-					<br>
-					<span class="displayk">页数:</span>
-					<span class="displayv">1001</span>
-					<br>
-					<span class="displayk">定价:</span>
-					<span class="displayv">49.00元</span>
-					<br>
-					<span class="displayk">版次:</span>
-					<span class="displayv">第1版</span>
-					<br>
-					<span class="displayk">ISBN:</span>
-					<span class="displayv">梁小明</span>
-					<br>
+	    <div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading"><span class="glyphicon glyphicon-tasks"></span> 书籍状态</div>
+		  <div class="panel-body">
+			当前馆藏 <strong>3</strong> 本。有3本空闲中 or 最近即将到期的已借出的书时间为 <strong>2013-11-19</strong> .
+		  </div>
 
-							<div class="action">
-								<button type="button" class="btn btn-primary btn-xs" title="Edit">
-									<span class="glyphicon glyphicon-pencil"></span>
-								</button>
-								<button type="button" class="btn btn-success btn-xs" title="Approved">
-									<span class="glyphicon glyphicon-ok"></span>
-								</button>
-								<button type="button" class="btn btn-danger btn-xs" title="Delete">
-									<span class="glyphicon glyphicon-trash"></span>
-								</button>
-							</div>
-						</div>
-			</div>
-		  </li>
-		  
-	  </ul>
+		  <!-- Table -->
+		  <div class="table-responsive">
+		  <table class="table table-hover "> <!-- table-bordered? -->
+			   <thead>
+				<tr>
+				  <th>#</th>
+				  <th>馆藏地点</th>
+				  <th>索书号/卷次</th>
+				  <th>馆藏状态</th>
+				  <th>操作</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr class="default">
+				  <td>1231</td>
+				  <td>Mark</td>
+				  <td>Otto</td>
+				  <td>已借出（13-11-20 到期 +1 已预约）</td>
+				  <td><button type="button" class="btn btn-default btn-xs">预约</button></td>
+				</tr>
+				<tr class="success">
+				  <td>2S13</td>
+				  <td>Jacob</td>
+				  <td>Thornton</td>
+				  <td>在架上</td>
+				  <td><button type="button" class="btn btn-default btn-xs " disabled="disabled">在架上不可预约</button></td>
+				</tr>
+				<tr class="success">
+				  <td>123D</td>
+				  <td>Larry</td>
+				  <td>the Bird</td>
+				  <td>馆内阅览</td>
+				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">馆内不可预约</button></td>
+				</tr>
+			  </tbody>
+		  </table>
+		  </div>
+		</div>
 	</div><!-- /.container -->
 	
 	
@@ -228,7 +224,7 @@
 		<div class="panel panel-default comment-widget">
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-comment"></span> 书评
-			<span class="label label-info">78</span>
+			<span class="label label-info" style="float:right;">78</span>
 		</div>
 		<div class="panel-body">
 			<ul class="list-group">
