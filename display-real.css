@@ -58,6 +58,13 @@ body {
 	background-color:#f5cbad;
 }
 
+
+
+#makemycomment .modal-footer {
+	margin-top: 0px;
+}
+
+
 .show_grid {
 	margin-bottom: 15px;
 }

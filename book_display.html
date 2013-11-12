@@ -224,10 +224,11 @@
 		<div class="panel panel-default comment-widget">
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-comment"></span> 书评
-			<span class="label label-info" style="float:right;">78</span>
+			<span class="label label-info" >78 条</span>
+			<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
 		</div>
 		<div class="panel-body">
-			<ul class="list-group">
+			<ul class="list-group" id="comment-group">
 				<li class="list-group-item">
 					<div class="row">
 						<div class="col-xs-2 col-md-1">
@@ -321,6 +322,70 @@
 	  </div>
 	  </div>
 	  
+	  
+	  <!-- Modal -->
+		<div class="modal fade" id="makemycomment" tabindex="-1" role="dialog" aria-labelledby="makemycomment-Label" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="makemycomment-Label"><span class="glyphicon glyphicon-pencil"></span> 撰写我的书评</h4>
+			  </div>
+			  <div class="modal-body">
+				
+				<form class="form-horizontal" role="form">
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-2 control-label">标题</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="inputTitle" placeholder="给评论取个标题吧=w=">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="inputRate" class="col-sm-2 control-label">评分</label>
+					<div class="col-sm-10">
+						<label class="radio-inline">
+						  <input type="radio" name="optionsRadios" id="inlineRadio5" value="rate5"> <span class="label label-danger">力荐</span>
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="optionsRadios" id="inlineRadio4" value="rate4"> <span class="label label-primary">推荐</span>
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="optionsRadios" id="inlineRadio3" value="rate3"><span class="label label-success">一般</span>
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="optionsRadios" id="inlineRadio2" value="rate2"> <span class="label label-warning">较差</span>
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="optionsRadios" id="inlineRadio1" value="rate1"> <span class="label label-default">糟糕</span>
+						</label>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="inputComment" class="col-sm-2 control-label">评论</label>
+					<div class="col-sm-10">
+					  <textarea class="form-control" rows="8" id="inputComment" placeholder="写点什么好呢…"></textarea>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					  <div class="checkbox">
+						<label>
+						  <input type="checkbox"> 有关键情节透露> <
+						</label>
+					  </div>
+					</div>
+				  </div>
+				</form>
+				
+			  </div>
+			  <div class="modal-footer">
+			  （不刷新页面内容是不会丢失的，可以回来继续编辑）
+				<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="tooltip" title="（不刷新页面内容是不会丢失的，可以回来继续编辑）">关闭</button>
+				<button type="button" class="btn btn-primary">好了，添加评论</button>
+			  </div>
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 	
 	<!-- Bootstrap core JavaScript
 	================================================== -->
