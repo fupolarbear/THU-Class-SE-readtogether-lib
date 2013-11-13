@@ -12,3 +12,7 @@ def info(request):
 
 def search(request):
     return render(request, 'rt/searchResult.html', {})
+
+
+def test(request):
+    return render(request, 'rt/test.html', {})
