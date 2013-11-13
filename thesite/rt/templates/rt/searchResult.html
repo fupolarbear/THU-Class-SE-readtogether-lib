@@ -49,60 +49,14 @@
           </tr>
         </thead>
         <tbody>
+          {% for item in result %}
           <tr>
-            <td>1</td>
-            <td>哈利波特与魔法石头</td>
-            <td>JK罗琳</td>
-            <td>2000</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ item.year }}</td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>哈利波特与密室</td>
-            <td>JK罗琳</td>
-            <td>2001</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>哈利波特与阿兹卡班的囚徒</td>
-            <td>JK罗琳</td>
-            <td>2002</td>
-          </tr>
-           <tr>
-            <td>4</td>
-            <td>哈利波特与火焰杯</td>
-            <td>JK罗琳</td>
-            <td>2003</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>哈利波特与凤凰社</td>
-            <td>JK罗琳</td>
-            <td>2004</td>
-          </tr>
-           <tr>
-            <td>6</td>
-            <td>哈利波特与混血王子</td>
-            <td>JK罗琳</td>
-            <td>2005</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>哈利波特与死亡圣器</td>
-            <td>JK罗琳</td>
-            <td>2006</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>哈利波特与软工作业</td>
-            <td>JK罗琳</td>
-            <td>2013</td>
-          </tr>
-           <tr>
-            <td>9</td>
-            <td>哈利波特与伏地魔不得不说的故事</td>
-            <td>JK罗琳</td>
-            <td>2013</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
