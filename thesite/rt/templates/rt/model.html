@@ -30,10 +30,10 @@
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">Username:</span>
               <input type="text" class="form-control" placeholder="Username">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
@@ -41,14 +41,13 @@
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">Password:</span>
               <input type="password" class="form-control" placeholder="Password">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
-       
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -57,7 +56,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -65,14 +63,14 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Sign in</h4>
       </div>
-     <div class="modal-body">
+      <div class="modal-body">
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">Username:</span>
               <input type="text" class="form-control" placeholder="Username">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
@@ -80,10 +78,10 @@
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">Password:</span>
               <input type="password" class="form-control" placeholder="Password">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
@@ -91,10 +89,10 @@
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">Input again</span>
               <input type="password" class="form-control" placeholder="Password">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
@@ -102,14 +100,13 @@
         <div class="row">
           <div class="col-xs-2"></div>
           <div class="col-xs-8">
-             <div class="input-group">
+            <div class="input-group">
               <span class="input-group-addon">E-mail:</span>
               <input type="password" class="form-control" placeholder="E-mail address">
-              </div>
+            </div>
           </div>
           <div class="col-xs-2"></div>
         </div>
-       
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -119,10 +116,9 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
     {% endblock modal %}
-  </head>
- 
+  </head> 
   <body>
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -166,34 +162,27 @@
         </li>
       </ul>
     </nav>
-</div>
+  </div>
 </header>
 {% block main %}
 <br><br><br>
- <div class="row">
- <div class="col-xs-1 "></div>
+<div class="row">
+  <div class="col-xs-1 "></div>
   <div class="col-xs-2 ">
-   <img src="{% static 'rt/img/logo.jpg' %}" class="img-responsive" alt="Responsive image">
+    <img src="{% static 'rt/img/logo.jpg' %}" class="img-responsive" alt="Responsive image">
   </div>
   <div class="col-xs-6 ">
-      <img src="{% static 'rt/img/read_together.jpg' %}" class="img-responsive" alt="Responsive image">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="which book do you want?">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Search</button>
-        </span>
-      </div><!-- /input-group -->
-    
-   
+    <img src="{% static 'rt/img/read_together.jpg' %}" class="img-responsive" alt="Responsive image">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="which book do you want?">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div><!-- /input-group -->
   </div>
   <div class="col-xs-3 "></div>
 </div>
-<br><br><br><br><br>
-
-
-
-
- 
+<br><br><br><br><br> 
 {% endblock main %}
   </body>
 </html>
