@@ -90,6 +90,9 @@ class MyUser(models.Model):
         self.user.groups = [g]
         self.user.save()
 
+    def get_group_name(self):
+        return self.user.groups.all()[0].name
+
     def get_group(self):
         return self.user.groups.all()
 
@@ -102,3 +105,15 @@ class MyUser(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Info(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.CharField(max_length=10000)
+    date = models.DateTimeField(auto_now=True)
+
+    def local_time(self):
+        return timezone.localtime(self.date)
+
+    def __unicode__(self):  # only for debug
+        return self.title+" "+str(self.date)
