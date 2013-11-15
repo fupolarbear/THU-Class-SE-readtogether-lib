@@ -41,7 +41,7 @@ def search(request):
 def book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
-    return render(request, 'rt/book.html', {
+    return render(request, 'rt/book-detail.html', {
         'book': book,
         'copy': copy,
         })
