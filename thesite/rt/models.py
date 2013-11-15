@@ -146,9 +146,10 @@ class Info(models.Model):
 
     @staticmethod
     def get_all(sp=None):
-        if (sp is None):
+        if sp is None:
             return Info.objects.all()
-        return Info.objects.filter(species=sp)
+        str2id = {sp_name: sp_id for sp_id, sp_name in Info.species_choice}
+        return Info.objects.filter(species=str2id[sp])
 
     def local_time(self):
         return timezone.localtime(self.date)
