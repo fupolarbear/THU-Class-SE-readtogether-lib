@@ -56,7 +56,7 @@ class Borrowing(models.Model):
     reborrow_time = models.SmallIntegerField(default=0)
 
     def date_expired(self):
-        return date_borrowing + datetime.timedelta(days=book.duartion)
+        return date_borrowing + datetime.timedelta(days=book_copy.book.duartion)
 
 
 class MyUser(models.Model):
@@ -100,8 +100,8 @@ class MyUser(models.Model):
         self.user.delete()
         super(MyUser, self).delete()
 
-    def has_perm(self, str):
-        return self.user.has_perm('rt.'+str)
+    def has_perm(self, perm):
+        return self.user.has_perm('rt.'+perm)
 
     def __unicode__(self):
         return self.name
