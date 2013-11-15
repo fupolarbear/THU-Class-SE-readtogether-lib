@@ -8,7 +8,7 @@ from django.db.models.query import QuerySet
 
 
 class Book(models.Model):
-    duartion = models.SmallIntegerField(default=0)  # It can only be 0, 7, 14
+    duartion = models.SmallIntegerField(default=14)  # It can only be 0, 7, 14
     name_cn = models.CharField(max_length=200, default="")
     author = models.CharField(max_length=300)  # separate by ","
     press = models.CharField(max_length=200)
