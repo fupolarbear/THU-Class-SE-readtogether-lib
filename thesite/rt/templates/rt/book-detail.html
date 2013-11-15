@@ -14,11 +14,12 @@
 {% endblock define_CSS %}
 
 {% block main %}
+
 	<div class="container">
 
 	  <div class="starter-template">
-		<h1> starter template</h1>
-		<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+		<h2>{{ book.simple_name }}<small> - {{ book.simple_version }}</small></h2>
+		<!-- <p class="lead"></p> -->
 	  </div>
 	
 	</div><!-- /.container -->
@@ -28,7 +29,7 @@
 	  <div class="panel panel-default">
 		  <div class="panel-heading">
 			<span class="glyphicon glyphicon-book"></span>
-			<strong>Harry Potter - The Philosopher Stone</strong>
+			<strong>书籍信息</strong>
 			<button type="button" class="btn btn-default btn-xs" style="float:right;">我要纠错</button>
 		  </div>
 		  <div class="panel-body">
@@ -44,32 +45,70 @@
 				  <div class="row">
 					<div class="col-md-8 col-sm-8 col-xs-12">
 						<div class="book-info">
-							<span class="displayk">作者:</span>
-							<span class="displayv"><a href="...">J.K R~</a></span>
+							{% if book.name_cn %}
+								<span class="displayk">标准名:</span>
+								<span class="displayv">{{ book.name_cn }}</a></span>
+								<br>
+							{% endif %}
+
+							{% if book.author %}
+								<span class="displayk">作者:</span>
+								<span class="displayv"><a href="...">{{ book.author }}</a></span>
+								<br>
+							{% endif %}							
+							
+							{% if book.press %}
+								<span class="displayk">出版社:</span>
+								<span class="displayv"><a href="...">{{ book.press }}</a></span>
 							<br>
-							<span class="displayk">出版社:</span>
-							<span class="displayv"><a href="...">机械工业出版社</a></span>
+							{% endif %}
+
+							{% if book.name_origin %}
+								<span class="displayk">外文原名:</span>
+								<span class="displayv">{{ book.name_origin }}</span>
 							<br>
-							<span class="displayk">副标题:</span>
-							<span class="displayv">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</span>
+							{% endif %}
+
+							{% if book.pub_year_origin %}
+							<span class="displayk">原版出版年:</span>
+							<span class="displayv">{{ book.pub_year_origin }}</span>
 							<br>
-							<span class="displayk">译者:</span>
-							<span class="displayv"><a href="...">梁小明</a></span>
+							{% endif %}
+
+							{% if book.revision_origin %}
+							<span class="displayk">原版版次:</span>
+							<span class="displayv">{{ book.revision_origin }}</span>
 							<br>
+							{% endif %}							
+							
+							{% if book.translator %}
+								<span class="displayk">译者:</span>
+								<span class="displayv"><a href="...">{{ book.translator }}</a></span>
+							<br>
+							{% endif %}
+							
+							{% if book.pub_year %}
 							<span class="displayk">出版年:</span>
-							<span class="displayv">2005-11-10</span>
+							<span class="displayv">{{ book.pub_year }}</span>
 							<br>
-							<span class="displayk">页数:</span>
-							<span class="displayv">1001</span>
-							<br>
-							<span class="displayk">定价:</span>
-							<span class="displayv">49.00元</span>
-							<br>
+							{% endif %}
+
+							{% if book.revision %}
 							<span class="displayk">版次:</span>
-							<span class="displayv">第1版</span>
+							<span class="displayv">第 {{ book.revision }} 版</span>
 							<br>
+							{% endif %}
+
+							{% if book.type %}
+							<span class="displayk">书籍分类:</span>
+							<span class="displayv">{{ book.type }}</span>
+							<br>
+							{% endif %}							
+
+							{% if book.ISBN %}
 							<span class="displayk">ISBN:</span>
-							<span class="displayv">9823786482873</span>
+							<span class="displayv">{{ book.ISBN }}</span>
+							{% endif %}
 						</div>
 						<!--
 						<div class="book-info-edit">
@@ -140,7 +179,9 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading"><span class="glyphicon glyphicon-tasks"></span> 书籍状态</div>
 		  <div class="panel-body">
-			当前馆藏 <strong>3</strong> 本。有3本空闲中 or 最近即将到期的已借出的书时间为 <strong>2013-11-19</strong> .
+		  	{% if copy and copy|length > 0%}
+			
+			当前馆藏 <strong>{{ copy|length }}</strong> 本。有 <strong>3</strong> 本空闲中 or 最近即将到期的已借出的书时间为 <strong>2013-11-19</strong> .
 		  </div>
 
 		  <!-- Table -->
@@ -179,7 +220,13 @@
 				</tr>
 			  </tbody>
 		  </table>
-		  </div>
+		  </div> <!-- end of table -->
+
+		{% else %}
+			噢哟，该书暂无馆藏。您可以前往相关页面填写表单或者联系管理员申请购买该图书;-)
+			</div> <!-- end of head -->
+		{% endif %}
+
 		</div>
 	</div><!-- /.container -->
 	
