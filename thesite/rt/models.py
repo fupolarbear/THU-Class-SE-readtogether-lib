@@ -52,7 +52,7 @@ class BookCopy(models.Model):
         (3, 'arranging'),
         (4, 'off shelf')
     )
-    status = models.IntegerField(choices=status_choice)
+    status = models.IntegerField(choices=status_choice, default=0)
     book = models.ForeignKey(Book)
     reborrow_time = models.SmallIntegerField(default=0)
 
@@ -124,9 +124,20 @@ class MyUser(models.Model):
 
 
 class Info(models.Model):
+    species_choice = (
+        (0, 'news'),
+        (1, 'guide'),
+    )
     title = models.CharField(max_length=200)
     content = models.CharField(max_length=10000)
     date = models.DateTimeField(auto_now=True)
+    species = models.IntegerField(choices=species_choice, default=0)
+
+    @staticmethod
+    def get_all(sp=None):
+        if (sp is None):
+            return Info.objects.all()
+        return Info.objects.filter(species=sp)
 
     def local_time(self):
         return timezone.localtime(self.date)
