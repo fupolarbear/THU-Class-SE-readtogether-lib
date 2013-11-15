@@ -77,6 +77,19 @@ class MyUser(models.Model):
     'can_manage' includes ('can_midify_book', 'can_change_perm',
     'can_generate_tempuser', 'can_manage_blacklist', 'can_delete_user')
     """
+    permission_num_list = [
+        'borrowing_num', 'borrowing_coefficient', 'queue_book_num'
+        ]
+    def _permission_num_generate(self, *args):
+        return dict(zip(self.permission_num_list, args))
+
+    def __init__(self):
+        self.permission_num = {
+            'NormalUser': self._permission_num_generate(10, 1, 1),
+            'AdvancedUser': self._permission_num_generate(20, 2, 3),
+            'Blacklist': self._permission_num_generate(0, 0, 0),
+            'Admin': self._permission_num_generate(0, 0, 0),
+            }
 
     def register(self, username, password, email, name, group='NormalUser'):
         '''
@@ -111,6 +124,9 @@ class MyUser(models.Model):
 
     def has_perm(self, perm):
         return self.user.has_perm('rt.'+perm)
+
+    def get_perm(self, perm):
+        return (self.permission_num[self.get_group_name()])[perm]
 
     def __unicode__(self):
         return self.name
