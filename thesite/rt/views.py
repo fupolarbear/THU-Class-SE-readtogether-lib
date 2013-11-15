@@ -1,18 +1,52 @@
-# encoding: utf-8
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
 
+PInfo = ['title', 'pub', 'id']
+PBook = ['simple_name', 'author', 'simple_version', 'id']
+PCopy = ['status', 'id']
+
+
 def index(request):
-    rank = [
-        ('Mark', 'Otto', '@mdo'),
-        ('Jacob', 'Thornton', '@fat'),
-        ('Larry', 'the Bird', '@twitter'),
-        ]
     return render(request, 'rt/index.html', {
-        'top10': rank,
-        'information': rank,
-        'help': rank,
+        'rank': [],
+        'news': [
+            FC(PInfo, 'Title of news 1', datetime(2013, 11, 15), 12),
+            FC(PInfo, 'Title of news 2', datetime(2012, 2, 29), 7),
+            ],
+        'guide': [
+            FC(PInfo, 'Title of guide 1', datetime(2010, 1, 1), 25),
+            ],
+        })
+
+
+def search(request):
+    return render(request, 'rt/searchResult.html', {
+        'q': 'Bible',
+        'result': [
+            FC(PBook, 'Title of book 1', 'Author 1', 'Ver 1.0', 123),
+            FC(PBook, 'Title of book 2', 'Author 1', '2013', 12),
+            FC(PBook, 'Title of book 3', 'Author 2', 'Ver 1.0', 13),
+            FC(PBook, 'Title of book 1', 'Author 1', 'Ver 1.1', 17),
+            ],
+        })
+
+
+def book(request, book_id):
+    return render(request, 'rt/book.html', {
+        'book': FC(
+            PBook,
+            'Title of book %s' % book_id,
+            'Author of book %s' % book_id,
+            'Version ???',
+            int(book_id),
+            ),
+        'copy': [
+            FC(PCopy, 0, 1212),
+            FC(PCopy, 1, 2213),
+            ],
         })
 
 
@@ -98,23 +132,6 @@ def info(request):
                 occaecat craft beer farm-to-table, raw denim aesthetic synth
                 nesciunt you probably haven't heard of them accusamus labore
                 sustainable VHS.'''),
-            ],
-        })
-
-
-def search(request):
-    Book = ['title', 'author', 'year']
-    return render(request, 'rt/searchResult.html', {
-        'result': [
-            FC(Book, '哈利波特与魔法石头', 'JK罗琳', '2000'),
-            FC(Book, '哈利波特与密室', 'JK罗琳', '2001'),
-            FC(Book, '哈利波特与阿兹卡班的囚徒', 'JK罗琳', '2002'),
-            FC(Book, '哈利波特与火焰杯', 'JK罗琳', '2003'),
-            FC(Book, '哈利波特与凤凰社', 'JK罗琳', '2004'),
-            FC(Book, '哈利波特与混血王子', 'JK罗琳', '2005'),
-            FC(Book, '哈利波特与死亡圣器', 'JK罗琳', '2006'),
-            FC(Book, '哈利波特与软工作业', 'JK罗琳', '2013'),
-            FC(Book, '哈利波特与伏地魔不得不说的故事', 'JK罗琳', '2013'),
             ],
         })
 
