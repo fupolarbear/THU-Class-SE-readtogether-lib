@@ -46,7 +46,7 @@ class Book(models.Model):
             self.revision_origin, self.pub_year_origin,
             )
 
-    def __unicode__(self):  # only for debbug
+    def __unicode__(self):  # only for debug
         return self.name_cn+" "+self.author+": "+str(self.duartion)
 
 
@@ -61,6 +61,11 @@ class BookCopy(models.Model):
     status = models.IntegerField(choices=status_choice, default=0)
     book = models.ForeignKey(Book)
     reborrow_time = models.SmallIntegerField(default=0)
+    location = models.CharField(max_length=100)
+
+    def __unicode__(self):  # only for debug
+        return str(self.id) + ": " + self.book.simple_name() + ": " + \
+            self.get_status_display()
 
 
 class Borrowing(models.Model):
