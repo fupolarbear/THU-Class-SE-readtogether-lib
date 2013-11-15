@@ -70,7 +70,7 @@ def info(request):
 
 
 def info_detail(request, info_id):
-    info = get_object_or_404(Book, pk=info_id)
+    info = get_object_or_404(Info, pk=info_id)
     return render(request, 'rt/info.html', {
         'info': info,
         'news': Info.get_all('news'),
