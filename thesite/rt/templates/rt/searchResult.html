@@ -1,7 +1,67 @@
 {% extends 'rt/model.html' %}
 {% load staticfiles %}
-{% block query_str %}{{ q }}{% endblock query_str %}
-{% block content %}
+
+{% block define_head %}
+  <title>{{ q }} - ReadTogether Smart Search</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="{% static 'rt/ico/favicon.png' %}">
+{% endblock define_head %}
+
+{% block define_CSS %}
+  <!-- Custom styles for this template -->
+  <link href="{% static 'rt/common-qt.css' %}" rel="stylesheet">
+  <link href="{% static 'rt/common-qt-index.css' %}" rel="stylesheet">
+{% endblock define_CSS %}
+
+{% block nav_search %}
+{% endblock nav_search %}
+
+{% block main %}
+<!--
+<ul class="nav navbar-nav">
+  <form class="navbar-form navbar-left" role="search" action="{% url 'rt:search' %}" method="get">
+    <div class="form-group">
+      <input type="text" class="form-control" name="q" placeholder="Which book do you like?" value="{{ q }}">
+    </div>
+    <button type="submit" class="btn btn-default">Search</button>
+  </form>
+</ul>
+-->
+
+<div class="container" id="search-panel">
+  <div class="row">
+
+    <div class="col-xs-2 col-md-2"></div>
+    <div class="col-xs-3 col-md-3">
+      <img src="{% static 'rt/img/logo.jpg' %}" class="img-responsive" alt="Responsive image">
+    </div>
+
+    <div class="col-xs-6 col-md-6">
+      <div class="row">
+        <img src="{% static 'rt/img/read_together.jpg' %}" class="img-responsive" alt="Responsive image">
+      </div>
+      <div class="row">
+        <form class="form-inline" role="form">
+          <div class="form-group">
+          <input class="form-control" type="text" placeholder="which book do you want?" name="q" value="{{ q }}">
+          </div>
+          <button type="submit" class="btn btn-default">Search books</button>
+        </form>
+        <!--
+        <div class="input-group">
+          <input type="text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">Go!</button>
+        </span>
+        </div> -->
+        <!-- /input-group -->
+      </div>
+    </div>
+    
+  </div>
+</div>
+
 <div class="container">
 <div class="row">
   <div class="col-xs-1 "></div>
@@ -33,4 +93,4 @@
   <div class="col-xs-1 "></div>
 </div>
 </div>
-{% endblock content %}
+{% endblock main %}
