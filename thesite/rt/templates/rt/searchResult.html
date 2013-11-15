@@ -2,6 +2,7 @@
 {% load staticfiles %}
       {% block nav_search %}
       {% endblock nav_search %}
+{% block query_str %}{{ q }}{% endblock query_str %}
 {% block content %}
 <div class="row">
   <div class="col-xs-3 "></div>
