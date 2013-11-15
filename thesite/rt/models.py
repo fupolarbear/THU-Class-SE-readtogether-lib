@@ -68,24 +68,6 @@ class BookCopy(models.Model):
             self.get_status_display()
 
 
-class Borrowing(models.Model):
-    status_choice = (
-        (0, 'borrowing'),
-        (1, 'unreturned'),
-        (2, 'over time'),
-        (3, 'arranging'),
-        (4, 'off shelf')
-        )
-    status = models.IntegerField(choices=status_choice)
-    date_borrowing = models.DateField(default=timezone.now().date())
-    date_return = models.DateField()
-    book_copy = models.ForeignKey(BookCopy)
-    reborrow_time = models.SmallIntegerField(default=0)
-
-    def date_expired(self):
-        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
-
-
 class MyUser(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField(max_length=100)
@@ -132,6 +114,25 @@ class MyUser(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Borrowing(models.Model):
+    status_choice = (
+        (0, 'borrowing'),
+        (1, 'unreturned'),
+        (2, 'over time'),
+        (3, 'arranging'),
+        (4, 'off shelf')
+        )
+    status = models.IntegerField(choices=status_choice)
+    date_borrowing = models.DateField(auto_now=True)
+    date_return = models.DateField()
+    book_copy = models.ForeignKey(BookCopy)
+    myuser = models.ForeignKey(MyUser)
+    reborrow_time = models.SmallIntegerField(default=0)
+
+    def date_expired(self):
+        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
 
 
 class Info(models.Model):
