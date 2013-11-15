@@ -129,7 +129,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="#" class="navbar-brand">Read Together</a>
+      <a href="{% url 'rt:index' %}" class="navbar-brand">Read Together</a>
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
@@ -147,7 +147,7 @@
       <ul class="nav navbar-nav">
         <form class="navbar-form navbar-left" role="search" action="{% url 'rt:search' %}" method="get">
           <div class="form-group">
-            <input type="text" class="form-control" name="searchBook" placeholder="Which book do you like?">
+            <input type="text" class="form-control" name="q" placeholder="Which book do you like?" value="{% block query_str %}{% endblock query_str %}">
           </div>
           <button type="submit" class="btn btn-default">Search</button>
         </form>
@@ -175,13 +175,14 @@
     <img src="{% static 'rt/img/logo.jpg' %}" class="img-responsive" alt="Responsive image">
   </div>
   <div class="col-xs-6 ">
+    <br>
     <img src="{% static 'rt/img/read_together.jpg' %}" class="img-responsive" alt="Responsive image">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="which book do you want?" value="{% block query_str %}{% endblock query_str %}">
+    <!--<div class="input-group">
+      <input type="text" class="form-control" placeholder="which book do you want?" >
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">Search</button>
       </span>
-    </div><!-- /input-group -->
+    </div>-->
   </div>
   <div class="col-xs-3 "></div>
 </div>
