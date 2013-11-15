@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User, Group, Permission
@@ -78,20 +78,19 @@ class MyUser(models.Model):
     'can_generate_tempuser', 'can_manage_blacklist', 'can_delete_user')
     """
 
+    @transaction.commit_on_success
     def register(self, username, password, email, name, group='NormalUser'):
         '''
             >>> myuser = MyUser()
             >>> myuser.register(username, password, email, name, group)
         '''
-        u = User(username=username, email=email, password=password)
-        u.save()
+        u = User.objects.create_user(username, email, password)
         self.user = u
         self.name = name
         if group in self.group_list:
             self.set_group(group)
         else:
             raise TypeError()
-        self.user.save()
         self.save()
 
     def set_group(self, group):
@@ -105,9 +104,10 @@ class MyUser(models.Model):
     def get_group(self):
         return self.user.groups.all()
 
-    def delete(self):
+    @transaction.commit_on_success
+    def erase(self):
         self.user.delete()
-        super(MyUser, self).delete()
+        self.delete()
 
     def has_perm(self, perm):
         return self.user.has_perm('rt.'+perm)

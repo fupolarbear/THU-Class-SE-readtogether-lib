@@ -1,9 +1,13 @@
 from datetime import datetime
+import json
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+# from django.contrib.auth import authenticate, login
+from django.contrib import auth
 
-from rt.models import Book, Info
+from rt.models import Book, Info, MyUser
+from rt.forms import RegisterForm
 
 
 PInfo = ['title', 'pub', 'id']
@@ -47,7 +51,32 @@ def login(request):
 
 
 def register(request):
-    pass
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            u = MyUser()
+            u.register(
+                form.cleaned_data['username'],
+                form.cleaned_data['password'],
+                form.cleaned_data['email'],
+                form.cleaned_data['name'],
+                )
+            user = auth.authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+                )
+            assert user is not None
+            auth.login(request, user)
+            return HttpResponse(json.dumps({
+                'status': 'OK',
+                'username': u.user.username,
+                }))
+    else:
+        form = RegisterForm()
+    return HttpResponse(json.dumps({
+        'status': 'Error',
+        'error': 'Login failed.',
+        }))
 
 
 def logout(request):
