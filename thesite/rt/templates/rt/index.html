@@ -1,7 +1,6 @@
 {% extends 'rt/model.html' %}
 {% load staticfiles %}
-      {% block nav_search %}
-      {% endblock nav_search %}
+      
 {% block main %}
 <br><br><br><br><br><br><br><br>
 <div class="row">
@@ -18,12 +17,13 @@
 <br>
 <div class="row">
   <div class="col-xs-4 "></div>
-  <div class="col-xs-2 "><button type="button " class="btn btn-primary btn-block">Search books</button></div>
-  <div class="col-xs-2 "><button type="button " class="btn btn-primary btn-block">I cannot be luckier</button></div>
+  <div class="col-xs-2 "><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
+  <div class="col-xs-2 "><button type="button" class="btn btn-primary btn-block">I cannot be luckier</button></div>
   <div class="col-xs-4 "></div>
 </div>
 </form>
 <br><br><br>
+<div class="container">
 <div class="row">
   <div class="col-xs-5 ">
     <div class="alert alert-danger">
@@ -100,5 +100,6 @@
     </div>
   </div>
   <div class="col-xs-4 "></div>
+</div>
 </div>
 {% endblock main %}

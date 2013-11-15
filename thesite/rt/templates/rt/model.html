@@ -19,12 +19,13 @@
     <![endif]-->
     {% block modal %}
 <!-- Modal -->
-<div class="modal fade" id="rModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
+    
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Register</h4>
+        <h4 class="modal-title" id="myModalLabel">Sign in</h4>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -32,7 +33,7 @@
           <div class="col-xs-8">
             <div class="input-group">
               <span class="input-group-addon">Username:</span>
-              <input type="text" class="form-control" placeholder="Username">
+              <input type="text" name="sUsername" class="form-control" placeholder="Username">
             </div>
           </div>
           <div class="col-xs-2"></div>
@@ -43,7 +44,7 @@
           <div class="col-xs-8">
             <div class="input-group">
               <span class="input-group-addon">Password:</span>
-              <input type="password" class="form-control" placeholder="Password">
+              <input type="password" name="sPassword" class="form-control" placeholder="Password">
             </div>
           </div>
           <div class="col-xs-2"></div>
@@ -51,17 +52,18 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
       </div>
     </div><!-- /.modal-content -->
+  
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="rModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Sign in</h4>
+        <h4 class="modal-title" id="myModalLabel">Register</h4>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -110,7 +112,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -132,22 +134,22 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li>
-          <a href="#">Info</a>
+          <a href="{% url 'rt:index' %}">Home</a>
         </li>
         <li>
-          <a href="#">Rank</a>
+          <a href="{% url 'rt:rank' %}">Rank</a>
         </li>
         <li class="active">
-          <a href="{% url 'rt:index' %}">Home</a>
+          <a href="{% url 'rt:info' %}">Info</a>
         </li>
       </ul>
       {% block nav_search %}
       <ul class="nav navbar-nav">
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" role="search" action="{% url 'rt:search' %}" method="get">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" name="searchBook" placeholder="Which book do you like?">
           </div>
-          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="submit" class="btn btn-default">Search</button>
         </form>
       </ul>
       {% endblock nav_search %}
