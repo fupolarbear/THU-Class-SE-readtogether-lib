@@ -5,9 +5,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth import authenticate, login
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.core import urlresolvers
 from django.db.utils import IntegrityError
 
-from rt.models import Book, Info, MyUser
+from rt.models import Book, Info, MyUser, BookCopy
 from rt.forms import RegisterForm, LoginForm
 
 
@@ -118,12 +120,30 @@ def logout(request):
         }))
 
 
+@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def user(request):
-    pass
+    return render(request, 'rt/user-panel.html', {
+        'profile': request.user.myuser,
+        })
 
 
-def queue(request):
-    pass
+def queue(request, copy_id):
+    if request.user.is_authenticated():
+        pass  # More permission check
+    else:
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'error': 'Not logged in.',
+            }))
+    try:
+        copy = BookCopy.objects.get(pk=copy_id)
+        # Queue!
+    except BookCopy.DoesNotExist as err:
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'error': 'Invalid copy_id.',
+            'copy_id': copy_id,
+            }))
 
 
 def info(request):
@@ -143,7 +163,7 @@ def info_detail(request, info_id):
 
 
 def rank(request):
-    pass
+    return render(request, 'rt/rank.html', {})
 
 
 def test(request):
