@@ -189,41 +189,77 @@
 		  <table class="table table-hover "> <!-- table-bordered? -->
 			   <thead>
 				<tr>
-				  <th>#</th>
 				  <th>馆藏地点</th>
 				  <th>索书号/卷次</th>
 				  <th>馆藏状态</th>
+				  <th>复本权限</th>
 				  <th>操作</th>
 				</tr>
 			  </thead>
 			  <tbody>
-				<tr class="default">
-				  <td>1231</td>
-				  <td>Mark</td>
-				  <td>Otto</td>
-				  <td>已借出（13-11-20 到期 +1 已预约）</td>
-				  <td><button type="button" class="btn btn-default btn-xs">预约</button></td>
-				</tr>
-				<tr class="success">
-				  <td>2S13</td>
-				  <td>Jacob</td>
-				  <td>Thornton</td>
+			  	{% for item in copy %}
+			  	{% if item.status == 0 %}
+			  	<!-- ready -->
+			  	<tr class="success">
+				  <td>item.location</td>
+				  <td>item.id</td>
+				  <td>item.book.duartion</td>
 				  <td>在架上</td>
 				  <td><button type="button" class="btn btn-default btn-xs " disabled="disabled">在架上不可预约</button></td>
 				</tr>
-				<tr class="success">
-				  <td>123D</td>
-				  <td>Larry</td>
-				  <td>the Bird</td>
-				  <td>馆内阅览</td>
-				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">馆内不可预约</button></td>
+			  	{% elif item.status == 1 %}
+			  	<!-- un-returned -->
+			  	<tr class="warning">
+				  <td>item.location</td>
+				  <td>item.id</td>
+				  <td>item.book.duartion</td>
+				  <td>已借出（13-11-20 到期 +1 已预约）</td>
+				  <td><button type="button" class="btn btn-success btn-xs">预约</button></td>
+				</tr>
+			  	{% elif item.status == 2 %}
+			  	<!-- over time -->
+			  	<tr class="danger">
+				  <td>item.location</td>
+				  <td>item.id</td>
+				  <td>item.book.duartion</td>
+				  <td>借出超时未归还（13-11-23 到期 +1 已预约）</td>
+				  <td><button type="button" class="btn btn-success btn-xs">预约</button></td>
+				</tr>
+			  	{% elif item.status == 3 %}
+			  	<!-- arranging -->
+			  	<tr class="default">
+				  <td>item.location</td>
+				  <td>item.id</td>
+				  <td>item.book.duartion</td>
+				  <td>正在整理中</td>
+				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">整理中不可预约</button></td>
+				</tr>
+			  	{% elif item.status == 4 %}
+			  	<!-- off shelves -->
+			  	<tr class="danger">
+				  <td>item.location</td>
+				  <td>item.id</td>
+				  <td>item.book.duartion</td>
+				  <td>不在架上</td>
+				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">不可预约</button></td>
+				</tr>
+			  	{% else %}
+			  	<tr>
+					<td>it's impossible! Book status error!</td>
+				</tr>
+			  	{% endif %}
+				{% empty %}
+				<tr>
+					<td>it's impossible! Copy list empty!</td>
+				</tr>
+				{% endfor %}
 				</tr>
 			  </tbody>
 		  </table>
 		  </div> <!-- end of table -->
 
 		{% else %}
-			噢哟，该书暂无馆藏。您可以前往相关页面填写表单或者联系管理员申请购买该图书;-)
+			噢哟，该书暂无馆藏。您可以前往相关页面填写表单或者联系管理员申请购买该图书 ;-)
 			</div> <!-- end of head -->
 		{% endif %}
 
