@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate
+from django.db.models.query import QuerySet
 # Create your models here.
 
 
@@ -18,6 +19,21 @@ class Book(models.Model):
     translator = models.CharField(max_length=200, default="")
     pub_year_origin = models.SmallIntegerField(default=1900)
     revision_origin = models.SmallIntegerField(default=0)
+
+    @staticmethod
+    def search_part(string):
+        re1 = Book.objects.filter(name_cn__contains=string)
+        re2 = Book.objects.filter(name_origin__contains=string)
+        re3 = Book.objects.filter(author__contains=string)
+        return re1 | re2 | re3
+
+    @staticmethod
+    def search(string):
+        s = string.split()
+        re = Book.objects.get_empty_query_set()
+        for ss in s:
+            re = re | Book.search_part(ss)
+        return re
 
     def simple_name(self):
         if self.name_cn == "":
@@ -56,7 +72,7 @@ class Borrowing(models.Model):
     reborrow_time = models.SmallIntegerField(default=0)
 
     def date_expired(self):
-        return date_borrowing + datetime.timedelta(days=book.duartion)
+        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
 
 
 class MyUser(models.Model):
@@ -100,8 +116,8 @@ class MyUser(models.Model):
         self.user.delete()
         super(MyUser, self).delete()
 
-    def has_perm(self, str):
-        return self.user.has_perm('rt.'+str)
+    def has_perm(self, perm):
+        return self.user.has_perm('rt.'+perm)
 
     def __unicode__(self):
         return self.name
