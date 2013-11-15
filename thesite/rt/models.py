@@ -40,6 +40,12 @@ class Book(models.Model):
             return self.name_origin
         return self.name_cn
 
+    def simple_version(self):
+        return 'ver %d, %d (Origin: ver %d, %d)' % (
+            self.revision, self.pub_year,
+            self.revision_origin, self.pub_year_origin,
+            )
+
     def __unicode__(self):  # only for debbug
         return self.name_cn+" "+self.author+": "+str(self.duartion)
 

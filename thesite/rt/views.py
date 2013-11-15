@@ -3,6 +3,8 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from rt.models import Book
+
 
 PInfo = ['title', 'pub', 'id']
 PBook = ['simple_name', 'author', 'simple_version', 'id']
@@ -23,14 +25,10 @@ def index(request):
 
 
 def search(request):
+    q = request.GET['q']
     return render(request, 'rt/searchResult.html', {
-        'q': 'Bible',
-        'result': [
-            FC(PBook, 'Title of book 1', 'Author 1', 'Ver 1.0', 123),
-            FC(PBook, 'Title of book 2', 'Author 1', '2013', 12),
-            FC(PBook, 'Title of book 3', 'Author 2', 'Ver 1.0', 13),
-            FC(PBook, 'Title of book 1', 'Author 1', 'Ver 1.1', 17),
-            ],
+        'q': q,
+        'result': Book.search(q),
         })
 
 
@@ -53,14 +51,18 @@ def book(request, book_id):
 def login(request):
     pass
 
+
 def register(request):
     pass
+
 
 def logout(request):
     pass
 
+
 def user(request):
     pass
+
 
 def queue(request):
     pass
@@ -155,8 +157,10 @@ def info(request):
 def info_detail(request):
     pass
 
+
 def rank(request):
     pass
+
 
 def test(request):
     return render(request, 'rt/test.html', {})
