@@ -9,6 +9,12 @@ from rt.models import Book
 PInfo = ['title', 'pub', 'id']
 PBook = ['simple_name', 'author', 'simple_version', 'id']
 PCopy = ['status', 'id']
+'''
+XCopy = {
+    'where': 'Shelf 01',
+    }
+Copy.__getitem__ = lambda obj, key: XCopy[key]
+'''
 
 
 def index(request):
@@ -33,18 +39,11 @@ def search(request):
 
 
 def book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    copy = book.bookcopy_set.all()
     return render(request, 'rt/book.html', {
-        'book': FC(
-            PBook,
-            'Title of book %s' % book_id,
-            'Author of book %s' % book_id,
-            'Version ???',
-            int(book_id),
-            ),
-        'copy': [
-            FC(PCopy, 0, 1212),
-            FC(PCopy, 1, 2213),
-            ],
+        'book': book,
+        'copy': copy,
         })
 
 
