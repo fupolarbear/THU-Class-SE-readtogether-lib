@@ -50,6 +50,22 @@ def book(request, book_id):
         })
 
 
+def login(request):
+    pass
+
+def register(request):
+    pass
+
+def logout(request):
+    pass
+
+def user(request):
+    pass
+
+def queue(request):
+    pass
+
+
 def info(request):
     TC = ['title', 'content']  # Title & Content
     one = FC(TC, 'Alice has been fined 5RMB', '''Leggings occaecat craft beer
@@ -135,6 +151,12 @@ def info(request):
             ],
         })
 
+
+def info_detail(request):
+    pass
+
+def rank(request):
+    pass
 
 def test(request):
     return render(request, 'rt/test.html', {})
