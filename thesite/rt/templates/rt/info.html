@@ -9,23 +9,23 @@
       <h3><strong>公告板</strong></h3>   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#news" data-toggle="tab">News</a></li>
-        <li><a href="#guide" data-toggle="tab">User Guide</a></li>  
+        <li class="{% if info.get_species_display == "news" %} active {% endif %} {% if info|default:"null" == "null" %} active {% endif %}"><a href="#news" data-toggle="tab">News</a></li>
+        <li class="{% if info.get_species_display == "guide" %} active {% endif %}"><a href="#guide" data-toggle="tab">User Guide</a></li>  
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane fade in active" id="news">
+        <div class="tab-pane fade in {% if info.get_species_display == "news" %} active {% endif %} {% if info|default:"null" == "null" %} active {% endif %}" id="news">
           <div class="panel-group" id="accordion">
             {% for item in news %}
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
                   <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-                    {{ item.title }} {{ item.pub }}
+                    {{ item.title }} {{ item.date }}
                   </a>
                 </h4>
               </div>
-              <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse{% if forloop.first %} in{% endif %}">
+              <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">
                 <div class="panel-body">
                   {{ item.content }}
                 </div>
@@ -34,7 +34,7 @@
             {% endfor %}
           </div>
         </div>
-        <div class="tab-pane fade in" id="guide">
+        <div class="tab-pane fade in {% if info.get_species_display == "guide" %} active {% endif %}" id="guide">
           <div class="panel-group" id="accordion2">
             {% for item in guide %}
             <div class="panel panel-default">
@@ -45,7 +45,7 @@
                   </a>
                 </h4>
               </div>
-              <div id="collapse2_{{ forloop.counter }}" class="panel-collapse collapse{% if forloop.first %} in{% endif %}">
+              <div id="collapse2_{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">
                 <div class="panel-body">
                   {{ item.content }}
                 </div>
