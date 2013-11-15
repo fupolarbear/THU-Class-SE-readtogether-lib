@@ -19,6 +19,13 @@ class Book(models.Model):
     pub_year_origin = models.SmallIntegerField(default=1900)
     revision_origin = models.SmallIntegerField(default=0)
 
+    @staticmethod
+    def search(string):
+        re1 = Book.objects.filter(name_cn__contains=string)
+        re2 = Book.objects.filter(name_origin__contains=string)
+        re3 = Book.objects.filter(author__contains=string)
+        return re1 | re2 | re3
+
     def simple_name(self):
         if self.name_cn == "":
             return self.name_origin
@@ -56,7 +63,7 @@ class Borrowing(models.Model):
     reborrow_time = models.SmallIntegerField(default=0)
 
     def date_expired(self):
-        return date_borrowing + datetime.timedelta(days=book_copy.book.duartion)
+        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
 
 
 class MyUser(models.Model):
