@@ -5,9 +5,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth import authenticate, login
 from django.contrib import auth
+from django.db.utils import IntegrityError
 
 from rt.models import Book, Info, MyUser
-from rt.forms import RegisterForm
+from rt.forms import RegisterForm, LoginForm
 
 
 PInfo = ['title', 'pub', 'id']
@@ -47,7 +48,31 @@ def book(request, book_id):
 
 
 def login(request):
-    pass
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = auth.authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+                )
+            if user is not None:
+                if user.is_active:
+                    auth.login(request, user)
+                    return HttpResponse(json.dumps({
+                        'status': 'OK',
+                        'username': user.username,
+                        'name': user.myuser.name,
+                        }))
+            return HttpResponse(json.dumps({
+                'status': 'Error',
+                'error': 'Login failed.',
+                }))
+    else:
+        form = LoginForm()
+    return HttpResponse(json.dumps({
+        'status': 'Error',
+        'error': 'Login syntax error.',
+        }))
 
 
 def register(request):
@@ -55,32 +80,42 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             u = MyUser()
-            u.register(
-                form.cleaned_data['username'],
-                form.cleaned_data['password'],
-                form.cleaned_data['email'],
-                form.cleaned_data['name'],
-                )
-            user = auth.authenticate(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password'],
-                )
-            assert user is not None
-            auth.login(request, user)
-            return HttpResponse(json.dumps({
-                'status': 'OK',
-                'username': u.user.username,
-                }))
+            try:
+                u.register(
+                    form.cleaned_data['username'],
+                    form.cleaned_data['password'],
+                    form.cleaned_data['email'],
+                    form.cleaned_data['name'],
+                    )
+                user = auth.authenticate(
+                    username=form.cleaned_data['username'],
+                    password=form.cleaned_data['password'],
+                    )
+                assert user is not None
+                auth.login(request, user)
+                return HttpResponse(json.dumps({
+                    'status': 'OK',
+                    'username': user.username,
+                    'name': user.myuser.name,
+                    }))
+            except IntegrityError as err:
+                return HttpResponse(json.dumps({
+                    'status': 'Error',
+                    'error': 'Username taken.',
+                    }))
     else:
         form = RegisterForm()
     return HttpResponse(json.dumps({
         'status': 'Error',
-        'error': 'Login failed.',
+        'error': 'Register syntax error.',
         }))
 
 
 def logout(request):
-    pass
+    auth.logout(request)
+    return HttpResponse(json.dumps({
+        'status': 'OK',
+        }))
 
 
 def user(request):
