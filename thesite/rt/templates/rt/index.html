@@ -1,7 +1,6 @@
 {% extends 'rt/model.html' %}
 {% load staticfiles %}
-      {% block nav_search %}
-      {% endblock nav_search %}
+      
 {% block main %}
 <br><br><br><br><br><br><br><br>
 <div class="row">
@@ -9,19 +8,22 @@
   <div class="col-xs-6 "><img src="{% static 'rt/img/index_logo.jpg' %}" class="img-responsive" alt="Responsive image"></div>
   <div class="col-xs-3 "></div>
 </div>
+<form action="{% url 'rt:search' %}" method="get">
 <div class="row">
   <div class="col-xs-3 "></div>
-  <div class="col-xs-6 "><input class="form-control" type="text" placeholder="which book do you want?"></div>
+  <div class="col-xs-6 "><input class="form-control" type="text" placeholder="which book do you want?" name="q"></div>
   <div class="col-xs-3 "></div>
 </div>
 <br>
 <div class="row">
   <div class="col-xs-4 "></div>
-  <div class="col-xs-2 "><button type="button " class="btn btn-primary btn-block">Search books</button></div>
-  <div class="col-xs-2 "><button type="button " class="btn btn-primary btn-block">I cannot be luckier</button></div>
+  <div class="col-xs-2 "><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
+  <div class="col-xs-2 "><button type="button" class="btn btn-primary btn-block">I cannot be luckier</button></div>
   <div class="col-xs-4 "></div>
 </div>
+</form>
 <br><br><br>
+<div class="container">
 <div class="row">
   <div class="col-xs-5 ">
     <div class="alert alert-danger">
@@ -35,13 +37,15 @@
           </tr>
         </thead>
         <tbody>
-	      {% for item in top10 %}
+	      {% for item in rank %}
           <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ item.0 }}</td>
             <td>{{ item.1 }}</td>
             <td>{{ item.2 }}</td>
           </tr>
+        {% empty %}
+          <p>No content.</p>
       	{% endfor %}
         </tbody>
       </table>
@@ -59,12 +63,12 @@
           </tr>
         </thead>
         <tbody>
-	      {% for item in information %}
+	      {% for item in news %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ item.0 }}</td>
-            <td>{{ item.1 }}</td>
-            <td>{{ item.2 }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.pub|date:"F j, Y"}}</td>
+            <td><a href="{% url 'rt:info_detail' item.id %}">Link</a></td>
           </tr>
       	{% endfor %}
         </tbody>
@@ -96,5 +100,6 @@
     </div>
   </div>
   <div class="col-xs-4 "></div>
+</div>
 </div>
 {% endblock main %}

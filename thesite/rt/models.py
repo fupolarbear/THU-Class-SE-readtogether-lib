@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate
+from django.db.models.query import QuerySet
 # Create your models here.
 
 
@@ -19,12 +20,33 @@ class Book(models.Model):
     pub_year_origin = models.SmallIntegerField(default=1900)
     revision_origin = models.SmallIntegerField(default=0)
 
+    @staticmethod
+    def search_part(string):
+        re1 = Book.objects.filter(name_cn__contains=string)
+        re2 = Book.objects.filter(name_origin__contains=string)
+        re3 = Book.objects.filter(author__contains=string)
+        return re1 | re2 | re3
+
+    @staticmethod
+    def search(string):
+        s = string.split()
+        re = Book.objects.get_empty_query_set()
+        for ss in s:
+            re = re | Book.search_part(ss)
+        return re
+
     def simple_name(self):
         if self.name_cn == "":
             return self.name_origin
         return self.name_cn
 
-    def __unicode__(self):  # only for debbug
+    def simple_version(self):
+        return 'ver %d, %d (Origin: ver %d, %d)' % (
+            self.revision, self.pub_year,
+            self.revision_origin, self.pub_year_origin,
+            )
+
+    def __unicode__(self):  # only for debug
         return self.name_cn+" "+self.author+": "+str(self.duartion)
 
 
@@ -36,9 +58,14 @@ class BookCopy(models.Model):
         (3, 'arranging'),
         (4, 'off shelf')
     )
-    status = models.IntegerField(choices=status_choice)
+    status = models.IntegerField(choices=status_choice, default=0)
     book = models.ForeignKey(Book)
     reborrow_time = models.SmallIntegerField(default=0)
+    location = models.CharField(max_length=100)
+
+    def __unicode__(self):  # only for debug
+        return str(self.id) + ": " + self.book.simple_name() + ": " + \
+            self.get_status_display()
 
 
 class Borrowing(models.Model):
@@ -56,7 +83,7 @@ class Borrowing(models.Model):
     reborrow_time = models.SmallIntegerField(default=0)
 
     def date_expired(self):
-        return date_borrowing + datetime.timedelta(days=book_copy.book.duartion)
+        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
 
 
 class MyUser(models.Model):
@@ -108,9 +135,20 @@ class MyUser(models.Model):
 
 
 class Info(models.Model):
+    species_choice = (
+        (0, 'news'),
+        (1, 'guide'),
+    )
     title = models.CharField(max_length=200)
     content = models.CharField(max_length=10000)
     date = models.DateTimeField(auto_now=True)
+    species = models.IntegerField(choices=species_choice, default=0)
+
+    @staticmethod
+    def get_all(sp=None):
+        if (sp is None):
+            return Info.objects.all()
+        return Info.objects.filter(species=sp)
 
     def local_time(self):
         return timezone.localtime(self.date)
