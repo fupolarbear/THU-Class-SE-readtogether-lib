@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
 from django.db.utils import IntegrityError
 
-from rt.models import Book, Info, MyUser, BookCopy
+from rt.models import Book, Info, MyUser, BookCopy, Borrowing
 from rt.forms import RegisterForm, LoginForm
 
 
@@ -139,7 +139,12 @@ def queue(request, copy_id):
             }))
     try:
         copy = BookCopy.objects.get(pk=copy_id)
-        # Queue!
+        Borrowing.queue(request.user.myuser, copy)
+        return HttpResponse(json.dumps({
+            'status': 'OK',
+            'username': request.user.username,
+            'copy_id': copy_id,
+            }))
     except BookCopy.DoesNotExist as err:
         return HttpResponse(json.dumps({
             'status': 'Error',
@@ -169,7 +174,7 @@ def rank(request):
 
 
 def test(request):
-    return render(request, 'rt/test.html', {'l':LoginForm, 'r':RegisterForm})
+    return render(request, 'rt/test.html', {'l': LoginForm, 'r': RegisterForm})
 
 
 def FC(prototype, *args):  # Fake Class
