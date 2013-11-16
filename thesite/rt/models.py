@@ -226,6 +226,20 @@ class Borrowing(models.Model):
                 myuser=myuser,
                 )
 
+    @staticmethod
+    def disappear(myuser, book_copy):
+        bs = Borrowing.objects.filter(
+            is_active=True, book_copy=book_copy
+            )
+        for b in bs:
+            b.is_active = False
+            b.save()
+        Borrowing.objects.create(
+            status=5,
+            book_copy=book_copy,
+            myuser=myuser,
+            )
+
     def __unicode__(self):  # only for debug
         return self.myuser.name + " " + str(self.book_copy.id) + ":" + \
             self.book_copy.book.simple_name() + \
