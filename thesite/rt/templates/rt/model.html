@@ -49,6 +49,26 @@
           <div class="col-xs-2 "><h4>Password:</h4></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="sPassword"></div>
           <div class="col-xs-2 "></div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="sRespondS" class="alert alert-success">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
+
+        </div>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="sRespondD" class="alert alert-danger">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
 
         </div>
       </div>
@@ -180,6 +200,8 @@
   <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
   <script type="text/javascript">
 $(document).ready(function(){
+  $("[name='sRespondD']").hide();
+  $("[name='sRespondS']").hide();
   $("[name='sSubmit']").click(function(){
     $.post("{% url 'rt:login' %}",
       {
@@ -191,7 +213,27 @@ $(document).ready(function(){
         var Obj= eval("("+res+")");//转换为json对象   
         if(Obj.status=="OK")
         {
+            $("[name='sRespondD']").hide();
+            $("[name='sRespondS']").show();
+            $("[name='sRespondS']").text(Obj.status+": Welcome back~~"+Obj.username);
+            
           location.reload();
+        }
+        else if(Obj.status=="O")
+        {
+            $("[name='sRespondS']").hide();
+            $("[name='sRespondD']").show();
+            $("[name='sRespondD']").text(Obj.status+": 用户名与密码不匹配");
+        }
+        else
+        {
+            $("[name='sRespondS']").hide();
+            $("[name='sRespondD']").show();
+            $("[name='sRespondD']").text(Obj.status+": 请输入");
+            $.each(Obj.detail,function(key,value){
+            $("[name='sRespondD']").append(key+" ");
+               
+          })
         }
     });
 });
