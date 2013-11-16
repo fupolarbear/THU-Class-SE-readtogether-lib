@@ -1,20 +1,4 @@
 ﻿
-$(document).ready(
-	function() {
-		$('#ordingModal').on('shown.bs.modal', function () {
-			console.log("finish display modal");
-		});
-
-		$('#ording-button').click(function(){
-			var bid = $('#ordingModal').find("#ording-book-id").val();
-			console.log("get-bid:" + bid);
-
-			$.post({% url 'rt:queue' copy.id %}
-				);
-		});
-	}
-);
-
 //var hehe, m;
 function callording(obj, bid) {
 	//hehe = obj;

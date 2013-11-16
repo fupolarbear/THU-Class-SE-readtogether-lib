@@ -271,9 +271,10 @@
 	        	<div class="panel-body" id="ording-info">
 	        	</div>
 	        </div>
-	        <div class="alert alert-success">预约成功！</div>
-	        <div class="alert alert-danger">预约失败！<strong id="detailed-alert"></strong></div>
+	        <p><div class="alert alert-success">预约成功！</div>
+	        <div class="alert alert-danger">预约失败！<strong id="detailed-alert"></strong></div></p>
 	        <input type="hidden" id="ording-book-id" value="0">
+	        {% csrf_token %}
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">放弃</button>
@@ -469,8 +470,10 @@
 				console.log("get-bid:" + bid);
 
 				$.post(
-					"{% url 'rt:queue' %}/" + bid,
-					{},
+					"{% url 'rt:queue' 1 %}".replace("1", bid),
+					{
+						csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+					},
 					function(res){
 						var got = eval("(" + res + ")");
 						if(got.status == "OK"){
@@ -480,7 +483,7 @@
 									$('#ordingModal').find(".alert").hide();
 									$('#ordingModal').modal('hide');
 								},
-								1500
+								1200
 							);
 						} else {
 							$('#ordingModal').find(".alert-danger").find("#detailed-alert").html(got.err);

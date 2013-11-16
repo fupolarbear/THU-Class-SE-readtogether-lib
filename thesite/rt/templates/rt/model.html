@@ -24,6 +24,7 @@
 <body>
 
 {% block login_fade_modal %}
+{% csrf_token %}
 <!-- Modal -->
 <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -34,7 +35,6 @@
         <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span> Sign in</h4>
       </div>
       <div class="modal-body">
-        {% csrf_token %}
         <div class="row">
           <div class="col-xs-2 "></div>
           <div class="col-xs-2 "><h4>Username:</h4></div>
@@ -171,7 +171,8 @@
           <a href="{% url 'rt:index' %}">Home</a>
         </li>
         <li>
-          <a href="{% url 'rt:rank' %}">Rank</a>
+          <a href="#">Rank</a>
+          <!-- {% url 'rt:rank' %} -->
         </li>
         <li>
           <a href="{% url 'rt:info' %}">Info</a>
@@ -237,8 +238,13 @@
               $("[name='sRespondD']").hide();
               $("[name='sRespondS']").show();
               $("[name='sRespondS']").text(Obj.status+": 欢迎回来~"+Obj.username);
-              
-            location.reload();
+              setTimeout(
+                function(){
+                  location.reload();
+                },
+                1000
+              );
+
           }
           else if(Obj.err=="Login failed.")
           {
@@ -276,7 +282,12 @@
               $("[name='rRespondS']").show();
               $("[name='rRespondS']").text(Obj.status+": 欢迎来到我们的网站~"+Obj.username);
               
-            location.reload();
+              setTimeout(
+                function(){
+                  location.reload();
+                },
+                1000
+              );
           }
           else if(Obj.detail)
           {
