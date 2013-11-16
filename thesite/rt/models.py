@@ -58,7 +58,11 @@ class BookCopy(models.Model):
         re = []
         all_borrowing = self.borrowing_set.filter(is_active=True)
         if all_borrowing.filter(status=0).exists():
+            borr = all_borrowing.get(status=0)
+            k = borr.myuser.get_perm('borrowing_coefficient') * \
+                borr.book_copy.book.duartion
             re += ["borrowing"]
+            re += [str(borr.datetime.date()+datetime.timedelta(days=k))]
             re += ["queue"]*(all_borrowing.filter(status=4).count())
         elif all_borrowing.filter(status=3).exists():
             re += ["arranging"]
