@@ -51,21 +51,14 @@ class Book(models.Model):
 
 
 class BookCopy(models.Model):
-    status_choice = (
-        (0, 'ready'),
-        (1, 'unreturned'),
-        (2, 'over time'),
-        (3, 'arranging'),
-        (4, 'off shelf')
-    )
-    status = models.IntegerField(choices=status_choice, default=0)
     book = models.ForeignKey(Book)
-    reborrow_time = models.SmallIntegerField(default=0)
     location = models.CharField(max_length=100)
 
+    def get_status(self):
+        all_borrowing = self.borrowing_set.filter(is_active=True)
+
     def __unicode__(self):  # only for debug
-        return str(self.id) + ": " + self.book.simple_name() + ": " + \
-            self.get_status_display()
+        return str(self.id) + ": " + self.book.simple_name()
 
 
 class MyUser(models.Model):
@@ -80,7 +73,7 @@ class MyUser(models.Model):
     permission_num_list = [
         'borrowing_num', 'borrowing_coefficient', 'queue_book_num'
         ]
-    
+
     def _permission_num_generate(*args):
         permission_num_list = [
             'borrowing_num', 'borrowing_coefficient', 'queue_book_num'
@@ -127,7 +120,7 @@ class MyUser(models.Model):
 
     def has_perm(self, perm):
         return self.user.has_perm('rt.'+perm)
-    
+
     def get_perm(self, perm):
         return (self.permission_num[self.get_group_name()])[perm]
 
@@ -138,20 +131,94 @@ class MyUser(models.Model):
 class Borrowing(models.Model):
     status_choice = (
         (0, 'borrowing'),
-        (1, 'unreturned'),
-        (2, 'over time'),
+        (1, 'reborrowing 1'),
+        (2, 'reborrowing 2'),
         (3, 'arranging'),
-        (4, 'off shelf')
+        (4, 'queue'),
+        (5, 'disappear'),
         )
     status = models.IntegerField(choices=status_choice)
-    date_borrowing = models.DateField(auto_now=True)
-    date_return = models.DateField()
+    datetime = models.DateTimeField(auto_now=True)
     book_copy = models.ForeignKey(BookCopy)
     myuser = models.ForeignKey(MyUser)
-    reborrow_time = models.SmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
 
-    def date_expired(self):
-        return date_borrowing+datetime.timedelta(days=book_copy.book.duartion)
+    @staticmethod
+    def borrow(myuser, book_copy):
+        Borrowing.objects.create(
+            status=0,
+            book_copy=book_copy,
+            myuser=myuser,
+            )
+
+    @staticmethod
+    def reborrow(myuser, book_copy):
+        b = Borrowing.objects.get(
+            is_active=True, myuser=myuser, book_copy=book_copy
+            )
+        b.is_active = False
+        b.save()
+        Borrowing.objects.create(
+            status=b.status+1,
+            book_copy=book_copy,
+            myuser=myuser,
+            )
+
+    @staticmethod
+    def return_book(myuser, book_copy):
+        b = Borrowing.objects.get(
+            is_active=True, myuser=myuser, book_copy=book_copy
+            )
+        b.is_active = False
+        b.save()
+        Borrowing.objects.create(
+            status=3,
+            book_copy=book_copy,
+            myuser=myuser,
+            )
+
+    @staticmethod
+    def queue_next(book_copy):
+        b = Borrowing.objects.get(
+            is_active=True, status=3, book_copy=book_copy
+            )
+        b.is_active = False
+        b.save()
+        u = Borrowing.objects.filter(
+            is_active=True, status=4, book_copy=book_copy
+            ).order_by('datetime')[0]
+        u.is_active = False
+        u.save()
+        Borrowing.objects.create(
+            status=0,
+            book_copy=book_copy,
+            myuser=u.myuser,
+            )
+
+    @staticmethod
+    def readify(book_copy):
+        b = Borrowing.objects.get(
+            is_active=True, status=3, book_copy=book_copy
+            )
+        b.is_active = False
+        b.save()
+
+    @staticmethod
+    def queue(myuser, book_copy):
+        if (
+            Borrowing.objects.filter(
+                is_active=True, status__in=[0, 1, 2], book_copy=book_copy
+                ).exists()):
+            Borrowing.objects.create(
+                status=4,
+                book_copy=book_copy,
+                myuser=myuser,
+                )
+
+    def __unicode__(self):  # only for debug
+        return self.myuser.name + " " + str(self.book_copy.id) + ":" + \
+            self.book_copy.book.simple_name() + \
+            " " + self.get_status_display()
 
 
 class Info(models.Model):
