@@ -47,7 +47,7 @@
         <div class="row">
           <div class="col-xs-2 "></div>
           <div class="col-xs-2 "><h4>Password:</h4></div>
-          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="sPassword"></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="sPassword"></div>
           <div class="col-xs-2 "></div>
         </div>
         <p></p>
@@ -98,7 +98,7 @@
         <div class="row">
           <div class="col-xs-2 "></div>
           <div class="col-xs-2 "><h4>Password:</h4></div>
-          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rPassword"></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword"></div>
           <div class="col-xs-2 "></div>
 
         </div>
@@ -106,7 +106,7 @@
         <div class="row">
           <div class="col-xs-2 "></div>
           <div class="col-xs-2 "><h4>Confirm</h4></div>
-          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rPassword2"></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword2"></div>
           <div class="col-xs-2 "></div>
         </div>
         <p></p>
@@ -123,6 +123,27 @@
           <div class="col-xs-2 "><h4>Name:</h4></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rName"></div>
           <div class="col-xs-2 "></div>
+        </div>
+         <p></p>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="rRespondS" class="alert alert-success">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
+
+        </div>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="rRespondD" class="alert alert-danger">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
+
         </div>
         
       </div>
@@ -202,6 +223,8 @@
 $(document).ready(function(){
   $("[name='sRespondD']").hide();
   $("[name='sRespondS']").hide();
+  $("[name='rRespondD']").hide();
+  $("[name='rRespondS']").hide();
   $("[name='sSubmit']").click(function(){
     $.post("{% url 'rt:login' %}",
       {
@@ -215,11 +238,11 @@ $(document).ready(function(){
         {
             $("[name='sRespondD']").hide();
             $("[name='sRespondS']").show();
-            $("[name='sRespondS']").text(Obj.status+": Welcome back~~"+Obj.username);
+            $("[name='sRespondS']").text(Obj.status+": 欢迎回来~"+Obj.username);
             
           location.reload();
         }
-        else if(Obj.status=="O")
+        else if(Obj.err=="Login failed.")
         {
             $("[name='sRespondS']").hide();
             $("[name='sRespondD']").show();
@@ -252,7 +275,41 @@ $(document).ready(function(){
         var Obj= eval("("+res+")");//转换为json对象   
         if(Obj.status=="OK")
         {
+            $("[name='rRespondD']").hide();
+            $("[name='rRespondS']").show();
+            $("[name='rRespondS']").text(Obj.status+": 欢迎来到我们的网站~"+Obj.username);
+            
           location.reload();
+        }
+        else if(Obj.detail)
+        {
+          if(Obj.detail.password2=="Passwords not match.")
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 密码不匹配");
+          }
+          else if(Obj.detail.email=="Enter a valid email address.")
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 请输入合法的邮箱地址");
+          }
+          else
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 请输入");
+              $.each(Obj.detail,function(key,value){
+                $("[name='rRespondD']").append(key+" "); 
+              })
+          }
+        }
+        else
+        {
+            $("[name='rRespondS']").hide();
+            $("[name='rRespondD']").show();
+            $("[name='rRespondD']").text(Obj.err);
         }
     });
 });
