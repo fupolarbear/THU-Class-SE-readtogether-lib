@@ -1,5 +1,5 @@
 body {
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 #search-panel {
@@ -7,12 +7,25 @@ body {
 }
 
 .magxs {
-	margin-bottom: 8px;
+	margin-top: 50px;
+	margin-bottom: 10px;
 }
 
 .magmd {
-	margin-bottom: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
+
+.maglg {
+	margin-bottom: 50px;
+	margin-top: 20px;
+}
+
+.magleft {
+	margin-left: 15px;
+	
+}
+
 
 #main-container {
 	margin-top: 20px;
