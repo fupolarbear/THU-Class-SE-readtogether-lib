@@ -24,3 +24,7 @@ function callording(obj, bid) {
 	
 	$('#ordingModal').modal('show');
 }
+
+function doording(bid){
+	
+}
