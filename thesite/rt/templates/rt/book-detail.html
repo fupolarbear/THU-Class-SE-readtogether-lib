@@ -221,7 +221,7 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>已丢失</td>
-				  <td><button type="button" class="btn btn-default btn-xs">丢失中不可预约</button></td>
+				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">丢失中不可预约</button></td>
 				</tr>
 			  	{% elif item.get_status.text == 'arranging' %}
 			  	<!-- arranging -->
