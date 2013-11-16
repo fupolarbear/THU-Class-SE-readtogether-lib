@@ -55,7 +55,18 @@ class BookCopy(models.Model):
     location = models.CharField(max_length=100)
 
     def get_status(self):
+        re = []
         all_borrowing = self.borrowing_set.filter(is_active=True)
+        if all_borrowing.filter(status=0).exists():
+            re += ["borrowing"]
+            re += ["queue"]*(all_borrowing.filter(status=4).count())
+        elif all_borrowing.filter(status=3).exists():
+            re += ["arranging"]
+        elif all_borrowing.filter(status=5).exists():
+            re += ["disappear"]
+        else:
+            re += ["on shelf"]
+        return re
 
     def __unicode__(self):  # only for debug
         return str(self.id) + ": " + self.book.simple_name()
