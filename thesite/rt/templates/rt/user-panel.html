@@ -17,15 +17,24 @@
 
 {% if user.is_authenticated %}
 
-<div class="container">
-
+	<!--
+	<div class="container">
 	  <div class="user-panel-head">
 		<h2>欢迎！ {{ user.myuser.name }}</h2>
 		<p class="lead">you should return the book at 2013-11-11, and your ordring book will get returned at tomorrow.</p>
-	  </div>
+	  </div>	
+	</div> /.container -->
 	
+
+	<div class="container">
+	  <div class="panel panel-default">
+	  	<div class="panel-body">
+			<h2>欢迎！ {{ user.myuser.name }}</h2>
+			<p class="lead">you should return the book at 2013-11-11, and your ordring book will get returned at tomorrow.</p>
+		</div>
+	  </div>	
 	</div><!-- /.container -->
-	
+
 	<!--
 	<div class="container">
     <div class="row">
