@@ -2,10 +2,14 @@
 {% load staticfiles %}
 
 {% block define_head %}
+{% if user.is_authenticated %}
+	<title>{{ user.myuser.name }}'s ReadTogether</title>
+{% else %}
 	<title>User Panel</title>
-	<meta name="description" content="the page for managing books">
+{% endif %}
+	<meta name="description" content="user panel">
 	<meta name="author" content="Fu Zuoyou.">
-	<link rel="shortcut icon" href="{% static 'ico/favicon.png' %}">
+	<link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}">
 {% endblock define_head %}
 
 {% block define_CSS %}
