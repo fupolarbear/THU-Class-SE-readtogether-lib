@@ -55,21 +55,22 @@ class BookCopy(models.Model):
     location = models.CharField(max_length=100)
 
     def get_status(self):
-        re = []
+        re = {}
         all_borrowing = self.borrowing_set.filter(is_active=True)
-        if all_borrowing.filter(status=0).exists():
-            borr = all_borrowing.get(status=0)
+        if all_borrowing.filter(status__in=[0, 1, 2]).exists():
+            borr = all_borrowing.get(status__in=[0, 1, 2])
             k = borr.myuser.get_perm('borrowing_coefficient') * \
                 borr.book_copy.book.duartion
-            re += ["borrowing"]
-            re += [str(borr.datetime.date()+datetime.timedelta(days=k))]
-            re += ["queue"]*(all_borrowing.filter(status=4).count())
+            re = {'text': 'borrowing'}
+            re['expire'] = borr.datetime.date() + datetime.timedelta(days=k)
+            re['reborrow_count'] = borr.status
+            re['queue'] = all_borrowing.filter(status=4).count()
         elif all_borrowing.filter(status=3).exists():
-            re += ["arranging"]
+            re = {'text': 'arranging'}
         elif all_borrowing.filter(status=5).exists():
-            re += ["disappear"]
+            re = {'text': 'disappear'}
         else:
-            re += ["on shelf"]
+            re = {'text': 'on shelf'}
         return re
 
     def __unicode__(self):  # only for debug
@@ -217,6 +218,11 @@ class Borrowing(models.Model):
             )
         b.is_active = False
         b.save()
+        for u in Borrowing.objects.filter(
+                is_active=True, status=4, book_copy=book_copy
+                ):
+            u.is_active = False
+            u.save()
 
     @staticmethod
     def queue(myuser, book_copy):
