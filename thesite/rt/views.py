@@ -33,7 +33,7 @@ def index(request):
 
 
 def search(request):
-    q = request.GET['q']
+    q = request.GET.get('q', '')
     return render(request, 'rt/searchResult.html', {
         'q': q,
         'result': Book.search(q),
@@ -74,6 +74,7 @@ def login(request):
     return HttpResponse(json.dumps({
         'status': 'Error',
         'error': 'Login syntax error.',
+        'detail': form.errors,
         }))
 
 
@@ -110,6 +111,7 @@ def register(request):
     return HttpResponse(json.dumps({
         'status': 'Error',
         'error': 'Register syntax error.',
+        'detail': form.errors,
         }))
 
 
