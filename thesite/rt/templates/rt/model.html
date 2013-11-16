@@ -108,7 +108,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" name="rSubmit">Submit</button>
+        <button type="submit" class="btn btn-primary"  name="rSubmit">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -171,7 +171,7 @@
 
     {% block main %}
     {% endblock main %}
-<p>kjsdhsakjdhjaldjklajdlkadjlkasj</p>
+
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
@@ -197,24 +197,21 @@ $(document).ready(function(){
 });
   $("[name='rSubmit']").click(function(){
 
-    $.post("{% url 'rt:login' %}",
+    $.post("{% url 'rt:register' %}",
       {
         username: $("[name='rUsername']").val(),
         password: $("[name='rPassword']").val(),
         password2: $("[name='rPassword2']").val(),
         email: $("[name='rEmail']").val(),
-        name: $("[name='sName']").val(),
+        name: $("[name='rName']").val(),
         csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
       },
       function(res){
-        var Obj= eval(res);//转换为json对象   
-        $("p").text( Obj.name);
-
-        if(res.status=="OK")
+        var Obj= eval("("+res+")");//转换为json对象   
+        if(Obj.status=="OK")
         {
-          
-         
-      }
+          location.reload();
+        }
     });
 });
   $("[name='logout']").click(function(){
