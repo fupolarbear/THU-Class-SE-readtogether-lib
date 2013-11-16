@@ -15,10 +15,12 @@
 
 {% block main %}
 
+{% if user.is_authenticated %}
+
 <div class="container">
 
 	  <div class="user-panel-head">
-		<h2>欢迎！</h2>
+		<h2>欢迎！ {{ user.myuser.name }}</h2>
 		<p class="lead">you should return the book at 2013-11-11, and your ordring book will get returned at tomorrow.</p>
 	  </div>
 	
@@ -327,13 +329,13 @@
 				</div>
 				<div class="col-sm-4 col-md-4">
 					<blockquote>
-						<p>Bruce Wayne</p>
+						<p>{{ user.myuser.name }}</p>
 						  <small>
-							<cite title="Source Title">Gotham, United Kingdom  <i class="glyphicon glyphicon-map-marker"></i></cite>
+							<cite title="Source Title">{{ user.username }} <i class="glyphicon glyphicon-map-marker"></i></cite>
 						  </small>
 					</blockquote>
 					<p>
-						<i class="glyphicon glyphicon-envelope"></i> masterwayne@batman.com
+						<i class="glyphicon glyphicon-envelope"></i> {{ user.email }}
 					   <br/>
 						<i class="glyphicon glyphicon-phone"></i> 123-4567-8901
 					   <br />
@@ -351,8 +353,12 @@
 				<div class="col-sm-5 col-md-5">
 					<ul class="list-group">
 					  <li class="list-group-item">
-						<span class="badge">2013-11-9</span>
+						<span class="badge">{{ user.date_joined }}</span>
 						注册时间
+					  </li>
+					  <li class="list-group-item">
+						<span class="badge">{{ user.last_login }}</span>
+						最后一次登录时间
 					  </li>
 					  <li class="list-group-item">
 						<span class="badge">56</span>
@@ -378,6 +384,33 @@
 		  </div>
 		</div>
 	</div>
+
+{% else %} {# else no authorized #}
+
+<div class="container">
+	<div class="row">
+		<div class="bs-example-modal">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">噢哟，未登录</h4>
+		      </div>
+		      <div class="modal-body">
+		        <p>您现在还未登录，这里是用户中心，请登录后再进行操作。;-)</p>
+		        <p><img src="{% static 'rt/img/xiaohei-lying.jpg' %}" class="img-responsive center-img" alt="Please login"></p>
+		      </div>
+		      <div class="modal-footer">
+		        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+		        <button type="button" class="btn btn-primary">哼！我就勉为其难的登录一下好了╮(╯_╰)╭</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	</div>
+</div>
+
+{% endif %}
 
 {% endblock main %}
 
