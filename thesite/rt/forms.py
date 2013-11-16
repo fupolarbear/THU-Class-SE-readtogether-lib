@@ -3,6 +3,9 @@ from django.forms.widgets import PasswordInput
 
 
 class RegisterForm(forms.Form):
+
+    """Form for user registration."""
+
     username = forms.CharField(max_length=30)
     password = forms.CharField(widget=PasswordInput)
     password2 = forms.CharField(widget=PasswordInput)
@@ -10,6 +13,7 @@ class RegisterForm(forms.Form):
     name = forms.CharField(max_length=100)
 
     def clean(self):
+        """Check whether the two passwords match."""
         cleaned_data = super(RegisterForm, self).clean()
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
@@ -22,5 +26,8 @@ class RegisterForm(forms.Form):
 
 
 class LoginForm(forms.Form):
+
+    """Form for user login."""
+
     username = forms.CharField(max_length=30)
     password = forms.CharField(widget=PasswordInput)
