@@ -26,6 +26,7 @@
 
 {% block login_fade_modal %}
 <!-- Modal -->
+ {% csrf_token %}
 <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     
@@ -35,31 +36,45 @@
         <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span> Sign in</h4>
       </div>
       <div class="modal-body">
+
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">Username:</span>
-              <input type="text" name="sUsername" class="form-control" placeholder="Username">
-            </div>
-          </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Username:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="sUsername"></div>
+          <div class="col-xs-2 "></div>
         </div>
-        <br>
+        <p></p>
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">Password:</span>
-              <input type="password" name="sPassword" class="form-control" placeholder="Password">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Password:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="sPassword"></div>
+          <div class="col-xs-2 "></div>
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="sRespondS" class="alert alert-success">  
+              <a href="#" class="alert-link">...</a>
             </div>
           </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+
+        </div>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="sRespondD" class="alert alert-danger">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
+
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="submit" class="btn btn-primary"  name="sSubmit">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   
@@ -74,52 +89,67 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">Username:</span>
-              <input type="text" class="form-control" placeholder="Username">
-            </div>
-          </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Username:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rUsername"></div>
+          <div class="col-xs-2 "></div>
         </div>
-        <br>
+        <p></p>
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">Password:</span>
-              <input type="password" class="form-control" placeholder="Password">
-            </div>
-          </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Password:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword"></div>
+          <div class="col-xs-2 "></div>
+
         </div>
-        <br>
+        <p></p>
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">Input again</span>
-              <input type="password" class="form-control" placeholder="Password">
-            </div>
-          </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Confirm</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword2"></div>
+          <div class="col-xs-2 "></div>
         </div>
-        <br>
+        <p></p>
         <div class="row">
-          <div class="col-xs-2"></div>
-          <div class="col-xs-8">
-            <div class="input-group">
-              <span class="input-group-addon">E-mail:</span>
-              <input type="password" class="form-control" placeholder="E-mail address">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Email:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rEmail"></div>
+          <div class="col-xs-2 "></div>
+
+        </div>
+        <p></p>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-2 "><h4>Name:</h4></div>
+          <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rName"></div>
+          <div class="col-xs-2 "></div>
+        </div>
+         <p></p>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="rRespondS" class="alert alert-success">  
+              <a href="#" class="alert-link">...</a>
             </div>
           </div>
-          <div class="col-xs-2"></div>
+          <div class="col-xs-2 "></div>
+
         </div>
+        <div class="row">
+          <div class="col-xs-2 "></div>
+          <div class="col-xs-8 ">
+            <div name="rRespondD" class="alert alert-danger">  
+              <a href="#" class="alert-link">...</a>
+            </div>
+          </div>
+          <div class="col-xs-2 "></div>
+
+        </div>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="submit" class="btn btn-primary"  name="rSubmit">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -161,10 +191,18 @@
 {% endblock nav_search %}
       <ul class="nav navbar-nav navbar-right">
         <li>
+          {% if user.is_authenticated %}
+          <a href="#" >{{ user.myuser.name }}</a>
+          {% else %}
           <a href="#" data-toggle="modal" data-target="#sModal">登录</a>
+          {% endif %}
         </li>
         <li>
+          {% if user.is_authenticated %}
+          <a href="#" name="logout">登出</a>
+          {% else %}
           <a href="#" data-toggle="modal" data-target="#rModal">注册</a>
+          {% endif %}
         </li>
       </ul>
     </div>
@@ -175,12 +213,119 @@
     {% block main %}
     {% endblock main %}
 
+
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="{% static 'jquery-2.0.3.min.js' %}"></script>
   <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-  
+  <script type="text/javascript">
+$(document).ready(function(){
+  $("[name='sRespondD']").hide();
+  $("[name='sRespondS']").hide();
+  $("[name='rRespondD']").hide();
+  $("[name='rRespondS']").hide();
+  $("[name='sSubmit']").click(function(){
+    $.post("{% url 'rt:login' %}",
+      {
+        username: $("[name='sUsername']").val(),
+        password: $("[name='sPassword']").val(),
+        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+      },
+      function(res){
+        var Obj= eval("("+res+")");//转换为json对象   
+        if(Obj.status=="OK")
+        {
+            $("[name='sRespondD']").hide();
+            $("[name='sRespondS']").show();
+            $("[name='sRespondS']").text(Obj.status+": 欢迎回来~"+Obj.username);
+            
+          location.reload();
+        }
+        else if(Obj.err=="Login failed.")
+        {
+            $("[name='sRespondS']").hide();
+            $("[name='sRespondD']").show();
+            $("[name='sRespondD']").text(Obj.status+": 用户名与密码不匹配");
+        }
+        else
+        {
+            $("[name='sRespondS']").hide();
+            $("[name='sRespondD']").show();
+            $("[name='sRespondD']").text(Obj.status+": 请输入");
+            $.each(Obj.detail,function(key,value){
+            $("[name='sRespondD']").append(key+" ");
+               
+          })
+        }
+    });
+});
+  $("[name='rSubmit']").click(function(){
+
+    $.post("{% url 'rt:register' %}",
+      {
+        username: $("[name='rUsername']").val(),
+        password: $("[name='rPassword']").val(),
+        password2: $("[name='rPassword2']").val(),
+        email: $("[name='rEmail']").val(),
+        name: $("[name='rName']").val(),
+        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+      },
+      function(res){
+        var Obj= eval("("+res+")");//转换为json对象   
+        if(Obj.status=="OK")
+        {
+            $("[name='rRespondD']").hide();
+            $("[name='rRespondS']").show();
+            $("[name='rRespondS']").text(Obj.status+": 欢迎来到我们的网站~"+Obj.username);
+            
+          location.reload();
+        }
+        else if(Obj.detail)
+        {
+          if(Obj.detail.password2=="Passwords not match.")
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 密码不匹配");
+          }
+          else if(Obj.detail.email=="Enter a valid email address.")
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 请输入合法的邮箱地址");
+          }
+          else
+          {
+              $("[name='rRespondS']").hide();
+              $("[name='rRespondD']").show();
+              $("[name='rRespondD']").text(Obj.status+": 请输入");
+              $.each(Obj.detail,function(key,value){
+                $("[name='rRespondD']").append(key+" "); 
+              })
+          }
+        }
+        else
+        {
+            $("[name='rRespondS']").hide();
+            $("[name='rRespondD']").show();
+            $("[name='rRespondD']").text(Obj.err);
+        }
+    });
+});
+  $("[name='logout']").click(function(){
+
+    $.get("{% url 'rt:logout' %}",
+     
+      function(){
+        location.reload();
+         
+      
+    });
+});
+});
+</script>
+ 
   {% block define_js %}
   {% endblock define_js %}
   
