@@ -5,7 +5,7 @@
   <title>ReadTogether Library System</title>
   <meta name="description" content="Index">
   <meta name="author" content="Qt">
-  <link rel="shortcut icon" href="{% static 'rt/ico/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}" />
 {% endblock define_head %}
 
 {% block define_CSS %}
@@ -19,19 +19,19 @@
 
 {% block main %}
 <div class="container">
-  <div class="row">
+  <div class="row magxs">
     <div class="col-xs-2 "></div>
     <div class="col-xs-8 "><img src="{% static 'rt/img/index_logo.jpg' %}" class="img-responsive" alt="Responsive image"></div>
     <div class="col-xs-2 "></div>
   </div>
   <form action="{% url 'rt:search' %}" method="get">
-    <div class="row magxs">
+    <div class="row magmd">
       <div class="col-xs-2 "></div>
       <div class="col-xs-8 "><input class="form-control" type="text" placeholder="which book do you want?" name="q"></div>
       <div class="col-xs-2 "></div>
     </div>
 
-    <div class="row magmd">
+    <div class="row maglg">
       <div class="col-xs-4 "></div>
       <div class="col-xs-2 "><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
       <div class="col-xs-0 "></div>

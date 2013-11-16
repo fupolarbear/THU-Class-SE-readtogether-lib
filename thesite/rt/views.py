@@ -9,22 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
 from django.db.utils import IntegrityError
 
-from rt.models import Book, Info, MyUser, BookCopy
+from rt.models import Book, Info, MyUser, BookCopy, Borrowing
 from rt.forms import RegisterForm, LoginForm
 
 
-PInfo = ['title', 'pub', 'id']
-PBook = ['simple_name', 'author', 'simple_version', 'id']
-PCopy = ['status', 'id']
-'''
-XCopy = {
-    'where': 'Shelf 01',
-    }
-Copy.__getitem__ = lambda obj, key: XCopy[key]
-'''
-
-
 def index(request):
+    """Render index page with rank, news and guide."""
     return render(request, 'rt/index.html', {
         'rank': [],
         'news': Info.get_all('news')[:5],
@@ -33,6 +23,7 @@ def index(request):
 
 
 def search(request):
+    """Search for books."""
     q = request.GET.get('q', '')
     return render(request, 'rt/searchResult.html', {
         'q': q,
@@ -41,6 +32,7 @@ def search(request):
 
 
 def book(request, book_id):
+    """Show the detail page for a certain book."""
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
     return render(request, 'rt/book-detail.html', {
@@ -50,6 +42,7 @@ def book(request, book_id):
 
 
 def login(request):
+    """Backend for AJAX login."""
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -67,18 +60,19 @@ def login(request):
                         }))
             return HttpResponse(json.dumps({
                 'status': 'Error',
-                'error': 'Login failed.',
+                'err': 'Login failed.',
                 }))
     else:
         form = LoginForm()
     return HttpResponse(json.dumps({
         'status': 'Error',
-        'error': 'Login syntax error.',
+        'err': 'Login syntax error.',
         'detail': form.errors,
         }))
 
 
 def register(request):
+    """Backend for AJAX register."""
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -104,18 +98,19 @@ def register(request):
             except IntegrityError as err:
                 return HttpResponse(json.dumps({
                     'status': 'Error',
-                    'error': 'Username taken.',
+                    'err': 'Username taken.',
                     }))
     else:
         form = RegisterForm()
     return HttpResponse(json.dumps({
         'status': 'Error',
-        'error': 'Register syntax error.',
+        'err': 'Register syntax error.',
         'detail': form.errors,
         }))
 
 
 def logout(request):
+    """Backend for AJAX logout."""
     auth.logout(request)
     return HttpResponse(json.dumps({
         'status': 'OK',
@@ -124,31 +119,39 @@ def logout(request):
 
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def user(request):
+    """Show the user panel page."""
     return render(request, 'rt/user-panel.html', {
         'profile': request.user.myuser,
         })
 
 
 def queue(request, copy_id):
+    """Backend for AJAX book queueing."""
     if request.user.is_authenticated():
         pass  # More permission check
     else:
         return HttpResponse(json.dumps({
             'status': 'Error',
-            'error': 'Not logged in.',
+            'err': 'Not logged in.',
             }))
     try:
         copy = BookCopy.objects.get(pk=copy_id)
-        # Queue!
+        Borrowing.queue(request.user.myuser, copy)
+        return HttpResponse(json.dumps({
+            'status': 'OK',
+            'username': request.user.username,
+            'copy_id': copy_id,
+            }))
     except BookCopy.DoesNotExist as err:
         return HttpResponse(json.dumps({
             'status': 'Error',
-            'error': 'Invalid copy_id.',
+            'err': 'Invalid copy_id.',
             'copy_id': copy_id,
             }))
 
 
 def info(request):
+    """Show news and guide list."""
     return render(request, 'rt/info.html', {
         'news': Info.get_all('news'),
         'guide': Info.get_all('guide'),
@@ -156,6 +159,7 @@ def info(request):
 
 
 def info_detail(request, info_id):
+    """Show the content of the specific news of guide."""
     info = get_object_or_404(Info, pk=info_id)
     return render(request, 'rt/info.html', {
         'info': info,
@@ -165,12 +169,15 @@ def info_detail(request, info_id):
 
 
 def rank(request):
+    """Show the rank page. Uncomplete."""
     return render(request, 'rt/rank.html', {})
 
 
 def test(request):
-    return render(request, 'rt/test.html', {})
+    """Dummy page for various on-hand snippets."""
+    return render(request, 'rt/test.html', {'l': LoginForm, 'r': RegisterForm})
 
 
-def FC(prototype, *args):  # Fake Class
+def FC(prototype, *args):
+    """Fake a object-like variable for templates based on the prototype."""
     return dict(zip(prototype, args))

@@ -16,7 +16,11 @@ body {
 }
 
 */
-
+img.center-img {
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
 /*
 .panel-body .btn:not(.btn-block){ width:120px;margin-bottom:10px; }
 */
@@ -63,6 +67,15 @@ body {
 #makemycomment .modal-footer {
 	margin-top: 0px;
 }
+
+#ordingModal .panel {
+	margin-bottom: 0px;
+}
+
+#ordingModal .modal-footer {
+	margin-bottom: 0px;
+}
+
 
 
 .show_grid {
