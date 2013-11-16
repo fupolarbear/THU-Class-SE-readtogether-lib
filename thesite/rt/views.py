@@ -169,7 +169,7 @@ def rank(request):
 
 
 def test(request):
-    return render(request, 'rt/test.html', {})
+    return render(request, 'rt/test.html', {'l':LoginForm, 'r':RegisterForm})
 
 
 def FC(prototype, *args):  # Fake Class
