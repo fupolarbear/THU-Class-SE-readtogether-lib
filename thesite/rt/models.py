@@ -26,7 +26,7 @@ class Book(models.Model):
     revision_origin = models.SmallIntegerField(default=0)
 
     @staticmethod
-    def search_part(string):
+    def _search_part(string):
         """search for string in name_cn, name_origin or author"""
         re1 = Book.objects.filter(name_cn__contains=string)
         re2 = Book.objects.filter(name_origin__contains=string)
@@ -39,9 +39,9 @@ class Book(models.Model):
         make the word split with whitespace and get their search result union.
         """
         s = string.split()
-        re = Book.objects.get_empty_query_set()
+        re = Book.objects.none()
         for ss in s:
-            re = re | Book.search_part(ss)
+            re = re | Book._search_part(ss)
         return re
 
     def simple_name(self):
@@ -129,7 +129,7 @@ class MyUser(models.Model):
         'Admin': _permission_num_generate(0, 0, 0),
         }
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def register(self, username, password, email, name, group='NormalUser'):
         """
         user register,
@@ -160,7 +160,7 @@ class MyUser(models.Model):
         """get my group queryset"""
         return self.user.groups.all()
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def erase(self):
         """delete user in both myuser and Django.User"""
         self.user.delete()
