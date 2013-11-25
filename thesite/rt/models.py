@@ -174,6 +174,12 @@ class MyUser(models.Model):
         """return the permission numbe"""
         return (self.permission_num[self.get_group_name()])[perm]
 
+    def has_borrowing_num(self):
+        """return the number of book which you have borrowed."""
+        return Borrowing.objects.filter(
+            myuser=self, status=0, is_active=True
+            ).count()
+
     def __unicode__(self):
         return self.name
 
@@ -201,11 +207,16 @@ class Borrowing(models.Model):
     @staticmethod
     def borrow(myuser, book_copy):
         """User myuser borrow a book_copy."""
-        Borrowing.objects.create(
-            status=0,
-            book_copy=book_copy,
-            myuser=myuser,
-            )
+        if (book_copy.get_status()['text'] != 'on shelf'):
+            raise Exception("the book is not on shelf")
+        elif (myuser.has_borrowing_num >= myuser.has_perm('borrowing_num')):
+            raise Exception("you can't borrow so many book~")
+        else:
+            Borrowing.objects.create(
+                status=0,
+                book_copy=book_copy,
+                myuser=myuser,
+                )
 
     @staticmethod
     def reborrow(myuser, book_copy):
