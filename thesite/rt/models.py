@@ -174,6 +174,28 @@ class MyUser(models.Model):
         """return the permission numbe"""
         return (self.permission_num[self.get_group_name()])[perm]
 
+    def has_borrowing_num(self):
+        """return the number of book which you have borrowed."""
+        return Borrowing.objects.filter(
+            myuser=self, status__in=[0, 1, 2], is_active=True
+            ).count()
+
+    def has_queue_num(self):
+        """return the number of book wich you have queued."""
+        return Borrowing.objects.filter(
+            myuser=self, status=4, is_active=True
+            ).count()
+
+    def get_all_borrowing(self):
+        return Borrowing.objects.filter(
+            myuser=self, status__in=[0, 1, 2], is_active=True
+            )
+
+    def get_all_queue(self):
+        return Borrowing.objects.filter(
+            myuser=self, status=4, is_active=True
+            )
+
     def __unicode__(self):
         return self.name
 
@@ -201,15 +223,31 @@ class Borrowing(models.Model):
     @staticmethod
     def borrow(myuser, book_copy):
         """User myuser borrow a book_copy."""
-        Borrowing.objects.create(
-            status=0,
-            book_copy=book_copy,
-            myuser=myuser,
-            )
+        if (book_copy.get_status()['text'] != 'on shelf'):
+            raise Exception("the book is not on shelf")
+        elif (myuser.has_borrowing_num >= myuser.has_perm('borrowing_num')):
+            raise Exception("you can't borrow so many book~")
+        else:
+            Borrowing.objects.create(
+                status=0,
+                book_copy=book_copy,
+                myuser=myuser,
+                )
 
     @staticmethod
     def reborrow(myuser, book_copy):
         """User muuser reborrow the book again."""
+        if (not Borrowing.objects.filter(
+                myuser=myuser, book_copy=book_copy, is_active=True,
+                status__in=[0, 1, 2]
+                ).exists()):
+            raise Exception("you don't borrow this book!")
+        elif (book_copy.get_status()['queue'] > 0):
+            raise Exception("there is someone queuing, you can't reborrow")
+        elif (Borrowing.objects.get(
+                is_active=True, myuser=myuser, book_copy=book_copy
+                ).status == 2):
+            raise Exception("you have reborrowed once!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
@@ -224,6 +262,11 @@ class Borrowing(models.Model):
     @staticmethod
     def return_book(myuser, book_copy):
         """User myuser return the book"""
+        if (not Borrowing.objects.filter(
+                myuser=myuser, book_copy=book_copy, is_active=True,
+                status__in=[0, 1, 2]
+                ).exists()):
+            raise Exception("you don't borrow this book!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
@@ -238,6 +281,14 @@ class Borrowing(models.Model):
     @staticmethod
     def queue_next(book_copy):
         """the admin gives the returned book to the one who queue first."""
+        if (not Borrowing.objects.filter(
+                is_active=True, status=3, book_copy=book_copy
+                ).exists()):
+            raise Exception("the book is not arranging")
+        elif (not Borrowing.objects.filter(
+                is_active=True, status=4, book_copy=book_copy
+                ).exists()):
+            raise Exception("no one queue")
         b = Borrowing.objects.get(
             is_active=True, status=3, book_copy=book_copy
             )
@@ -257,6 +308,10 @@ class Borrowing(models.Model):
     @staticmethod
     def readify(book_copy):
         """the admin moves the returned book to shelf."""
+        if (not Borrowing.objects.filter(
+                is_active=True, status=3, book_copy=book_copy
+                ).exists()):
+            raise Exception("the book is not arranging")
         b = Borrowing.objects.get(
             is_active=True, status=3, book_copy=book_copy
             )
@@ -270,6 +325,16 @@ class Borrowing(models.Model):
 
     @staticmethod
     def queue(myuser, book_copy):
+        if (Borrowing.objects.filter(
+                myuser=myuser, book_copy=book_copy, is_active=True, status=0
+                ).exists()):
+            raise Exception("you have been borrowing this book!")
+        elif (Borrowing.objects.filter(
+                myuser=myuser, book_copy=book_copy, is_active=True, status=4
+                ).exists()):
+            raise Exception("you have been queuing this book!")
+        elif (myuser.get_perm("queue_book_num") <= myuser.has_queue_num()):
+            raise Exception("you can't queue so many books.")
         """queue a book."""
         if (
             Borrowing.objects.filter(
