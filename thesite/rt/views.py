@@ -8,6 +8,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
 from django.db.utils import IntegrityError
+from django.utils.datastructures import MultiValueDictKeyError
 
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing
 from rt.forms import RegisterForm, LoginForm
@@ -39,6 +40,57 @@ def book(request, book_id):
         'book': book,
         'copy': copy,
         })
+
+
+# Error checking below should work as standard or example for similar views.
+# A decorator may be introduced to DRY the code.
+# queue should be modified to meet this standard, as well as login/out/reg.
+def comment(request, book_id):
+    """Add a comment for the book specified by book_id.
+
+    POST:
+    content -- the content of the comment.
+
+    Renders JSON with 'status' ('Error' or 'OK') and optionally 'err' for
+    detailed (human-readable but English) error message.
+
+    User is derived from the session.
+    """
+    if request.method != 'POST':
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'err': 'Only POST method is accepted.',
+            }))
+    if not request.user.is_authenticated():
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'err': 'Not logged in.',
+            }))
+    try:
+        book = Book.objects.get(pk=book_id)
+    except Book.DoesNotExist as err:
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'err': 'Invalid book_id.',
+            }))
+    try:
+        content = request.POST['content']
+    except MultiValueDictKeyError as err:
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'err': 'POST data not found: content.',
+            }))
+    # call model to post the comment
+    # maybe permission errors
+    # maybe truncation errors
+    # maybe others insert errors
+    return HttpResponse(json.dumps({
+        'status': 'OK',
+        }))
+
+
+def ajax_comment(request, book_id):
+    pass
 
 
 def login(request):
@@ -148,6 +200,50 @@ def queue(request, copy_id):
             'err': 'Invalid copy_id.',
             'copy_id': copy_id,
             }))
+
+
+def reborrow(request, book_id):
+    pass
+
+
+def borrow(request, book_id, user_id):
+    pass
+
+
+def back(request, book_id):
+    pass
+
+
+def queue_next(request, book_id):
+    pass
+
+
+def readify(request, book_id):
+    pass
+
+
+def ad_borrow(request):
+    pass
+
+
+def ad_back(request):
+    pass
+
+
+def ad_queue_next(request):
+    pass
+
+
+def ad_readify(request):
+    pass
+
+
+def ad_user(request):
+    pass
+
+
+def ad_root(request):
+    pass
 
 
 def info(request):
