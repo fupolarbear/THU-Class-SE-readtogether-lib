@@ -51,8 +51,9 @@ def comment(request, book_id):
     POST:
     content -- the content of the comment.
 
-    Renders JSON with 'status' ('Error' or 'OK') and optionally 'err' for
-    detailed (human-readable but English) error message.
+    Renders JSON:
+    status  -- 'Error' or 'OK'
+    err     -- (on 'Error') human-readable (but English) error message.
 
     User is derived from the session.
     """
@@ -90,7 +91,50 @@ def comment(request, book_id):
 
 
 def ajax_comment(request, book_id):
-    pass
+    """Fetch comments for the book specified by book_id.
+
+    GET:
+    page -- the desired page. 0 is reserved for the default ones returned on
+            the book page. The first load operation should use 1 (default).
+            Large page numbers exceeds the total number returns empty list.
+    Other parameters may be used such as 'last_date' or 'last_id', so it's not
+    a good idea to put them into URL.
+
+    Renders JSON:
+    status  -- 'Error' or 'OK'
+    err     -- (on 'Error') human-readable (but English) error message.
+    comment -- (on 'OK') a list of comments
+      name     -- the name of the user
+      datetime -- datetime when the comment was posted
+      title    -- title of the comment
+      content  -- content of the comment
+      rate     -- rate of the comment
+      spoiler  -- whether this comment is a spoiler
+
+    Everyone can view comments.
+    """
+    try:
+        book = Book.objects.get(pk=book_id)
+    except Book.DoesNotExist as err:
+        return HttpResponse(json.dumps({
+            'status': 'Error',
+            'err': 'Invalid book_id.',
+            }))
+    page = request.GET.get('page', 1)
+    CMT = ['name', 'datetime', 'title', 'content', 'rate', 'spoiler']
+    return HttpResponse(json.dumps({
+        'status': 'OK',
+        'comment': [
+            FC(
+                CMT, 'Tester', '2013-12-12 12:12:12', 'Title', 'Content',
+                3, True,
+                ),
+            FC(
+                CMT, 'SuperBug', '2013-12-12 12:12:12', 'No Title', 'Super!',
+                4, False,
+                ),
+            ],
+        }))
 
 
 def login(request):
