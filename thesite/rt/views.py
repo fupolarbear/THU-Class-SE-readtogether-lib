@@ -9,7 +9,8 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing
 from rt.forms import RegisterForm, LoginForm
-from rt.views_utils import FC, render_JSON_OK, render_JSON_Error
+from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
+    POST_required, login_required_JSON, catch_404_JSON
 
 
 def index(request):
@@ -43,6 +44,9 @@ def book(request, book_id):
 # Error checking below should work as standard or example for similar views.
 # A decorator may be introduced to DRY the code.
 # queue should be modified to meet this standard, as well as login/out/reg.
+@POST_required('content')
+@login_required_JSON
+@catch_404_JSON
 def comment(request, book_id):
     """Add a comment for the book specified by book_id.
 
@@ -53,18 +57,8 @@ def comment(request, book_id):
 
     User is derived from the session.
     """
-    if request.method != 'POST':
-        return render_JSON_Error('Only POST method is accepted.')
-    if not request.user.is_authenticated():
-        return render_JSON_Error('Not logged in.')
-    try:
-        book = Book.objects.get(pk=book_id)
-    except Book.DoesNotExist as err:
-        return render_JSON_Error('Invalid book_id.')
-    try:
-        content = request.POST['content']
-    except MultiValueDictKeyError as err:
-        return render_JSON_Error('POST data not found: content.')
+    book = get_object_or_404(Book, pk=book_id)
+    content = request.POST['content']
     # call model to post the comment
     # maybe permission errors
     # maybe truncation errors
@@ -72,6 +66,7 @@ def comment(request, book_id):
     return render_JSON_OK({})
 
 
+@catch_404_JSON
 def ajax_comment(request, book_id):
     """Fetch comments for the book specified by book_id.
 
@@ -93,10 +88,7 @@ def ajax_comment(request, book_id):
 
     Everyone can view comments.
     """
-    try:
-        book = Book.objects.get(pk=book_id)
-    except Book.DoesNotExist as err:
-        return render_JSON_Error('Invalid book_id.')
+    book = get_object_or_404(Book, pk=book_id)
     page = request.GET.get('page', 1)
     CMT = ['name', 'datetime', 'title', 'content', 'rate', 'spoiler']
     return render_JSON_OK({
@@ -113,57 +105,53 @@ def ajax_comment(request, book_id):
         })
 
 
+@POST_required()
 def login(request):
     """Backend for AJAX login."""
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = auth.authenticate(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password'],
-                )
-            if user is not None:
-                if user.is_active:
-                    auth.login(request, user)
-                    return render_JSON_OK({
-                        'username': user.username,
-                        'name': user.myuser.name,
-                        })
-            return render_JSON_Error('Login failed.')
-    else:
-        form = LoginForm()
-    return render_JSON_Error('Login syntax error.', {
-        'detail': form.errors,
-        })
-
-
-def register(request):
-    """Backend for AJAX register."""
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            u = MyUser()
-            try:
-                u.register(
-                    form.cleaned_data['username'],
-                    form.cleaned_data['password'],
-                    form.cleaned_data['email'],
-                    form.cleaned_data['name'],
-                    )
-                user = auth.authenticate(
-                    username=form.cleaned_data['username'],
-                    password=form.cleaned_data['password'],
-                    )
-                assert user is not None
+    form = LoginForm(request.POST)
+    if form.is_valid():
+        user = auth.authenticate(
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password'],
+            )
+        if user is not None:
+            if user.is_active:
                 auth.login(request, user)
                 return render_JSON_OK({
                     'username': user.username,
                     'name': user.myuser.name,
                     })
-            except IntegrityError as err:
-                return render_JSON_Error('Username taken.')
-    else:
-        form = RegisterForm()
+        return render_JSON_Error('Login failed.')
+    return render_JSON_Error('Login syntax error.', {
+        'detail': form.errors,
+        })
+
+
+@POST_required()
+def register(request):
+    """Backend for AJAX register."""
+    form = RegisterForm(request.POST)
+    if form.is_valid():
+        u = MyUser()
+        try:
+            u.register(
+                form.cleaned_data['username'],
+                form.cleaned_data['password'],
+                form.cleaned_data['email'],
+                form.cleaned_data['name'],
+                )
+            user = auth.authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+                )
+            assert user is not None
+            auth.login(request, user)
+            return render_JSON_OK({
+                'username': user.username,
+                'name': user.myuser.name,
+                })
+        except IntegrityError as err:
+            return render_JSON_Error('Username taken.')
     return render_JSON_Error('Register syntax error.', {
         'detail': form.errors,
         })
@@ -183,23 +171,17 @@ def user(request):
         })
 
 
+@POST_required()
+@login_required_JSON
+@catch_404_JSON
 def queue(request, copy_id):
     """Backend for AJAX book queueing."""
-    if request.user.is_authenticated():
-        pass  # More permission check
-    else:
-        return render_JSON_Error('Not logged in.')
-    try:
-        copy = BookCopy.objects.get(pk=copy_id)
-        Borrowing.queue(request.user.myuser, copy)
-        return render_JSON_OK({
-            'username': request.user.username,
-            'copy_id': copy_id,
-            })
-    except BookCopy.DoesNotExist as err:
-        return render_JSON_Error('Invalid copy_id.', {
-            'copy_id': copy_id,
-            })
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.queue(request.user.myuser, copy)
+    return render_JSON_OK({
+        'username': request.user.username,
+        'copy_id': copy_id,
+        })
 
 
 def reborrow(request, book_id):
