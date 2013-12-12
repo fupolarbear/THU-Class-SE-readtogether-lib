@@ -1,9 +1,6 @@
 from datetime import datetime
-import json
 
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-# from django.contrib.auth import authenticate, login
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
@@ -12,6 +9,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing
 from rt.forms import RegisterForm, LoginForm
+from rt.views_utils import FC, render_JSON_OK, render_JSON_Error
 
 
 def index(request):
@@ -51,43 +49,27 @@ def comment(request, book_id):
     POST:
     content -- the content of the comment.
 
-    Renders JSON:
-    status  -- 'Error' or 'OK'
-    err     -- (on 'Error') human-readable (but English) error message.
+    Renders JSON: (besides 'status' or 'err')
 
     User is derived from the session.
     """
     if request.method != 'POST':
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Only POST method is accepted.',
-            }))
+        return render_JSON_Error('Only POST method is accepted.')
     if not request.user.is_authenticated():
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Not logged in.',
-            }))
+        return render_JSON_Error('Not logged in.')
     try:
         book = Book.objects.get(pk=book_id)
     except Book.DoesNotExist as err:
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Invalid book_id.',
-            }))
+        return render_JSON_Error('Invalid book_id.')
     try:
         content = request.POST['content']
     except MultiValueDictKeyError as err:
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'POST data not found: content.',
-            }))
+        return render_JSON_Error('POST data not found: content.')
     # call model to post the comment
     # maybe permission errors
     # maybe truncation errors
     # maybe others insert errors
-    return HttpResponse(json.dumps({
-        'status': 'OK',
-        }))
+    return render_JSON_OK({})
 
 
 def ajax_comment(request, book_id):
@@ -100,9 +82,7 @@ def ajax_comment(request, book_id):
     Other parameters may be used such as 'last_date' or 'last_id', so it's not
     a good idea to put them into URL.
 
-    Renders JSON:
-    status  -- 'Error' or 'OK'
-    err     -- (on 'Error') human-readable (but English) error message.
+    Renders JSON: (besides 'status' or 'err')
     comment -- (on 'OK') a list of comments
       name     -- the name of the user
       datetime -- datetime when the comment was posted
@@ -116,14 +96,10 @@ def ajax_comment(request, book_id):
     try:
         book = Book.objects.get(pk=book_id)
     except Book.DoesNotExist as err:
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Invalid book_id.',
-            }))
+        return render_JSON_Error('Invalid book_id.')
     page = request.GET.get('page', 1)
     CMT = ['name', 'datetime', 'title', 'content', 'rate', 'spoiler']
-    return HttpResponse(json.dumps({
-        'status': 'OK',
+    return render_JSON_OK({
         'comment': [
             FC(
                 CMT, 'Tester', '2013-12-12 12:12:12', 'Title', 'Content',
@@ -134,7 +110,7 @@ def ajax_comment(request, book_id):
                 4, False,
                 ),
             ],
-        }))
+        })
 
 
 def login(request):
@@ -149,22 +125,16 @@ def login(request):
             if user is not None:
                 if user.is_active:
                     auth.login(request, user)
-                    return HttpResponse(json.dumps({
-                        'status': 'OK',
+                    return render_JSON_OK({
                         'username': user.username,
                         'name': user.myuser.name,
-                        }))
-            return HttpResponse(json.dumps({
-                'status': 'Error',
-                'err': 'Login failed.',
-                }))
+                        })
+            return render_JSON_Error('Login failed.')
     else:
         form = LoginForm()
-    return HttpResponse(json.dumps({
-        'status': 'Error',
-        'err': 'Login syntax error.',
+    return render_JSON_Error('Login syntax error.', {
         'detail': form.errors,
-        }))
+        })
 
 
 def register(request):
@@ -186,31 +156,23 @@ def register(request):
                     )
                 assert user is not None
                 auth.login(request, user)
-                return HttpResponse(json.dumps({
-                    'status': 'OK',
+                return render_JSON_OK({
                     'username': user.username,
                     'name': user.myuser.name,
-                    }))
+                    })
             except IntegrityError as err:
-                return HttpResponse(json.dumps({
-                    'status': 'Error',
-                    'err': 'Username taken.',
-                    }))
+                return render_JSON_Error('Username taken.')
     else:
         form = RegisterForm()
-    return HttpResponse(json.dumps({
-        'status': 'Error',
-        'err': 'Register syntax error.',
+    return render_JSON_Error('Register syntax error.', {
         'detail': form.errors,
-        }))
+        })
 
 
 def logout(request):
     """Backend for AJAX logout."""
     auth.logout(request)
-    return HttpResponse(json.dumps({
-        'status': 'OK',
-        }))
+    return render_JSON_OK({})
 
 
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
@@ -226,24 +188,18 @@ def queue(request, copy_id):
     if request.user.is_authenticated():
         pass  # More permission check
     else:
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Not logged in.',
-            }))
+        return render_JSON_Error('Not logged in.')
     try:
         copy = BookCopy.objects.get(pk=copy_id)
         Borrowing.queue(request.user.myuser, copy)
-        return HttpResponse(json.dumps({
-            'status': 'OK',
+        return render_JSON_OK({
             'username': request.user.username,
             'copy_id': copy_id,
-            }))
+            })
     except BookCopy.DoesNotExist as err:
-        return HttpResponse(json.dumps({
-            'status': 'Error',
-            'err': 'Invalid copy_id.',
+        return render_JSON_Error('Invalid copy_id.', {
             'copy_id': copy_id,
-            }))
+            })
 
 
 def reborrow(request, book_id):
@@ -316,8 +272,3 @@ def rank(request):
 def test(request):
     """Dummy page for various on-hand snippets."""
     return render(request, 'rt/test.html', {'l': LoginForm, 'r': RegisterForm})
-
-
-def FC(prototype, *args):
-    """Fake a object-like variable for templates based on the prototype."""
-    return dict(zip(prototype, args))
