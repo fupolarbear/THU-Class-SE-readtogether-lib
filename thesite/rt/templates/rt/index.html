@@ -5,7 +5,7 @@
   <title>ReadTogether Library System</title>
   <meta name="description" content="Index">
   <meta name="author" content="Qt">
-  <link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}" />
+  <link rel="shortcut icon" href="{% static 'rt/ico/favicon.png' %}">
 {% endblock define_head %}
 
 {% block define_CSS %}
@@ -19,37 +19,37 @@
 
 {% block main %}
 <div class="container">
-  <div class="row magxs">
-    <div class="col-xs-2 "></div>
-    <div class="col-xs-8 "><img src="{% static 'rt/img/index_logo.jpg' %}" class="img-responsive" alt="Responsive image"></div>
-    <div class="col-xs-2 "></div>
+  <div class="row maglg">
+    <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
+    <div class="col-lg-8 col-md-10 col-sm-10 col-xs-12"><img src="{% static 'rt/img/index_logo.jpg' %}" class="img-responsive" alt="Responsive image"></div>
+    <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
   </div>
   <form action="{% url 'rt:search' %}" method="get">
-    <div class="row magmd">
-      <div class="col-xs-2 "></div>
-      <div class="col-xs-8 "><input class="form-control" type="text" placeholder="which book do you want?" name="q"></div>
-      <div class="col-xs-2 "></div>
+    <div class="row magxs">
+      <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
+      <div class="col-lg-8 col-md-10 col-sm-10 col-xs-12"><input class="form-control" type="text" placeholder="which book do you want?" name="q"></div>
+      <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
     </div>
 
-    <div class="row maglg">
-      <div class="col-xs-4 "></div>
-      <div class="col-xs-2 "><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
-      <div class="col-xs-0 "></div>
-      <div class="col-xs-2 "><button type="button" class="btn btn-primary btn-block" title="oops~~~~>_< " data-content="this function is still in the brain!">I cannot be luckier</button></div>
-      <div class="col-xs-4 "></div>
+    <div class="row magmd">
+      <div class="col-lg-4 col-md-3 col-sm-3 col-xs-0"></div>
+      <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6"><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
+      
+      <div class="col-lg-2 col-md-3 col-sm-3  col-xs-6"><button type="button" class="btn btn-primary btn-block" title="oops...>_< " data-content="this function is still in the brain!">I feel lucky</button></div>
+      <div class="col-lg-4 col-md-3 col-sm-3  col-xs-0"></div>
     </div>
   </form>
 </div>
 
-<div class="container">
+<div class="container magword">
 <div class="row">
-  <div class="col-xs-4 ">
+  <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12">
     <div class="alert alert-danger">
       <table class="table table-hover">
         <thead>
            <tr>
-            <th>Rank</th>
             <th></th>
+            <th>Rank</th>
             <th></th>
             <th></th>
           </tr>
@@ -63,20 +63,19 @@
             <td>{{ item.2 }}</td>
           </tr>
         {% empty %}
-          <tr><td>No content.</td><td></td><td></td><td></td></tr>
+          <tr><td></td><td>No content.</td><td></td><td></td></tr>
       	{% endfor %}
         </tbody>
       </table>
     </div>
   </div>
-  <div class="col-xs-4 ">
+  <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12">
     <div class="alert alert-warning">
-      <table class="table table-hover">
+      <table class="table table-hover magword">
         <thead>
           <tr>
             <th></th>
             <th>News</th>
-            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -85,7 +84,6 @@
           <tr>
             <td>{{ forloop.counter }}</td>
             <td><a href = "{% url 'rt:info_detail' item.id %}">{{ item.title }}</a></td>
-            <td></td>
             <td>{{ item.date|date:"F j, Y"}}</td>
           </tr>
         {% empty %}
@@ -95,14 +93,13 @@
       </table>
     </div>
   </div>
-  <div class="col-xs-4 ">
+  <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12">
     <div class="alert alert-success">
       <table class="table table-hover">
         <thead>
           <tr>
             <th></th>
             <th>Guide</th>
-            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -111,7 +108,6 @@
           <tr>
             <td>{{ forloop.counter }}</td>
             <td><a href = "{% url 'rt:info_detail' item.id %}">{{ item.title }}</a></td>
-            <td></td>
             <td>{{ item.date|date:"F j, Y"}}</td>
           </tr>
         {% empty %}
