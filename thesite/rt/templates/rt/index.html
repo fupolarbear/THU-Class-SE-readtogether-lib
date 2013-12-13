@@ -50,14 +50,16 @@
            <tr>
             <th></th>
             <th>Rank</th>
-            <th></th>
+            <th colspan=2 style="width:600px"><a href="{% url 'rt:rank' %}">更多排行榜</a></th>
+            
           </tr>
         </thead>
         <tbody>
 	      {% for item in rank %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ item.book.simple_name }}</td>
+            <td colspan=2><a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }}</a></td>
+            
             <td class="ranktd">{{ item.value|floatformat:1 }}</td>
           </tr>
         {% empty %}

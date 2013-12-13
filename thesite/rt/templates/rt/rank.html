@@ -33,13 +33,13 @@
       <h3><strong>排行榜</strong></h3>   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#borrow" data-toggle="tab">借阅排行</a></li>
+        <li ><a href="#borrow" data-toggle="tab">借阅排行</a></li>
         <li><a href="#comment" data-toggle="tab">评论排行</a></li>
-        <li><a href="#rate" data-toggle="tab">评分排行</a></li>  
+        <li class="active"><a href="#rate" data-toggle="tab">评分排行</a></li>  
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane fade in active" id="borrow">
+        <div class="tab-pane fade in " id="borrow">
           <div class="panel-group" id="accordion">
             {% for item in rank_by_borrow %}
             <div class="panel panel-default">
@@ -121,7 +121,7 @@
             {% endfor %}
           </div>
         </div>
-        <div class="tab-pane fade in " id="rate">
+        <div class="tab-pane fade in active" id="rate">
           <div class="panel-group" id="accordion3">
                 {% for item in rank_by_rate %}
             <div class="panel panel-default">
