@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate
 from django.db.models.query import QuerySet
 # Create your models here.
 
+class PermException(Exception):
+    pass
 
 class Book(models.Model):
 
@@ -243,9 +245,9 @@ class Borrowing(models.Model):
     def borrow(myuser, book_copy):
         """User myuser borrow a book_copy."""
         if (book_copy.get_status()['text'] != 'on shelf'):
-            raise Exception("the book is not on shelf")
+            raise PermException("the book is not on shelf")
         elif (myuser.has_borrowing_num >= myuser.has_perm('borrowing_num')):
-            raise Exception("you can't borrow so many book~")
+            raise PermException("you can't borrow so many book~")
         else:
             Borrowing.objects.create(
                 status=0,
@@ -260,13 +262,13 @@ class Borrowing(models.Model):
                 myuser=myuser, book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
                 ).exists()):
-            raise Exception("you don't borrow this book!")
+            raise PermException("you don't borrow this book!")
         elif (book_copy.get_status()['queue'] > 0):
-            raise Exception("there is someone queuing, you can't reborrow")
+            raise PermException("there is someone queuing, you can't reborrow")
         elif (Borrowing.objects.get(
                 is_active=True, myuser=myuser, book_copy=book_copy
                 ).status == 2):
-            raise Exception("you have reborrowed once!")
+            raise PermException("you have reborrowed once!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
@@ -285,7 +287,7 @@ class Borrowing(models.Model):
                 myuser=myuser, book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
                 ).exists()):
-            raise Exception("you don't borrow this book!")
+            raise PermException("you don't borrow this book!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
@@ -303,11 +305,11 @@ class Borrowing(models.Model):
         if (not Borrowing.objects.filter(
                 is_active=True, status=3, book_copy=book_copy
                 ).exists()):
-            raise Exception("the book is not arranging")
+            raise PermException("the book is not arranging")
         elif (not Borrowing.objects.filter(
                 is_active=True, status=4, book_copy=book_copy
                 ).exists()):
-            raise Exception("no one queue")
+            raise PermException("no one queue")
         b = Borrowing.objects.get(
             is_active=True, status=3, book_copy=book_copy
             )
@@ -330,7 +332,7 @@ class Borrowing(models.Model):
         if (not Borrowing.objects.filter(
                 is_active=True, status=3, book_copy=book_copy
                 ).exists()):
-            raise Exception("the book is not arranging")
+            raise PermException("the book is not arranging")
         b = Borrowing.objects.get(
             is_active=True, status=3, book_copy=book_copy
             )
@@ -347,13 +349,13 @@ class Borrowing(models.Model):
         if (Borrowing.objects.filter(
                 myuser=myuser, book_copy=book_copy, is_active=True, status=0
                 ).exists()):
-            raise Exception("you have been borrowing this book!")
+            raise PermException("you have been borrowing this book!")
         elif (Borrowing.objects.filter(
                 myuser=myuser, book_copy=book_copy, is_active=True, status=4
                 ).exists()):
-            raise Exception("you have been queuing this book!")
+            raise PermException("you have been queuing this book!")
         elif (myuser.get_perm("queue_book_num") <= myuser.has_queue_num()):
-            raise Exception("you can't queue so many books.")
+            raise PermException("you can't queue so many books.")
         """queue a book."""
         if (
             Borrowing.objects.filter(
