@@ -217,7 +217,7 @@ class MyUser(models.Model):
             ).count()
 
     def remain_borrowing_num(self):
-        return self.get_perm('borrowing_num')-has_borrowing_num
+        return self.get_perm('borrowing_num')-self.has_borrowing_num()
 
     def has_queue_num(self):
         """return the number of book wich you have queued."""
