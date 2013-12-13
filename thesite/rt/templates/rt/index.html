@@ -5,7 +5,7 @@
   <title>ReadTogether Library System</title>
   <meta name="description" content="Index">
   <meta name="author" content="Qt">
-  <link rel="shortcut icon" href="{% static 'rt/ico/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}">
 {% endblock define_head %}
 
 {% block define_CSS %}
@@ -51,16 +51,14 @@
             <th></th>
             <th>Rank</th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
 	      {% for item in rank %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ item.0 }}</td>
-            <td>{{ item.1 }}</td>
-            <td>{{ item.2 }}</td>
+            <td>{{ item.book.simple_name }}</td>
+            <td class="ranktd">{{ item.value|floatformat:1 }}</td>
           </tr>
         {% empty %}
           <tr><td></td><td>No content.</td><td></td><td></td></tr>
