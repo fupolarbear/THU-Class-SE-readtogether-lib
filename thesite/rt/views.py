@@ -11,7 +11,8 @@ from django.core.paginator import Paginator
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment, Rank
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
-    POST_required, login_required_JSON, catch_404_JSON, get_page
+    POST_required, login_required_JSON, catch_404_JSON, get_page, \
+    catch_PermException_JSON
 
 
 COMMENT_PAGE_SIZE_0 = 0
@@ -183,6 +184,7 @@ def user(request):
 @POST_required()
 @login_required_JSON()
 @catch_404_JSON
+@catch_PermException_JSON
 def queue(request, copy_id):
     """Backend for AJAX book queueing."""
     copy = get_object_or_404(BookCopy, pk=copy_id)
@@ -196,6 +198,7 @@ def queue(request, copy_id):
 @POST_required()
 @login_required_JSON()
 @catch_404_JSON
+@catch_PermException_JSON
 def reborrow(request, copy_id):
     """Backend for AJAX book reborrow."""
     copy = get_object_or_404(BookCopy, pk=copy_id)
@@ -206,43 +209,63 @@ def reborrow(request, copy_id):
         })
 
 
-def borrow(request, copy_id, user_id):
-    pass
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_PermException_JSON
+def borrow(request, copy_id, myuser_id):
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    myuser = get_object_or_404(MyUser, pk=myuser_id)
+    Borrowing.borrow(myuser, copy)
+    return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_PermException_JSON
 def back(request, copy_id):
-    pass
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.return_book(copy)
+    return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_PermException_JSON
 def queue_next(request, copy_id):
-    pass
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.queue_next(copy)
+    return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_PermException_JSON
 def readify(request, copy_id):
-    pass
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.readify(copy)
+    return render_JSON_OK({})
 
 
-def ad_borrow(request):
-    pass
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_PermException_JSON
+def disappear(request, copy_id):
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.disappear(copy)
+    return render_JSON_OK({})
 
 
-def ad_back(request):
-    pass
-
-
-def ad_queue_next(request):
-    pass
-
-
-def ad_readify(request):
-    pass
+@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+def ad_book(request):
+    return render(request, 'rt/book-manager-panel.html', {})
 
 
 def ad_user(request):
-    pass
-
-
-def ad_root(request):
     pass
 
 
@@ -270,6 +293,7 @@ def rank(request):
         'rank_by_borrow': Rank.get_top(0),
         'rank_by_comment': Rank.get_top(1),
         'rank_by_rate': Rank.get_top(2),
+        'range5': range(1, 6),
         })
 
 
