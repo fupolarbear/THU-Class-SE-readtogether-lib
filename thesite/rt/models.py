@@ -336,7 +336,8 @@ class Borrowing(models.Model):
             )
 
     @staticmethod
-    def queue_next(book_copy):
+    @transaction.atomic
+    def queue_next(myuser, book_copy):
         """the admin gives the returned book to the one who queue first."""
         if (not Borrowing.objects.filter(
                 is_active=True, status=3, book_copy=book_copy
@@ -345,17 +346,19 @@ class Borrowing(models.Model):
         elif (not Borrowing.objects.filter(
                 is_active=True, status=4, book_copy=book_copy
                 ).exists()):
-            raise PermException("no one queue")
+            raise PermException("no one queue") 
+        u = Borrowing.objects.filter(
+            is_active=True, status=4, book_copy=book_copy
+            ).order_by('datetime')[0]
+        if u.myuser.id != myuser.id:
+            raise PermException("you are not the first one who have queued")
+        u.is_active = False
+        u.save()
         b = Borrowing.objects.get(
             is_active=True, status=3, book_copy=book_copy
             )
         b.is_active = False
         b.save()
-        u = Borrowing.objects.filter(
-            is_active=True, status=4, book_copy=book_copy
-            ).order_by('datetime')[0]
-        u.is_active = False
-        u.save()
         Borrowing.objects.create(
             status=0,
             book_copy=book_copy,
