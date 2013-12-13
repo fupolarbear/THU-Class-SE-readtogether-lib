@@ -66,6 +66,7 @@ $(document).ready(
 							function(){
 								$('#ordingModal').find(".alert").hide();
 								$('#ordingModal').modal('hide');
+								location.reload();
 							},
 							1200
 						);
