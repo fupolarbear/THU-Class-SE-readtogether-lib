@@ -157,7 +157,7 @@ $( document ).ready(function() {
 
     	csrftoken = getCookie('csrftoken');
     	$.post(
-    		'/return/' + bid + '/',
+    		'/next/' + bid + '/u' + uid + '/',
     		{'csrfmiddlewaretoken':csrftoken},
     		function(data){
     			var obj = $.parseJSON(data);
@@ -171,7 +171,7 @@ $( document ).ready(function() {
 							+ '</strong></div></td></tr>';
 				} else if(obj.status == 'OK'){
 					txt = '<tr><td><div class="alert alert-success">' 
-							+ '<strong>预约成功！'
+							+ '<strong>归还上架成功！'
 							+ '</strong> uid: <strong>' + uid 
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
@@ -181,5 +181,74 @@ $( document ).ready(function() {
     		}
     	);
     });
+
+	// return to shelf
+	$('#magic-return2').click(function(){
+		var bid = $('#return-book-bid2').val();
+
+    	if(!bid){
+    		alert('empty book id!');
+    		return false;
+    	}
+
+    	csrftoken = getCookie('csrftoken');
+    	$.post(
+    		'/readify/' + bid + '/',
+    		{'csrfmiddlewaretoken':csrftoken},
+    		function(data){
+    			var obj = $.parseJSON(data);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong> msg: <strong>' + obj.message
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong>还书成功！'
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				}
+				$('#return-tbody2').append(txt);
+				$('#return-book-bid2').val('');
+    		}
+    	);
+	});
+
+	// move out of shelf
+
+	$('#magic-return3').click(function(){
+		var bid = $('#return-book-bid3').val();
+
+    	if(!bid){
+    		alert('empty book id!');
+    		return false;
+    	}
+
+    	csrftoken = getCookie('csrftoken');
+    	$.post(
+    		'/disappear/' + bid + '/',
+    		{'csrfmiddlewaretoken':csrftoken},
+    		function(data){
+    			var obj = $.parseJSON(data);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong> msg: <strong>' + obj.message
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong>图书丢失下架成功！'
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				}
+				$('#return-tbody3').append(txt);
+				$('#return-book-bid3').val('');
+    		}
+    	);
+	});
 
 }); // end of window

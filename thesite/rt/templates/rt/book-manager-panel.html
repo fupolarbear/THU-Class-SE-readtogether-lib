@@ -198,124 +198,39 @@
 		  <!-- add new book -->
 		  
 		  <div class="tab-pane fade" id="addnewbook">
-		  
-		  <div class="panel panel-default">
-		  <div class="panel-body">
-			<div class="row addnewbook-row">
-				<div class="col-xs-12 col-sm-12 col-md-12">
-					<legend><i class="glyphicon glyphicon-pencil"></i> 添加书籍</legend>
-					<form action="#" method="post" class="form" role="form">
-					<div class="row">
-						<div class="col-xs-6 col-md-6">
-							<input class="form-control" name="firstname" placeholder="First Name" type="text"
-								required autofocus />
-						</div>
-						<div class="col-xs-6 col-md-6">
-							<input class="form-control" name="lastname" placeholder="Last Name" type="text" required />
-						</div>
-					</div>
-					<input class="form-control" name="youremail" placeholder="Your Email" type="email" />
-					<input class="form-control" name="reenteremail" placeholder="Re-enter Email" type="email" />
-					<input class="form-control" name="password" placeholder="New Password" type="password" />
-					<label for="">
-						Birth Date</label>
-					<div class="row">
-						<div class="col-xs-4 col-md-4">
-							<select class="form-control">
-								<option value="Month">Month</option>
-							</select>
-						</div>
-						<div class="col-xs-4 col-md-4">
-							<select class="form-control">
-								<option value="Day">Day</option>
-							</select>
-						</div>
-						<div class="col-xs-4 col-md-4">
-							<select class="form-control">
-								<option value="Year">Year</option>
-							</select>
-						</div>
-					</div>
-					<label class="radio-inline">
-						<input type="radio" name="sex" id="inlineCheckbox1" value="male" />
-						Male
-					</label>
-					<label class="radio-inline">
-						<input type="radio" name="sex" id="inlineCheckbox2" value="female" />
-						Female
-					</label>
-					<br />
-					<br />
-					<div class="row">
-					<button class="btn btn-lg btn-primary col-md-8 col-md-offset-2" type="submit">
-						添加这本书</button>
-					</div>
-					</form>
-				</div>
-			 </div>
-			</div>
-			</div>
-			
-			<div class="panel panel-default">
+
+		  	<div class="panel panel-default">
 				  <!-- Default panel contents -->
-				  <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span> 待添加的书籍一览
-				  <span class="label label-info"  style="float:right;">12 件</span>
+				  <div class="panel-heading">
+					<span class="glyphicon glyphicon-import"></span> 书籍归还上架
+					<span class="label label-warning"  style="float:right;">22 件</span>
 				  </div>
-				  <!--
 				  <div class="panel-body">
-					<div class="alert alert-info">...</div>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 input-group">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid2">
+						  <span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="magic-return2">选择</button>
+						  </span>
+						</div><!-- /input-group -->
+					</div>
 				  </div>
-				  -->
+				  
 				  <!-- Table -->
-				  <div class="table-responsive">
-				  <table class="table table-striped "> <!-- table-bordered? -->
+				  <div class="table-responsive" id="usertable">
+				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>#</th>
-						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
-						  <th>续期</th>
+						  <th>info</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr class="success">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						</tr>
+					  <tbody id="return-tbody2">
 					  </tbody>
 				  </table>
 				  </div>
-				  <div class="panel-footer">
-						<div class="row">
-							<button class="btn btn-lg btn-info col-md-8 col-md-offset-2" type="submit">
-						确认添加上述书籍</button>
-						</div>
-				  </div>
-			</div>
-			
-			<!--
-			<div class="dev-note">
-					dev-note：表单Form根据需求修改
-			</div>
-			-->
+				</div>		
+
+
 		  </div>
 		  
 		  <!-- 下面是 edit newbook -->
@@ -356,18 +271,18 @@
 		  <!-- del old book -->
 		  
 		  <div class="tab-pane fade" id="deloldbook">
-				<div class="panel panel-default">
+		  	<div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-import"></span> 选择待删除书籍
+					<span class="glyphicon glyphicon-import"></span> 图书下架
 					<span class="label label-warning"  style="float:right;">22 件</span>
 				  </div>
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid3">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">选择</button>
+							<button class="btn btn-default" type="button" id="magic-return3">选择</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
@@ -378,105 +293,14 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>#</th>
-						  <th>ID</th>
-						  <th>姓名</th>
-						  <th>邮箱</th>
-						  <th>借书权限</th>
-						  <th>选择用户</th>
+						  <th>info</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
+					  <tbody id="return-tbody3">
 					  </tbody>
 				  </table>
 				  </div>
-				</div>
-				
-				<div class="panel panel-default">
-				  <!-- Default panel contents -->
-				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-saved"></span> 待确认删除的书籍
-					<span class="label label-info"  style="float:right;">12 件</span>
-				  </div>
-				  <div class="panel-body">
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
-						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">选择</button>
-						  </span>
-						</div><!-- /input-group -->
-					</div>
-				  </div>
-
-				  <!-- Table -->
-				  <div class="table-responsive">
-				  <table class="table table-striped "> <!-- table-bordered? -->
-					   <thead>
-						<tr>
-						  <th>#</th>
-						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
-						  <th>续期</th>
-						</tr>
-					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						</tr>
-					  </tbody>
-				  </table>
-				  </div>
-				  <div class="panel-footer">
-						<div class="row">
-							<button class="btn btn-lg btn-info col-md-8 col-md-offset-2" type="submit">
-						完成下架上述书籍</button>
-						</div>
-				  </div>
-				</div>	
+				</div>		
 		  </div>
 	</div>
 
