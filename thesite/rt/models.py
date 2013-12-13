@@ -216,6 +216,9 @@ class MyUser(models.Model):
             myuser=self, status__in=[0, 1, 2], is_active=True
             ).count()
 
+    def remain_borrowing_num(self):
+        return self.get_perm('borrowing_num')-has_borrowing_num
+
     def has_queue_num(self):
         """return the number of book wich you have queued."""
         return Borrowing.objects.filter(
