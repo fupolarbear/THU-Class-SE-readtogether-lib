@@ -74,6 +74,7 @@ def comment(request, book_id):
     rate = request.POST['rate']
     if rate not in {str(i) for i in range(1, 6)}:
         return render_JSON_Error('Invalid rate.')
+    rate = int(rate)
     spoiler = request.POST['spoiler'] == 'true'
     Comment.add(myuser, book, title, content, rate, spoiler)
     return render_JSON_OK({})
@@ -190,23 +191,32 @@ def queue(request, copy_id):
         })
 
 
-def reborrow(request, book_id):
+@POST_required()
+@login_required_JSON
+@catch_404_JSON
+def reborrow(request, copy_id):
+    """Backend for AJAX book reborrow."""
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.reborrow(request.user.myuser, copy)
+    return render_JSON_OK({
+        'username': request.user.username,
+        'copy_id': copy_id,
+        })
+
+
+def borrow(request, copy_id, user_id):
     pass
 
 
-def borrow(request, book_id, user_id):
+def back(request, copy_id):
     pass
 
 
-def back(request, book_id):
+def queue_next(request, copy_id):
     pass
 
 
-def queue_next(request, book_id):
-    pass
-
-
-def readify(request, book_id):
+def readify(request, copy_id):
     pass
 
 
