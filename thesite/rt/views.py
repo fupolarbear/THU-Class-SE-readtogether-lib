@@ -14,8 +14,8 @@ from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
     POST_required, login_required_JSON, catch_404_JSON, get_page
 
 
-COMMENT_PAGE_SIZE_0 = 3
-COMMENT_PAGE_SIZE = 10
+COMMENT_PAGE_SIZE_0 = 0
+COMMENT_PAGE_SIZE = 2
 
 
 def index(request):
