@@ -212,7 +212,7 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>已借出（{{ item.get_status.expire|date:"Y-m-d" }} 到期 {% if item.get_status.queue != 0 %} +{{ item.get_status.queue }} 已预约 {% endif %}）</td>
-				  <td><button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})">预约</button></td>
+				  <td><button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">预约</button></td>
 				</tr>
 			  	{% elif item.get_status.text == 'disappear' %}
 			  	<!-- over time -->
@@ -273,7 +273,7 @@
 	        </div>
 	        <p><div class="alert alert-success">预约成功！</div>
 	        <div class="alert alert-danger">预约失败！<strong id="detailed-alert"></strong></div></p>
-	        <input type="hidden" id="ording-book-id" value="0">
+	        <input type="hidden" id="ording-book-id" value="">
 	        {% csrf_token %}
 	      </div>
 	      <div class="modal-footer">
@@ -435,7 +435,7 @@
 					<div class="col-sm-offset-2 col-sm-10">
 					  <div class="checkbox">
 						<label>
-						  <input type="checkbox"> 有关键情节透露> <
+						  <input type="checkbox"> 有关键情节透露&gt; &lt;
 						</label>
 					  </div>
 					</div>
@@ -595,59 +595,6 @@
 	}
 
 	var csrftoken = null;
-
-	$(document).ready(
-		function() {
-
-			$('#comment-panel').jscroll({
-				debug: true,
-				autoTriggerUntil: 1,
-				//nextSelector: 'a.scroll-next:last'
-			});
-
-			csrftoken = getCookie('csrftoken');
-
-			$('#ordingModal').on('shown.bs.modal', function () {
-				console.log("finish display modal");
-			});
-
-			$('#ordingModal').find(".alert").hide();
-
-			$('#ording-button').click(function(){
-				var bid = $('#ordingModal').find("#ording-book-id").val();
-				console.log("get-bid:" + bid);
-
-				$.post(
-					"{% url 'rt:queue' 1 %}".replace("1", bid),
-					{
-						csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
-					},
-					function(res){
-						var got = eval("(" + res + ")");
-						if(got.status == "OK"){
-							$('#ordingModal').find(".alert-success").show();
-							setTimeout(
-								function(){
-									$('#ordingModal').find(".alert").hide();
-									$('#ordingModal').modal('hide');
-								},
-								1200
-							);
-						} else {
-							$('#ordingModal').find(".alert-danger").find("#detailed-alert").html(got.err);
-							$('#ordingModal').find(".alert-danger").show();
-							setTimeout(
-								function(){
-									$('#ordingModal').find(".alert").hide();
-									$('#ordingModal').modal('hide');
-								},
-								2000
-							);
-						}
-					}
-				);
-			});
-		}
-	);
+	
 	</script>
 {% endblock define_js %}
