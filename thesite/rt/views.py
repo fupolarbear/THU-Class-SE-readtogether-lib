@@ -274,4 +274,7 @@ def rank(request):
 def test(request):
     """Dummy page for various on-hand snippets."""
     comment = Comment.objects.all()
-    return render(request, 'rt/fetch_comment.html', {'comment': comment})
+    return render(request, 'rt/fetch_comment.html', {
+        'comment': comment,
+        'range5': range(1, 6),
+        })
