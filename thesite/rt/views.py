@@ -234,9 +234,10 @@ def back(request, copy_id):
 @login_required_JSON('book manager')
 @catch_404_JSON
 @catch_PermException_JSON
-def queue_next(request, copy_id):
+def queue_next(request, copy_id, myuser_id):
     copy = get_object_or_404(BookCopy, pk=copy_id)
-    Borrowing.queue_next(copy)
+    myuser = get_object_or_404(MyUser, pk=myuser_id)
+    Borrowing.queue_next(myuser, copy)
     return render_JSON_OK({})
 
 
