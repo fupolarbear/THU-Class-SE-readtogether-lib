@@ -458,10 +458,10 @@
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="fixbookinfo-Label"><span class="glyphicon glyphicon-pencil"></span> 纠错书籍信息</h4>
+				<h4 class="modal-title" id="fixbookinfo-Label"><span class="glyphicon glyphicon-pencil"></span> 纠正书籍信息</h4>
 			  </div>
 			  <div class="modal-body">
-				<form class="form-horizontal" role="form">
+				<form class="form-horizontal" role="form" id="fixbookinfo-form">
 				  {% if book.name_cn %}
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-2 control-label">标准名</label>
@@ -562,11 +562,16 @@
 				  {% endif %}
 
 				</form>
+
+				<div class="alert alert-danger alert-dismissable hidden" id="fixbookinfo-warning">
+				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				  <strong>噢哟！</strong> 有一个地方[ <b></b> ]您还没有填写哟！
+				</div>
 				
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="tooltip" title="（不刷新页面内容是不会丢失的，可以回来继续编辑）">关闭</button>
-				<button type="button" class="btn btn-primary">好了，快改过来吧</button>
+				<button type="button" class="btn btn-primary" id="fixbookinfo-submit">好了，快改过来吧</button>
 			  </div>
 			</div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -595,6 +600,6 @@
 	}
 
 	var csrftoken = null;
-	
+
 	</script>
 {% endblock define_js %}

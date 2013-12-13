@@ -75,5 +75,25 @@ $(document).ready(
 				}
 			);
 		});
-	}
-);
+
+		// the form used for fixing book info
+		$('#fixbookinfo-submit').click(function(){
+			$('#fixbookinfo-form > .form-group').each(function(){
+				var txt = $(this).find('input').val();
+				console.log(txt);
+				if(!txt || !txt.length){
+					// empty
+					$(this).addClass('has-error');
+					$('#fixbookinfo-warning > b').text($.trim($(this).text()));
+					$('#fixbookinfo-warning').removeClass('hidden');
+					return false;
+				} else {
+					$('#fixbookinfo-warning').addClass('hidden');
+					$(this).removeClass('has-error');
+				}
+			});
+		});
+
+		
+
+}); // end ready funtion
