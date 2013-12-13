@@ -123,76 +123,55 @@
 		  
 				<div class="panel panel-default">
 				  <!-- Default panel contents -->
-				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-import"></span> 未处理预约
-					<span class="label label-warning"  style="float:right;">22 件</span>
-				  </div>
+				  <div class="panel-heading"><span class="glyphicon glyphicon-eye-open"></span> 选择用户</div>
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户关键信息 ID/Name/Email ，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可" id="find-user-input2">
+						  <input type="hidden" id="find-user-url2" value="{% url 'rt:ajax_myuser' %}?q=">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">过滤</button>
+							<button class="btn btn-default" type="button" id="magic2">选择</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
 				  </div>
 				  
 				  <!-- Table -->
-				  <div class="table-responsive" id="usertable">
+				  <div class="table-responsive" id="usertable2">
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
 						  <th>#</th>
 						  <th>ID</th>
 						  <th>姓名</th>
-						  <th>预约权限</th>
-						  <th>预约书籍</th>
-						  <th>批准预约</th>
+						  <th>邮箱</th>
+						  <th>借书权限</th>
+						  <th>选择用户</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs"></button></td>
-						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
+					  <tbody id="find-user-tbody2">
 					  </tbody>
 				  </table>
 				  </div>
+
 				</div>
-				
-				<div class="panel panel-default">
+
+				<div class="maskforpanel">
+				<div class="panel panel-default" id="userborrow">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-saved"></span> 已处理预约
-					<span class="label label-info"  style="float:right;">12 件</span>
+					<span class="glyphicon glyphicon-book"></span> 处理用户 <span class="label label-info" id="display-username2">yoyo</span> 的预约
+					<!--<button type="button" class="btn btn-default btn-xs" style="float:right;">撤销选择</button>-->
+					<!-- <button type="button" class="btn btn-success btn-xs">提交</button> -->
 				  </div>
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户关键字 ID/Name/Email，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="borrow-book-bid2">
+						  <input type="hidden" id="borrow-book-url2" value="{% url 'rt:borrow' 1 2 %}">
+						  <input type="hidden" id="borrow-book-uid2" value="">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">过滤</button>
+							<button class="btn btn-default" type="button" id="magic-borrow2">预约</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
@@ -203,43 +182,17 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>#</th>
-						  <th>书名</th>
-						  <th>唯一编号</th>
-						  <th>状态</th>
-						  <th>相关用户ID</th>
-						  <th>操作</th>
+						  <th>info</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消</button></td>
-						</tr>
-						<tr>
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消</button></td>
-						</tr>
+					  <tbody id="borrow-book-tbody2">
+						
 					  </tbody>
 				  </table>
 				  </div>
 				</div>
+				</div>
+
 		  </div>
 		  
 		  <!-- add new book -->

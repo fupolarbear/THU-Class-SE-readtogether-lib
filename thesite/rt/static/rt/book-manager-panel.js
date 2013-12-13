@@ -122,4 +122,64 @@ $( document ).ready(function() {
     	);
 	});
 
+	/*
+	 * booking book
+	 */
+	$('#magic2').click(function(){
+    	csrftoken = getCookie('csrftoken');
+
+    	var curl = $('#find-user-url2').val();
+    	var search = $('#find-user-input2').val();
+
+    	$('#find-user-tbody2').load(curl+search, function(){
+    		$('.choose-user').click(function(){
+				var uid = $(this).attr('userid');
+				var uname = $(this).attr('username');
+				$('#display-username2').html(uname);
+				$('#borrow-book-uid2').val(uid);
+				$('#find-user-tbody2').html('');
+				$('#borrow-book-tbody2').html('');
+				return false;
+			});
+    	});
+    	return false;
+    });
+
+    $('#magic-borrow2').click(function(){
+    	var curl = $('#borrow-book-url2').val();
+    	var uid = $('#borrow-book-uid2').val();
+    	var bid = $('#borrow-book-bid2').val();
+
+    	if(!bid){
+    		alert('empty book id!');
+    		return false;
+    	}
+
+    	csrftoken = getCookie('csrftoken');
+    	$.post(
+    		'/return/' + bid + '/',
+    		{'csrfmiddlewaretoken':csrftoken},
+    		function(data){
+    			var obj = $.parseJSON(data);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong> msg: <strong>' + obj.message
+							+ '</strong> uid: <strong>' + uid 
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong>预约成功！'
+							+ '</strong> uid: <strong>' + uid 
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				}
+				$('#borrow-book-tbody2').append(txt);
+				$('#borrow-book-bid2').val('');
+    		}
+    	);
+    });
+
 }); // end of window
