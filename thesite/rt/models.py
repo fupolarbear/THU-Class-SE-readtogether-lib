@@ -211,7 +211,7 @@ class MyUser(models.Model):
         return self.user.has_perm('rt.'+perm)
 
     def get_perm(self, perm):
-        """return the permission numbe"""
+        """return the permission number"""
         return (self.permission_num[self.get_group_name()])[perm]
 
     def has_borrowing_num(self):
@@ -243,6 +243,14 @@ class MyUser(models.Model):
         for borr in bo:
             re.append(borr.book_copy)
         return re
+
+    @staticmethod
+    def search(s):
+        re1 = MyUser.objects.filter(name__contains=s)
+        re2 = MyUser.objects.filter(user__username__contains=s)
+        re3 = MyUser.objects.filter(user__email__contains=s)
+        re4 = MyUser.objects.filter(user__id__contains=s)
+        return re1 | re2 | re3 | re4
 
     def __unicode__(self):
         return self.name
