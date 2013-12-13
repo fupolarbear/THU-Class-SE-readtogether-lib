@@ -28,14 +28,14 @@ $(document).ready(
 	function() {
 
 		$('#comment-panel').jscroll({
-			loadingHtml: '<div class="isloading">Loading...</div>',
+			loadingHtml: '<div class="isloading text-center">喵小咪正在努力搬运新评论中T_T。。。</div>',
 			debug: true,
 			autoTriggerUntil: 1,
 			nextSelector: 'a.scroll-next:last',
 			padding: 10,
 			callback: function(){
 				if($('a.scroll-next:last').length == 0){
-					$('#comment-panel').append('<button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵～</button>');
+					$('#comment-panel').append('<button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵=w=～</button>');
 				}
 			}
 		});
