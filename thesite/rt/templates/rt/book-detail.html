@@ -292,7 +292,7 @@
 			<span class="label label-info" >78 条</span>
 			<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
 		</div>
-		<div class="panel-body">
+		<div class="panel-body" id="comment-panel">
 			<ul class="list-group" id="comment-group">
 				<li class="list-group-item">
 					<div class="row">
@@ -382,7 +382,7 @@
 					</div>
 				</li>
 			</ul>
-			<a href="#" class="btn btn-default btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
+			<a href="/ajax/comment/{{ book.id }}/" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
 		</div>
 	  </div>
 	  </div>
@@ -576,7 +576,7 @@
 
 {% block define_js %}
 	<script src="{% static 'rt/book-detail.js' %}"></script>
-	<script src="{% static 'rt/jquery.jscroll.min.js' %}"></script>
+	<script src="{% static 'jquery.jscroll.js' %}"></script>
 	<script type="text/javascript">
 	function getCookie(name) {
 		var cookieValue = null;
@@ -598,6 +598,12 @@
 
 	$(document).ready(
 		function() {
+
+			$('#comment-panel').jscroll({
+				debug: true,
+				autoTriggerUntil: 1,
+				//nextSelector: 'a.scroll-next:last'
+			});
 
 			csrftoken = getCookie('csrftoken');
 
