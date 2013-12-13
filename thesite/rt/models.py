@@ -470,39 +470,55 @@ class Rank(models.Model):
         if agg['version__max'] is None:
             n = 0
         return n
-    
+
     @staticmethod
     def _cal_value(books, species):
         re = []
         for book in books:
-            if species == 2:
+            if species == 0:
+                n = 0
+                for bookcopy in book.bookcopy_set.all():
+                    n += Borrowing.objects.filter(
+                        book_copy=bookcopy, status__in=[0, 1, 2]
+                        ).count()
+                re.append(n)
+            elif species == 1:
+                re.append(book.rate_num)
+            elif species == 2:
                 re.append(book.rate)
         return re
 
     @staticmethod
     @transaction.atomic
-    def top10(species):
+    def _top10(species, version):
         """get top 10 by species_sort_method"""
         books = list(Book.objects.all())
         values = Rank._cal_value(books, species)
         l = zip(books, values)
         l.sort(key=lambda a: a[1], reverse=True)
         l = l[:Rank.RANK_NUM]
-        version = Rank.get_maxversion()+1
         for index, i in enumerate(l):
             Rank.objects.create(
-                version = version,
-                book = i[0],
-                value= i[1],
-                sort_method = species,
-                rank = index
+                version=version,
+                book=i[0],
+                value=i[1],
+                sort_method=species,
+                rank=index,
                 )
 
     @staticmethod
     def update():
         """update the rank every week!"""
+        version = Rank.get_maxversion()+1
+        for i in range(len(Rank.species_sort_method)):
+            Rank._top10(i, version)
 
+    @staticmethod
+    def get_top(species = 2, v = 0):
+        if v == 0:
+            v = Rank.get_maxversion()
+        return Rank.objects.filter(version=v, sort_method=species)
+    
     def __unicode__(self):
         return self.book.simple_name()+" "+str(self.value)+" " + \
             str(self.sort_method)+" "+str(self.rank)
-
