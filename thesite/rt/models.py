@@ -243,7 +243,7 @@ class Borrowing(models.Model):
 
     @staticmethod
     def reborrow(myuser, book_copy):
-        """User muuser reborrow the book again."""
+        """User myuser reborrow the book again."""
         if (not Borrowing.objects.filter(
                 myuser=myuser, book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
@@ -391,7 +391,7 @@ class Info(models.Model):
 
     @staticmethod
     def get_all(sp=None):
-        """get all info with speices sp."""
+        """get all info with species sp."""
         if sp is None:
             return Info.objects.all()
         str2id = {sp_name: sp_id for sp_id, sp_name in Info.species_choice}
@@ -420,27 +420,89 @@ class Comment(models.Model):
     datetime = models.DateTimeField(auto_now=True)
     rate = models.IntegerField(choices=species_rate, default=3)
     spoiler = models.BooleanField(default=False)
-    user = models.ForeignKey(MyUser)
+    myuser = models.ForeignKey(MyUser)
     book = models.ForeignKey(Book)
 
-    def update(self):
+    def _update(self):
         """update the rate of the book after comment"""
         self.book.rate = (self.book.rate*self.book.rate_num+self.rate) / \
             (self.book.rate_num+1)
         self.book.rate_num = self.book.rate_num+1
+        self.book.save()
 
     @staticmethod
-    def add(user, book, title, content, rate=3):
-        """addd a new comment"""
+    def add(myuser, book, title, content, rate=3, spoiler=False):
+        """add a new comment"""
         c = Comment.objects.create(
-            user=user,
+            myuser=myuser,
             book=book,
             title=title,
             content=content,
             rate=rate,
+            spoiler=spoiler,
             )
-        c.update()
+        c._update()
 
     def __unicode__(self):  # only for debug
-        return self.user.name+" "+self.book.simple_name()+" " + \
+        return self.myuser.name+" "+self.book.simple_name()+" " + \
             self.title+" : "+self.content+" "+str(self.rate)
+
+
+class Rank(models.Model):
+    """save range every month"""
+
+    RANK_NUM = 10
+    version = models.IntegerField()
+    book = models.ForeignKey(Book)
+    value = models.FloatField()
+    species_sort_method = (
+        (0, 'borrowing time'),
+        (1, 'comment number'),
+        (2, 'rate')
+    )
+    sort_method = models.IntegerField(choices=species_sort_method)
+    rank = models.IntegerField()
+
+    @staticmethod
+    def get_maxversion():
+        agg = Rank.objects.all().aggregate(models.Max('version'))
+        n = agg['version__max']
+        if agg['version__max'] is None:
+            n = 0
+        return n
+    
+    @staticmethod
+    def _cal_value(books, species):
+        re = []
+        for book in books:
+            if species == 2:
+                re.append(book.rate)
+        return re
+
+    @staticmethod
+    @transaction.atomic
+    def top10(species):
+        """get top 10 by species_sort_method"""
+        books = list(Book.objects.all())
+        values = Rank._cal_value(books, species)
+        l = zip(books, values)
+        l.sort(key=lambda a: a[1], reverse=True)
+        l = l[:Rank.RANK_NUM]
+        version = Rank.get_maxversion()+1
+        for index, i in enumerate(l):
+            Rank.objects.create(
+                version = version,
+                book = i[0],
+                value= i[1],
+                sort_method = species,
+                rank = index
+                )
+
+    @staticmethod
+    def update():
+        """update the rank every week!"""
+
+    def __unicode__(self):
+        return self.book.simple_name()+" "+str(self.value)+" " + \
+            str(self.sort_method)+" "+str(self.rank)
+
