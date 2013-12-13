@@ -57,6 +57,11 @@ $( document ).ready(function() {
     	var uid = $('#borrow-book-uid').val();
     	var bid = $('#borrow-book-bid').val();
 
+    	if(!bid){
+    		alert('empty book id!');
+    		return false;
+    	}
+
     	csrftoken = getCookie('csrftoken');
     	$.post(
     		'/borrow/' + bid + '/u' + uid + '/',
@@ -65,7 +70,7 @@ $( document ).ready(function() {
     			var obj = $.parseJSON(data);
     			var txt = null;
 				if(obj.status == 'Error'){
-					txt = '<tr><td><div class="alert alert-danger">' 
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
 							+ 'err: <strong>' + obj.err 
 							+ '</strong> msg: <strong>' + obj.message
 							+ '</strong> uid: <strong>' + uid 
@@ -84,6 +89,37 @@ $( document ).ready(function() {
     	);
     });
 
+	$('#magic-return').click(function(){
+		var bid = $('#return-book-bid').val();
 
+    	if(!bid){
+    		alert('empty book id!');
+    		return false;
+    	}
 
-});
+    	csrftoken = getCookie('csrftoken');
+    	$.post(
+    		'/return/' + bid + '/',
+    		{'csrfmiddlewaretoken':csrftoken},
+    		function(data){
+    			var obj = $.parseJSON(data);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong> msg: <strong>' + obj.message
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong>还书成功！'
+							+ '</strong> bid: <strong>' + bid
+							+ '</strong></div></td></tr>';
+				}
+				$('#return-tbody').append(txt);
+				$('#return-book-bid').val('');
+    		}
+    	);
+	});
+
+}); // end of window

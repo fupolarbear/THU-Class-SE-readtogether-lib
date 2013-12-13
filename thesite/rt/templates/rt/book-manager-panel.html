@@ -30,10 +30,10 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs nav-justified">
 		  <li class="active"><a href="#borrowing" data-toggle="tab" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-book"></span> 借出管理</a></li>
+		  <li><a href="#editabook" data-toggle="tab" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-pencil"></span> 图书归还</a></li>
 		  <li><a href="#booking" data-toggle="tab" class="btn btn-success" role="button"><span class="glyphicon glyphicon-bookmark"></span> 预约管理</a></li>
 		  <li><a href="#addnewbook" data-toggle="tab" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list-alt"></span> 图书上架</a></li>
-		  <li><a href="#editabook" data-toggle="tab" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-pencil"></span> 图书信息修改</a></li>
-		  <li><a href="#deloldbook" data-toggle="tab" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-trash"></span> 图书下架</a></li>
+		  <li><a href="#deloldbook" data-toggle="tab" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-trash"></span> 图书丢失</a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -358,10 +358,11 @@
 				  </div>
 			</div>
 			
+			<!--
 			<div class="dev-note">
 					dev-note：表单Form根据需求修改
 			</div>
-			
+			-->
 		  </div>
 		  
 		  <!-- 下面是 edit newbook -->
@@ -370,15 +371,15 @@
 			 <div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-import"></span> 选择待处理书籍
+					<span class="glyphicon glyphicon-import"></span> 处理归还书籍
 					<span class="label label-warning"  style="float:right;">22 件</span>
 				  </div>
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">选择</button>
+							<button class="btn btn-default" type="button" id="magic-return">选择</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
@@ -389,106 +390,14 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>#</th>
-						  <th>ID</th>
-						  <th>姓名</th>
-						  <th>邮箱</th>
-						  <th>借书权限</th>
-						  <th>选择书籍</th>
+						  <th>info</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
+					  <tbody id="return-tbody">
 					  </tbody>
 				  </table>
 				  </div>
-				</div>
-				
-				<div class="panel panel-default">
-				  <!-- Default panel contents -->
-				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-saved"></span> 已修改信息的书籍
-					<span class="label label-info"  style="float:right;">12 件</span>
-				  </div>
-				  <div class="panel-body">
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
-						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">选择</button>
-						  </span>
-						</div><!-- /input-group -->
-					</div>
-				  </div>
-
-				  <!-- Table -->
-				  <div class="table-responsive">
-				  <table class="table table-striped "> <!-- table-bordered? -->
-					   <thead>
-						<tr>
-						  <th>#</th>
-						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
-						  <th>续期</th>
-						  <th>操作</th>
-						</tr>
-					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						</tr>
-					  </tbody>
-				  </table>
-				  </div>
-				  <div class="panel-footer">
-						<div class="row">
-							<button class="btn btn-lg btn-info col-md-8 col-md-offset-2" type="submit">
-						完成修改上述书籍</button>
-						</div>
-				  </div>
-				</div>			 
+				</div>		 
 		  </div>
 		  
 		  <!-- del old book -->
