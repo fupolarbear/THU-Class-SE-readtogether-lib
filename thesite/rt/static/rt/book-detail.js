@@ -84,7 +84,7 @@ $(document).ready(
 				if(!txt || !txt.length){
 					// empty
 					$(this).addClass('has-error');
-					$('#fixbookinfo-warning > b').text($.trim($(this).text()));
+					$('#fixbookinfo-warning > strong').text($.trim($(this).text()));
 					$('#fixbookinfo-warning').removeClass('hidden');
 					return false;
 				} else {
@@ -94,6 +94,46 @@ $(document).ready(
 			});
 		});
 
+		// the form used for fixing book info
+		$('#makemycomment-submit').click(function(){
+			var herr = false;
+			$('#makemycomment-form > .form-group').each(function(){
+				var txt = $(this).find('input, textarea').val();
+				console.log($.trim($(this).find('.control-label').text()) + ':' + txt);
+				if(!txt || !txt.length){
+					// empty
+					$(this).addClass('has-error');
+					$('#makemycomment-warning > strong').text($.trim($(this).text()));
+					$('#makemycomment-warning').removeClass('hidden');
+					herr = true;
+					return false;
+				} else {
+					$('#makemycomment-warning').addClass('hidden');
+					$(this).removeClass('has-error');
+				}
+			});
+
+			if(herr)
+				return false;
+
+			// check all radio
+			var rate = $("input[name='optionsRadios']:checked").val();
+			console.log('rate:' + rate);
+			if(rate && (rate >= 1 && rate <= 5)){
+				$('#makemycomment-warning').addClass('hidden');
+				$(this).removeClass('has-error');
+				console.log('meow');
+			} else {
+				// didn't rate
+				$(this).addClass('has-error');
+				$('#makemycomment-warning > strong').text($.trim($("label[for='inputRate']").text()));
+				$('#makemycomment-warning').removeClass('hidden');
+				return false;
+			}
+
+			var isSpoiler = $('#isSpoiler').is(':checked');
+			console.log('isSpoiler:' + isSpoiler);
+		});
 		
 
 }); // end ready funtion

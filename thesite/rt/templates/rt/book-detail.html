@@ -398,7 +398,7 @@
 			  </div>
 			  <div class="modal-body">
 				
-				<form class="form-horizontal" role="form">
+				<form class="form-horizontal" role="form" id="makemycomment-form">
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-2 control-label">标题</label>
 					<div class="col-sm-10">
@@ -409,19 +409,19 @@
 					<label for="inputRate" class="col-sm-2 control-label">评分</label>
 					<div class="col-sm-10">
 						<label class="radio-inline">
-						  <input type="radio" name="optionsRadios" id="inlineRadio5" value="rate5"> <span class="label label-danger">力荐</span>
+						  <input type="radio" name="optionsRadios" id="inlineRadio5" value="5"> <span class="label label-danger">力荐</span>
 						</label>
 						<label class="radio-inline">
-						  <input type="radio" name="optionsRadios" id="inlineRadio4" value="rate4"> <span class="label label-primary">推荐</span>
+						  <input type="radio" name="optionsRadios" id="inlineRadio4" value="4"> <span class="label label-primary">推荐</span>
 						</label>
 						<label class="radio-inline">
-						  <input type="radio" name="optionsRadios" id="inlineRadio3" value="rate3"><span class="label label-success">一般</span>
+						  <input type="radio" name="optionsRadios" id="inlineRadio3" value="3"><span class="label label-success">一般</span>
 						</label>
 						<label class="radio-inline">
-						  <input type="radio" name="optionsRadios" id="inlineRadio2" value="rate2"> <span class="label label-warning">较差</span>
+						  <input type="radio" name="optionsRadios" id="inlineRadio2" value="2"> <span class="label label-warning">较差</span>
 						</label>
 						<label class="radio-inline">
-						  <input type="radio" name="optionsRadios" id="inlineRadio1" value="rate1"> <span class="label label-default">糟糕</span>
+						  <input type="radio" name="optionsRadios" id="inlineRadio1" value="1"> <span class="label label-default">糟糕</span>
 						</label>
 					</div>
 				  </div>
@@ -435,18 +435,23 @@
 					<div class="col-sm-offset-2 col-sm-10">
 					  <div class="checkbox">
 						<label>
-						  <input type="checkbox"> 有关键情节透露&gt; &lt;
+						  <input type="checkbox" id="isSpoiler"> 有关键情节透露&gt; &lt;
 						</label>
 					  </div>
 					</div>
 				  </div>
 				</form>
+
+				<div class="alert alert-danger alert-dismissable hidden" id="makemycomment-warning">
+				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				  噢哟！[ <strong></strong> ]您还没有填写哟！
+				</div>
 				
 			  </div>
 			  <div class="modal-footer">
 			  （不刷新页面内容是不会丢失的，可以回来继续编辑）
 				<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="tooltip" title="（不刷新页面内容是不会丢失的，可以回来继续编辑）">关闭</button>
-				<button type="button" class="btn btn-primary">好了，添加评论</button>
+				<button type="button" class="btn btn-primary" id="makemycomment-submit">好了，添加评论</button>
 			  </div>
 			</div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -565,7 +570,7 @@
 
 				<div class="alert alert-danger alert-dismissable hidden" id="fixbookinfo-warning">
 				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				  <strong>噢哟！</strong> 有一个地方[ <b></b> ]您还没有填写哟！
+				  噢哟！有一个地方[ <strong></strong> ]您还没有填写哟！
 				</div>
 				
 			  </div>
