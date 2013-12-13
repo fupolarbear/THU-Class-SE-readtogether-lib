@@ -104,13 +104,14 @@ $(document).ready(
 		// the form used for fixing book info
 		$('#makemycomment-submit').click(function(){
 			var herr = false;
+			$('#makemycomment-warning').addClass('hidden');
 			$('#makemycomment-form > .form-group').each(function(){
 				var txt = $(this).find('input, textarea').val();
 				console.log($.trim($(this).find('.control-label').text()) + ':' + txt);
 				if(!txt || !txt.length){
 					// empty
 					$(this).addClass('has-error');
-					$('#makemycomment-warning > strong').text($.trim($(this).text()));
+					$('#makemycomment-warning > div').html('噢哟！[ <strong>' + $.trim($(this).text()) + '</strong> ]您还没有填写哟！');
 					$('#makemycomment-warning').removeClass('hidden');
 					herr = true;
 					return false;
@@ -133,13 +134,44 @@ $(document).ready(
 			} else {
 				// didn't rate
 				$(this).addClass('has-error');
-				$('#makemycomment-warning > strong').text($.trim($("label[for='inputRate']").text()));
+				$('#makemycomment-warning > div').html('噢哟！[ <strong>' + $.trim($("label[for='inputRate']").text()) + '</strong> ]您还没有填写哟！');
 				$('#makemycomment-warning').removeClass('hidden');
 				return false;
 			}
 
 			var isSpoiler = $('#isSpoiler').is(':checked');
 			console.log('isSpoiler:' + isSpoiler);
+
+			var title = $('#input-comment-title').val();
+			var content = $('#input-comment').val();
+			var curl = $('#input-comment-url').val();
+
+			$.post(
+				curl,
+				{
+					'csrfmiddlewaretoken' : csrftoken,
+					'title' : title,
+					'content' : content,
+					'rate' : rate,
+					'spoiler' : isSpoiler
+				},
+				function(data){
+					console.log('get data: ' + data);
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						$('#makemycomment-warning > div').html('噢哟！ ' + obj.err);
+						$('#makemycomment-warning').removeClass('hidden');
+					} else if(obj.status == 'OK'){
+						$('#makemycomment-success').removeClass('hidden');
+						setTimeout(
+							function(){
+								location.reload();
+							},
+							1000
+						);
+					}
+				}
+			);
 		});
 		
 

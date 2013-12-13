@@ -402,7 +402,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-2 control-label">标题</label>
 					<div class="col-sm-10">
-					  <input type="text" class="form-control" id="inputTitle" placeholder="给评论取个标题吧=w=">
+					  <input type="text" class="form-control" id="input-comment-title" placeholder="给评论取个标题吧=w=">
 					</div>
 				  </div>
 				  <div class="form-group">
@@ -426,9 +426,9 @@
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="inputComment" class="col-sm-2 control-label">评论</label>
+					<label for="input-comment" class="col-sm-2 control-label">评论</label>
 					<div class="col-sm-10">
-					  <textarea class="form-control" rows="8" id="inputComment" placeholder="写点什么好呢…"></textarea>
+					  <textarea class="form-control" rows="8" id="input-comment" placeholder="写点什么好呢…"></textarea>
 					</div>
 				  </div>
 				  <div class="form-group">
@@ -440,11 +440,16 @@
 					  </div>
 					</div>
 				  </div>
+				  <input type="hidden" id="input-comment-url" value="{% url 'rt:comment' book.id %}">
 				</form>
 
 				<div class="alert alert-danger alert-dismissable hidden" id="makemycomment-warning">
 				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				  噢哟！[ <strong></strong> ]您还没有填写哟！
+				  <div>噢哟！[ <strong></strong> ]您还没有填写哟！</div>
+				</div>
+
+				<div class="alert alert-success hidden" id="makemycomment-success">
+					哟吼！您的评论已成功发布！
 				</div>
 				
 			  </div>
