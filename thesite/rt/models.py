@@ -6,8 +6,27 @@ from django.contrib.auth import authenticate
 from django.db.models.query import QuerySet
 # Create your models here.
 
+
 class PermException(Exception):
     pass
+
+
+def get_field_changeable(obj):
+    return [
+        name for name in obj.__dict__.keys()
+        if not (name.startswith('_') or name.endswith('id'))
+        ]
+
+
+@transaction.atomic
+def change_model(obj, dic):
+    field_changeable = get_field_changeable(obj)
+    for key, value in dic.iteritems():
+        if key not in field_changeable:
+            raise PermException('field '+key+' is not changeable')
+        obj.__dict__[key] = value
+    obj.save()
+
 
 class Book(models.Model):
 
@@ -528,13 +547,13 @@ class Rank(models.Model):
             Rank._top10(i, version)
 
     @staticmethod
-    def get_top(species = 2, v = 0):
+    def get_top(species=2, v=0):
         if v == 0:
             v = Rank.get_maxversion()
         return Rank.objects.filter(
-            version=v,sort_method=species
+            version=v, sort_method=species
             ).order_by('rank')
-    
+
     def __unicode__(self):
         return self.book.simple_name()+" "+str(self.value)+" " + \
             str(self.sort_method)+" "+str(self.rank)
