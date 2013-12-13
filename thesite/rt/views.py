@@ -6,17 +6,22 @@ from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
 from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
+from django.core.paginator import Paginator
 
-from rt.models import Book, Info, MyUser, BookCopy, Borrowing
+from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment, Rank
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
-    POST_required, login_required_JSON, catch_404_JSON
+    POST_required, login_required_JSON, catch_404_JSON, get_page
+
+
+COMMENT_PAGE_SIZE_0 = 3
+COMMENT_PAGE_SIZE = 10
 
 
 def index(request):
     """Render index page with rank, news and guide."""
     return render(request, 'rt/index.html', {
-        'rank': [],
+        'rank': Rank.get_top(),
         'news': Info.get_all('news')[:5],
         'guide': Info.get_all('guide')[:5],
         })
@@ -35,34 +40,42 @@ def book(request, book_id):
     """Show the detail page for a certain book."""
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
+    comment = book.comment_set.all()[:COMMENT_PAGE_SIZE_0]
     return render(request, 'rt/book-detail.html', {
         'book': book,
         'copy': copy,
+        'comment': comment,
         })
 
 
 # Error checking below should work as standard or example for similar views.
 # A decorator may be introduced to DRY the code.
 # queue should be modified to meet this standard, as well as login/out/reg.
-@POST_required('content')
+@POST_required('title', 'content', 'rate', 'spoiler')
 @login_required_JSON
 @catch_404_JSON
 def comment(request, book_id):
     """Add a comment for the book specified by book_id.
 
     POST:
-    content -- the content of the comment.
+    title   -- the title of the comment
+    content -- the content of the comment
+    rate    -- the rate associated with the comment
+    spoiler -- whether this comment is a spoiler
 
     Renders JSON: (besides 'status' or 'err')
 
     User is derived from the session.
     """
+    myuser = request.user.myuser
     book = get_object_or_404(Book, pk=book_id)
+    title = request.POST['title']
     content = request.POST['content']
-    # call model to post the comment
-    # maybe permission errors
-    # maybe truncation errors
-    # maybe others insert errors
+    rate = request.POST['rate']
+    if rate not in {str(i) for i in range(1, 6)}:
+        return render_JSON_Error('Invalid rate.')
+    spoiler = request.POST['spoiler'] == 'true'
+    Comment.add(myuser, book, title, content, rate, spoiler)
     return render_JSON_OK({})
 
 
@@ -90,18 +103,11 @@ def ajax_comment(request, book_id):
     """
     book = get_object_or_404(Book, pk=book_id)
     page = request.GET.get('page', 1)
-    CMT = ['name', 'datetime', 'title', 'content', 'rate', 'spoiler']
+    comment_list = book.comment_set.all()[COMMENT_PAGE_SIZE_0:]
+    paginator = Paginator(comment_list, COMMENT_PAGE_SIZE)
+    comment = get_page(paginator, page)
     return render_JSON_OK({
-        'comment': [
-            FC(
-                CMT, 'Tester', '2013-12-12 12:12:12', 'Title', 'Content',
-                3, True,
-                ),
-            FC(
-                CMT, 'SuperBug', '2013-12-12 12:12:12', 'No Title', 'Super!',
-                4, False,
-                ),
-            ],
+        'comment': [],
         })
 
 
@@ -247,10 +253,15 @@ def info_detail(request, info_id):
 
 
 def rank(request):
-    """Show the rank page. Uncomplete."""
-    return render(request, 'rt/rank.html', {})
+    """Show the rank page."""
+    return render(request, 'rt/rank.html', {
+        'rank_by_borrow': Rank.get_top(0),
+        'rank_by_comment': Rank.get_top(1),
+        'rank_by_rate': Rank.get_top(2),
+        })
 
 
 def test(request):
     """Dummy page for various on-hand snippets."""
-    return render(request, 'rt/test.html', {'l': LoginForm, 'r': RegisterForm})
+    comment = Comment.objects.all()
+    return render(request, 'rt/fetch_comment.html', {'comment': comment})

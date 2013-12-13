@@ -1,6 +1,7 @@
 import json
 
 from django.http import HttpResponse, Http404
+from django.core.paginator import EmptyPage, PageNotAnInteger
 
 
 def FC(prototype, *args):
@@ -31,6 +32,15 @@ def render_JSON_Error(message, data={}):
         }
     res.update(data)
     return HttpResponse(json.dumps(res))
+
+
+def get_page(paginator, page):
+    try:
+        return paginator.page(page)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
 
 
 def POST_required(*field_list):
