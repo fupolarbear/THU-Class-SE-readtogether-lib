@@ -82,10 +82,6 @@ class Book(models.Model):
             self.revision_origin, self.pub_year_origin,
             )
 
-    def get_comment(self):
-        """get all comment about the book"""
-        return self.comment_set.all()
-
     def __unicode__(self):  # only for debug
         return self.name_cn+" "+self.author+": "+str(self.duartion)+" " + \
             str(self.rate)
@@ -227,7 +223,7 @@ class MyUser(models.Model):
             ).count()
 
     def get_all_borrowing(self):
-        bo =  Borrowing.objects.filter(
+        bo = Borrowing.objects.filter(
             myuser=self, status__in=[0, 1, 2], is_active=True
             )
         re = []
@@ -236,7 +232,7 @@ class MyUser(models.Model):
         return re
 
     def get_all_queue(self):
-        bo =  Borrowing.objects.filter(
+        bo = Borrowing.objects.filter(
             myuser=self, status=4, is_active=True
             )
         re = []
@@ -376,8 +372,8 @@ class Borrowing(models.Model):
         b.is_active = False
         b.save()
         Borrowing.objects.filter(
-                is_active=True, status=4, book_copy=book_copy
-                ).update(is_active=False)
+            is_active=True, status=4, book_copy=book_copy
+            ).update(is_active=False)
 
     @staticmethod
     def queue(myuser, book_copy):
