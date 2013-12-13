@@ -45,6 +45,7 @@ def book(request, book_id):
         'book': book,
         'copy': copy,
         'comment': comment,
+        'range5': range(1, 6),
         })
 
 
@@ -107,8 +108,12 @@ def ajax_comment(request, book_id):
     comment_list = book.comment_set.all()[COMMENT_PAGE_SIZE_0:]
     paginator = Paginator(comment_list, COMMENT_PAGE_SIZE)
     comment = get_page(paginator, page)
+    response = render(request, 'rt/fetch_comment.html', {
+        'comment': comment,
+        'range5': range(1, 6),
+        })
     return render_JSON_OK({
-        'comment': [],
+        'html': response.content,
         })
 
 
