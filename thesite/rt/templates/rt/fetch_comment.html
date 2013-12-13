@@ -3,13 +3,13 @@
 	<li class="list-group-item">
 		<div class="row">
 			<div class="col-xs-2 col-md-1">
-				<img src="http://placehold.it/80" class="img-circle img-responsive" alt="" />
+				<img src="http://placekitten.com/80/80" class="img-circle img-responsive" alt="" />
 			</div>
 			<div class="col-xs-10 col-md-11">
 				<div>
 					<strong>{{ item.title }}</strong>
 					<div class="mic-info">
-						By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"" }}
+						By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }}
 					</div>
 				</div>
 				{% if item.spoiler %}
