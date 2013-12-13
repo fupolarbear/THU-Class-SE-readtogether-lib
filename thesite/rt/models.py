@@ -280,7 +280,7 @@ class Borrowing(models.Model):
         """User myuser borrow a book_copy."""
         if (book_copy.get_status()['text'] != 'on shelf'):
             raise PermException("the book is not on shelf")
-        elif (myuser.has_borrowing_num >= myuser.get_perm('borrowing_num')):
+        elif (myuser.has_borrowing_num() >= myuser.get_perm('borrowing_num')):
             raise PermException("you can't borrow so many book~")
         else:
             Borrowing.objects.create(
