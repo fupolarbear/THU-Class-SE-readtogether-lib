@@ -41,6 +41,7 @@ img.center-img {
 }
 
 .rate-star-panel .big-star {
+	margin-top: 6px;
 	margin-bottom: 6px;
 	font-size: 17px;
 }
@@ -60,6 +61,10 @@ img.center-img {
 .rate-star-panel .glyphicon.rate-bar {
 	height:14px;
 	background-color:#f5cbad;
+}
+
+#comment-panel .rate-star-panel .small-star {
+	padding-top: 8px;
 }
 
 

@@ -121,10 +121,11 @@
 						<ul class="list-unstyled">
 							<li>评分：</li>
 							<li class="big-star">
-								<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span><span class="glyphicon glyphicon-star-empty"></span>
-								<span class="rate-score">3.2</span>
+								{% for i in range5 %}{% if forloop.counter <= book.rate %}<span class="glyphicon glyphicon-star"></span>{% else %}<span class="glyphicon glyphicon-star-empty"></span>{% endif %}{% endfor %}
+								<span class="rate-score">{{ book.rate|floatformat:1 }}</span>
 							</li>
 							<!-- 5 rate data -->
+							<!--
 							<li class="small-star">
 								<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>
 								<span class="glyphicon rate-bar" style="width:10px;"></span>
@@ -150,7 +151,7 @@
 								<span class="glyphicon rate-bar" style="width:1px;"></span>
 								<span class="rate-per">1.0%</span>
 							</li>
-							
+							-->
 							
 						</ul>
 						</div>
@@ -382,7 +383,7 @@
 					</div>
 				</li>
 			</ul>
-			<a href="/ajax/comment/{{ book.id }}/" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
+			<a href="http://localhost:8000/test/" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
 		</div>
 	  </div>
 	  </div>

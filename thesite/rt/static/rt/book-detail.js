@@ -30,7 +30,8 @@ $(document).ready(
 		$('#comment-panel').jscroll({
 			loadingHtml: '<div class="isloading text-center">喵小咪正在努力搬运新评论中T_T。。。</div>',
 			debug: true,
-			autoTriggerUntil: 1,
+			autoTrigger: false,
+			//autoTriggerUntil: false,
 			nextSelector: 'a.scroll-next:last',
 			padding: 10,
 			callback: function(){
