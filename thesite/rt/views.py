@@ -44,6 +44,7 @@ def book(request, book_id):
     return render(request, 'rt/book-detail.html', {
         'book': book,
         'copy': copy,
+        'comment_count': book.comment_set.all().count(),
         'comment': comment,
         'range5': range(1, 6),
         })
@@ -53,7 +54,7 @@ def book(request, book_id):
 # A decorator may be introduced to DRY the code.
 # queue should be modified to meet this standard, as well as login/out/reg.
 @POST_required('title', 'content', 'rate', 'spoiler')
-@login_required_JSON
+@login_required_JSON()
 @catch_404_JSON
 def comment(request, book_id):
     """Add a comment for the book specified by book_id.
@@ -180,7 +181,7 @@ def user(request):
 
 
 @POST_required()
-@login_required_JSON
+@login_required_JSON()
 @catch_404_JSON
 def queue(request, copy_id):
     """Backend for AJAX book queueing."""
@@ -193,7 +194,7 @@ def queue(request, copy_id):
 
 
 @POST_required()
-@login_required_JSON
+@login_required_JSON()
 @catch_404_JSON
 def reborrow(request, copy_id):
     """Backend for AJAX book reborrow."""

@@ -58,12 +58,19 @@ def POST_required(*field_list):
     return decorator
 
 
-def login_required_JSON(func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return render_JSON_Error('Not logged in.')
-        return func(request, *args, **kwargs)
-    return wrapper
+def login_required_JSON(admin_type=None):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            if not request.user.is_authenticated():
+                return render_JSON_Error('Not logged in.')
+            if admin_type is not None and \
+                    request.user.myuser.get_admin_type() != admin_type:
+                return render_JSON_Error('Only {} can access.'.format(
+                    admin_type,
+                    ))
+            return func(request, *args, **kwargs)
+        return wrapper
+    return decorator
 
 
 def catch_404_JSON(func):
