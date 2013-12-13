@@ -63,6 +63,10 @@ img.center-img {
 }
 
 
+.panel .table{
+	margin-bottom: 0px;
+}
+
 
 #makemycomment .modal-footer {
 	margin-top: 0px;
