@@ -476,6 +476,17 @@ class Comment(models.Model):
             )
         c._update()
 
+    @transaction.atomic
+    def remove(self):
+        if self.book.rate_num == 1:
+            self.book.rate = 0.0
+        else:
+            self.book.rate = (self.book.rate*self.book.rate_num-self.rate) / \
+            (self.book.rate_num-1)
+        self.book.rate_num = self.book.rate_num-1
+        self.book.save()
+        self.delete()
+
     def __unicode__(self):  # only for debug
         return self.myuser.name+" "+self.book.simple_name()+" " + \
             self.title+" : "+self.content+" "+str(self.rate)
