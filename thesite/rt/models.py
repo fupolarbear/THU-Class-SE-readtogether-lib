@@ -24,6 +24,8 @@ class Book(models.Model):
     translator = models.CharField(max_length=200, default="")
     pub_year_origin = models.SmallIntegerField(default=1900)
     revision_origin = models.SmallIntegerField(default=0)
+    rate = models.FloatField(default=0.0)
+    rate_num = models.IntegerField(default=0.0)
 
     @staticmethod
     def _search_part(string):
@@ -57,8 +59,13 @@ class Book(models.Model):
             self.revision_origin, self.pub_year_origin,
             )
 
+    def get_comment(self):
+        """get all comment about the book"""
+        return self.comment_set.all()
+
     def __unicode__(self):  # only for debug
-        return self.name_cn+" "+self.author+": "+str(self.duartion)
+        return self.name_cn+" "+self.author+": "+str(self.duartion)+" " + \
+            str(self.rate)
 
 
 class BookCopy(models.Model):
@@ -396,3 +403,44 @@ class Info(models.Model):
 
     def __unicode__(self):  # only for debug
         return self.title+" "+str(self.date)
+
+
+class Comment(models.Model):
+    """the comment of book"""
+
+    species_rate = (
+        (1, 'perfect'),
+        (2, 'good'),
+        (3, 'normal'),
+        (4, 'bad'),
+        (5, 'terrible'),
+    )
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=10000)
+    datetime = models.DateTimeField(auto_now=True)
+    rate = models.IntegerField(choices=species_rate, default=3)
+    spoiler = models.BooleanField(default=False)
+    user = models.ForeignKey(MyUser)
+    book = models.ForeignKey(Book)
+
+    def update(self):
+        """update the rate of the book after comment"""
+        self.book.rate = (self.book.rate*self.book.rate_num+self.rate) / \
+            (self.book.rate_num+1)
+        self.book.rate_num = self.book.rate_num+1
+
+    @staticmethod
+    def add(user, book, title, content, rate=3):
+        """addd a new comment"""
+        c = Comment.objects.create(
+            user=user,
+            book=book,
+            title=title,
+            content=content,
+            rate=rate,
+            )
+        c.update()
+
+    def __unicode__(self):  # only for debug
+        return self.user.name+" "+self.book.simple_name()+" " + \
+            self.title+" : "+self.content+" "+str(self.rate)
