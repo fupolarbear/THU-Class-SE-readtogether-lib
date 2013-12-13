@@ -49,8 +49,8 @@
         <thead>
            <tr>
             <th></th>
-            <th>Rank</th>
-            <th colspan=2 style="width:400px"><a href="{% url 'rt:rank' %}">更多排行榜</a></th>
+            <th>Rank </th>
+            <th style="width:50px"><a href="{% url 'rt:rank' %}">更多</a></th>
             
           </tr>
         </thead>
@@ -58,7 +58,7 @@
 	      {% for item in rank %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td colspan=2><a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }}</a></td>
+            <td><a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }}</a></td>
             
             <td class="ranktd">{{ item.value|floatformat:1 }}</td>
           </tr>

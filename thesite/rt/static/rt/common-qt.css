@@ -29,7 +29,7 @@ body {
 	word-break: break-all;
 }
 .ranktd {
-	width: 40px;
+	align="right"
 }
 
 .rate-star-panel .big-star {
