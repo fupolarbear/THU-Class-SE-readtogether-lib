@@ -8,16 +8,20 @@ from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
 
-from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment
+from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment, Rank
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
     POST_required, login_required_JSON, catch_404_JSON, get_page
 
 
+COMMENT_PAGE_SIZE_0 = 3
+COMMENT_PAGE_SIZE = 10
+
+
 def index(request):
     """Render index page with rank, news and guide."""
     return render(request, 'rt/index.html', {
-        'rank': [],
+        'rank': Rank.get_top(),
         'news': Info.get_all('news')[:5],
         'guide': Info.get_all('guide')[:5],
         })
@@ -36,9 +40,11 @@ def book(request, book_id):
     """Show the detail page for a certain book."""
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
+    comment = book.comment_set.all()[:COMMENT_PAGE_SIZE_0]
     return render(request, 'rt/book-detail.html', {
         'book': book,
         'copy': copy,
+        'comment': comment,
         })
 
 
@@ -97,8 +103,8 @@ def ajax_comment(request, book_id):
     """
     book = get_object_or_404(Book, pk=book_id)
     page = request.GET.get('page', 1)
-    comment_list = book.comment_set.all()
-    paginator = Paginator(comment_list, 10)
+    comment_list = book.comment_set.all()[COMMENT_PAGE_SIZE_0:]
+    paginator = Paginator(comment_list, COMMENT_PAGE_SIZE)
     comment = get_page(paginator, page)
     return render_JSON_OK({
         'comment': [],
@@ -247,8 +253,12 @@ def info_detail(request, info_id):
 
 
 def rank(request):
-    """Show the rank page. Uncomplete."""
-    return render(request, 'rt/rank.html', {})
+    """Show the rank page."""
+    return render(request, 'rt/rank.html', {
+        'rank_by_borrow': Rank.get_top(0),
+        'rank_by_comment': Rank.get_top(1),
+        'rank_by_rate': Rank.get_top(2),
+        })
 
 
 def test(request):
