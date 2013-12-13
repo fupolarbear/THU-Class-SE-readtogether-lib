@@ -35,5 +35,5 @@
 </ul>
 
 {% if comment.has_next %}
-<a href="{% url 'rt:ajax_comment' %}" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
+<a href="{% url 'rt:ajax_comment' comment.0.book.id %}?page={{ comment.next_page_number }}" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
 {% endif %}

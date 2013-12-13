@@ -294,6 +294,7 @@
 			<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
 		</div>
 		<div class="panel-body" id="comment-panel">
+			<!--
 			<ul class="list-group" id="comment-group">
 				<li class="list-group-item">
 					<div class="row">
@@ -383,7 +384,8 @@
 					</div>
 				</li>
 			</ul>
-			<a href="http://localhost:8000/test/" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
+			-->
+			<a href="{% url 'rt:ajax_comment' book.id %}" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
 		</div>
 	  </div>
 	  </div>
