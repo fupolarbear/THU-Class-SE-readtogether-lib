@@ -3,6 +3,8 @@ import json
 from django.http import HttpResponse, Http404
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
+from rt.models import PermException
+
 
 def FC(prototype, *args):
     """Fake a object-like variable for templates based on the prototype."""
@@ -80,5 +82,16 @@ def catch_404_JSON(func):
         except Http404 as err:
             return render_JSON_Error('404 raised.', {
                 'message': err.message,
+                })
+    return wrapper
+
+
+def catch_PermException_JSON(func):
+    def wrapper(request, *args, **kwargs):
+        try:
+            return func(request, *args, **kwargs)
+        except PermException as err:
+            return render_JSON_Error('Permission denied.', {
+                'message': err.args[0],
                 })
     return wrapper

@@ -300,16 +300,18 @@ class Borrowing(models.Model):
             )
 
     @staticmethod
-    def return_book(myuser, book_copy):
+    @transaction.atomic
+    def return_book(book_copy):
         """User myuser return the book"""
         if (not Borrowing.objects.filter(
-                myuser=myuser, book_copy=book_copy, is_active=True,
+                book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
                 ).exists()):
-            raise PermException("you don't borrow this book!")
+            raise PermException("noone borrows this book!")
         b = Borrowing.objects.get(
-            is_active=True, myuser=myuser, book_copy=book_copy
+            is_active=True, status__in=[0, 1, 2], book_copy=book_copy
             )
+        myuser = b.myuser
         b.is_active = False
         b.save()
         Borrowing.objects.create(
@@ -387,8 +389,17 @@ class Borrowing(models.Model):
                 )
 
     @staticmethod
-    def disappear(myuser, book_copy):
+    def disappear(book_copy):
         """the book which myuser borrowed has disappeared"""
+        if (not Borrowing.objects.filter(
+                book_copy=book_copy, is_active=True,
+                status__in=[0, 1, 2]
+                ).exists()):
+            raise PermException("noone borrows this book!")
+        b = Borrowing.objects.get(
+            is_active=True, status__in=[0, 1, 2], book_copy=book_copy
+            )
+        myuser = b.myuser
         bs = Borrowing.objects.filter(
             is_active=True, book_copy=book_copy
             )
@@ -482,7 +493,7 @@ class Comment(models.Model):
             self.book.rate = 0.0
         else:
             self.book.rate = (self.book.rate*self.book.rate_num-self.rate) / \
-            (self.book.rate_num-1)
+                (self.book.rate_num-1)
         self.book.rate_num = self.book.rate_num-1
         self.book.save()
         self.delete()
