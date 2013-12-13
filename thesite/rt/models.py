@@ -531,7 +531,9 @@ class Rank(models.Model):
     def get_top(species = 2, v = 0):
         if v == 0:
             v = Rank.get_maxversion()
-        return Rank.objects.filter(version=v, sort_method=species)
+        return Rank.objects.filter(
+            version=v,sort_method=species
+            ).order_by('rank')
     
     def __unicode__(self):
         return self.book.simple_name()+" "+str(self.value)+" " + \
