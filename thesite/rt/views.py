@@ -6,11 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
 from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
+from django.core.paginator import Paginator
 
-from rt.models import Book, Info, MyUser, BookCopy, Borrowing
+from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
-    POST_required, login_required_JSON, catch_404_JSON
+    POST_required, login_required_JSON, catch_404_JSON, get_page
 
 
 def index(request):
@@ -44,25 +45,31 @@ def book(request, book_id):
 # Error checking below should work as standard or example for similar views.
 # A decorator may be introduced to DRY the code.
 # queue should be modified to meet this standard, as well as login/out/reg.
-@POST_required('content')
+@POST_required('title', 'content', 'rate', 'spoiler')
 @login_required_JSON
 @catch_404_JSON
 def comment(request, book_id):
     """Add a comment for the book specified by book_id.
 
     POST:
-    content -- the content of the comment.
+    title   -- the title of the comment
+    content -- the content of the comment
+    rate    -- the rate associated with the comment
+    spoiler -- whether this comment is a spoiler
 
     Renders JSON: (besides 'status' or 'err')
 
     User is derived from the session.
     """
+    myuser = request.user.myuser
     book = get_object_or_404(Book, pk=book_id)
+    title = request.POST['title']
     content = request.POST['content']
-    # call model to post the comment
-    # maybe permission errors
-    # maybe truncation errors
-    # maybe others insert errors
+    rate = request.POST['rate']
+    if rate not in {str(i) for i in range(1, 6)}:
+        return render_JSON_Error('Invalid rate.')
+    spoiler = request.POST['spoiler'] == 'true'
+    Comment.add(myuser, book, title, content, rate, spoiler)
     return render_JSON_OK({})
 
 
@@ -90,18 +97,11 @@ def ajax_comment(request, book_id):
     """
     book = get_object_or_404(Book, pk=book_id)
     page = request.GET.get('page', 1)
-    CMT = ['name', 'datetime', 'title', 'content', 'rate', 'spoiler']
+    comment_list = book.comment_set.all()
+    paginator = Paginator(comment_list, 10)
+    comment = get_page(paginator, page)
     return render_JSON_OK({
-        'comment': [
-            FC(
-                CMT, 'Tester', '2013-12-12 12:12:12', 'Title', 'Content',
-                3, True,
-                ),
-            FC(
-                CMT, 'SuperBug', '2013-12-12 12:12:12', 'No Title', 'Super!',
-                4, False,
-                ),
-            ],
+        'comment': [],
         })
 
 
@@ -253,4 +253,5 @@ def rank(request):
 
 def test(request):
     """Dummy page for various on-hand snippets."""
-    return render(request, 'rt/test.html', {'l': LoginForm, 'r': RegisterForm})
+    comment = Comment.objects.all()
+    return render(request, 'rt/fetch_comment.html', {'comment': comment})
