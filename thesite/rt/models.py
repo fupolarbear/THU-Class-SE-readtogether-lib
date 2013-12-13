@@ -11,6 +11,8 @@ class Book(models.Model):
 
     """the Book Model
     saved all Book related information.
+
+    duartion : the duartion of the book
     """
 
     duartion = models.SmallIntegerField(default=14)  # It can only be 0, 7, 14
@@ -135,6 +137,16 @@ class MyUser(models.Model):
         'Blacklist': _permission_num_generate(0, 0, 0),
         'Admin': _permission_num_generate(0, 0, 0),
         }
+    species_admin = (
+        (0, 'user'),
+        (1, 'book manager'),
+        (2, 'user manager'),
+        )
+
+    admin_type = models.IntegerField(choices=species_admin, default=0)
+
+    def get_admin_type(self):
+        return self.get_admin_type_display()
 
     @transaction.atomic
     def register(self, username, password, email, name, group='NormalUser'):
