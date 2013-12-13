@@ -227,14 +227,22 @@ class MyUser(models.Model):
             ).count()
 
     def get_all_borrowing(self):
-        return Borrowing.objects.filter(
+        bo =  Borrowing.objects.filter(
             myuser=self, status__in=[0, 1, 2], is_active=True
             )
+        re = []
+        for borr in bo:
+            re.append(borr.book_copy)
+        return re
 
     def get_all_queue(self):
-        return Borrowing.objects.filter(
+        bo =  Borrowing.objects.filter(
             myuser=self, status=4, is_active=True
             )
+        re = []
+        for borr in bo:
+            re.append(borr.book_copy)
+        return re
 
     def __unicode__(self):
         return self.name
@@ -359,11 +367,9 @@ class Borrowing(models.Model):
             )
         b.is_active = False
         b.save()
-        for u in Borrowing.objects.filter(
+        Borrowing.objects.filter(
                 is_active=True, status=4, book_copy=book_copy
-                ):
-            u.is_active = False
-            u.save()
+                ).update(is_active=False)
 
     @staticmethod
     def queue(myuser, book_copy):
@@ -403,9 +409,7 @@ class Borrowing(models.Model):
         bs = Borrowing.objects.filter(
             is_active=True, book_copy=book_copy
             )
-        for b in bs:
-            b.is_active = False
-            b.save()
+        bs.update(is_active=False)
         Borrowing.objects.create(
             status=5,
             book_copy=book_copy,
