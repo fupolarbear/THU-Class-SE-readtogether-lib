@@ -86,6 +86,11 @@ $(document).ready(
 		});
 
 		// the form used for fixing book info
+		$('#fixbookinfo-form').submit(function(e){
+			console.log('hahha');
+			e.preventDefault();
+			$('#fixbookinfo-submit').click();
+		});
 		$('#fixbookinfo-submit').click(function(){
 			$('#fixbookinfo-form > .form-group').each(function(){
 				var txt = $(this).find('input').val();
@@ -104,6 +109,10 @@ $(document).ready(
 		});
 
 		// the form used for fixing book info
+		$('#makemycomment-form').submit(function(e){
+			e.preventDefault();
+			$('#makemycomment-submit').click();
+		});
 		$('#makemycomment-submit').click(function(){
 			var herr = false;
 			$('#makemycomment-warning').addClass('hidden');
