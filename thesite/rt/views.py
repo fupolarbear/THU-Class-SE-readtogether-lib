@@ -269,6 +269,17 @@ def ad_user(request):
     pass
 
 
+def ajax_myuser(request):
+    q_myuser = request.GET.get('q', '')
+    return render(request, 'rt/fetch_myuser.html', {
+        'myuser_list': MyUser.search(q_myuser),
+        })
+
+
+def ajax_book(request, book_id):
+    pass
+
+
 def info(request):
     """Show news and guide list."""
     return render(request, 'rt/info.html', {

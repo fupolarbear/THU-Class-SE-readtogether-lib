@@ -20,7 +20,7 @@ urlpatterns = patterns(
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
     url(r'^reborrow/(\d+)/$', views.reborrow, name='reborrow'),
 
-    url(r'^borrow/(\d+)/u(\d+)/$', views.borrow, name='reborrow'),
+    url(r'^borrow/(\d+)/u(\d+)/$', views.borrow, name='borrow'),
     url(r'^return/(\d+)/$', views.back, name='return'),
     url(r'^next/(\d+)/$', views.queue_next, name='queue_next'),
     url(r'^readify/(\d+)/$', views.readify, name='readify'),
@@ -28,6 +28,8 @@ urlpatterns = patterns(
 
     url(r'^admin/book/$', views.ad_book, name='ad_book'),
     url(r'^admin/user/$', views.ad_user, name='ad_user'),
+    url(r'^ajax/myuser/$', views.ajax_myuser, name='ajax_myuser'),
+    url(r'^ajax/book/(\d+)/$', views.ajax_book, name='ajax_book'),
 
     url(r'^info/list/$', views.info, name='info'),
     url(r'^info/(\d+)/$', views.info_detail, name='info_detail'),
