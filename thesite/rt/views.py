@@ -81,7 +81,6 @@ def comment(request, book_id):
     return render_JSON_OK({})
 
 
-@catch_404_JSON
 def ajax_comment(request, book_id):
     """Fetch comments for the book specified by book_id.
 
@@ -92,9 +91,9 @@ def ajax_comment(request, book_id):
     Other parameters may be used such as 'last_date' or 'last_id', so it's not
     a good idea to put them into URL.
 
-    Renders JSON: (besides 'status' or 'err')
+    Renders rt/fetch_comment.html for AJAX load with:
     comment -- (on 'OK') a list of comments
-      name     -- the name of the user
+      myuser   -- the user who posted this comment
       datetime -- datetime when the comment was posted
       title    -- title of the comment
       content  -- content of the comment
@@ -108,12 +107,9 @@ def ajax_comment(request, book_id):
     comment_list = book.comment_set.all()[COMMENT_PAGE_SIZE_0:]
     paginator = Paginator(comment_list, COMMENT_PAGE_SIZE)
     comment = get_page(paginator, page)
-    response = render(request, 'rt/fetch_comment.html', {
+    return render(request, 'rt/fetch_comment.html', {
         'comment': comment,
         'range5': range(1, 6),
-        })
-    return render_JSON_OK({
-        'html': response.content,
         })
 
 
