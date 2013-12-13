@@ -20,7 +20,7 @@
 	  <div class="container">
 
 	  <div class="starter-template">
-		<h3>Book Manage System - Login as yoyo~</h3>
+		<h3>Book Manage System - Login as {{ user.myuser.name}}({{ user.username }}) ~</h3>
 		<!-- <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p> -->
 	  </div>
 	
@@ -45,7 +45,8 @@
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入用户 ID/Name/Email ，确认回车即可" id="find-user-input">
+						  <input type="hidden" id="find-user-url" value="{% url 'rt:ajax_myuser' %}?q=">
 						  <span class="input-group-btn">
 							<button class="btn btn-default" type="button" id="magic">选择</button>
 						  </span>
@@ -66,31 +67,7 @@
 						  <th>选择用户</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>fupolarbear@gmail.com</td>
-						  <td>12 本</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>fupolarbear@gmail.com</td>
-						  <td>无权限（可考虑改显示方式）</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>fupolarbear@gmail.com</td>
-						  <td>1 本</td>
-						  <td><button type="button" class="btn btn-default btn-xs">选择</button></td>
-						</tr>
+					  <tbody id="find-user-tbody">
 					  </tbody>
 				  </table>
 				  </div>
@@ -100,16 +77,18 @@
 				<div class="panel panel-default" id="userborrow">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-book"></span> 处理用户 <span class="label label-info">yoyo</span> 的借阅
-					<button type="button" class="btn btn-default btn-xs" style="float:right;">撤销选择</button>
+					<span class="glyphicon glyphicon-book"></span> 处理用户 <span class="label label-info" id="display-username">yoyo</span> 的借阅
+					<!--<button type="button" class="btn btn-default btn-xs" style="float:right;">撤销选择</button>-->
 					<!-- <button type="button" class="btn btn-success btn-xs">提交</button> -->
 				  </div>
 				  <div class="panel-body">
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="borrow-book-bid">
+						  <input type="hidden" id="borrow-book-url" value="{% url 'rt:borrow' 1 2 %}">
+						  <input type="hidden" id="borrow-book-uid" value="">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic">借阅</button>
+							<button class="btn btn-default" type="button" id="magic-borrow">借阅</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
@@ -120,52 +99,22 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>#</th>
-						  <th>书名</th>
-						  <th>ISBN</th>
-						  <th>索书号</th>
-						  <th>唯一编号</th>
-						  <th>有关信息</th>
-						  <th>操作</th>
+						  <th>info</th>
 						</tr>
 					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>@mdo</td>
-						  <td>9787544268417</td>
-						  <td>N1939273</td>
-						  <td>o129873j</td>
-						  <td>7 天</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消</button></td>
-						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>@mdo</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>馆内阅览</td>
-						  <td>借阅无效</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>@mdo</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>213123</td>
-						  <td>20 天</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消</button></td>
-						</tr>
+					  <tbody id="borrow-book-tbody">
+						
 					  </tbody>
 				  </table>
 				  </div>
 				</div>
 				</div>
 				
+				<!--
 				<div class="dev-note">
 					dev-note：（可用鼠标移到选择按钮上模拟行为展示）搜索出并点选用户之后，自动弹出下面的表格，然后就可以开始输入书籍的编号，表示处理当前用户的借阅，对书籍进行各种操作即可。
 				</div>
+				-->
 		  </div>
 		  
 		  <!-- 预约管理 -->
