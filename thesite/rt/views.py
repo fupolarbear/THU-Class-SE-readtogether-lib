@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core import urlresolvers
@@ -177,6 +177,8 @@ def logout(request):
 def user(request):
     """Show the user panel page."""
     myuser = request.user.myuser
+    if myuser.get_admin_type() == 'book manager':
+        return redirect('rt:ad_book')
     return render(request, 'rt/user-panel.html', {
         'profile': myuser,
         'book_borrowing': myuser.get_all_borrowing(),
