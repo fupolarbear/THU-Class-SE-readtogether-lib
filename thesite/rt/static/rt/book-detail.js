@@ -38,6 +38,14 @@ $(document).ready(
 				if($('a.scroll-next:last').length == 0){
 					$('#comment-panel').append('<button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵=w=～</button>');
 				}
+				$('div.spoiler-comment').mouseover(function(){
+					$(this).css('color', 'black');
+					$(this).css('background-color', 'white');
+				});
+				$('div.spoiler-comment').mouseout(function(){
+					$(this).css('color', '#B6A7A7');
+					$(this).css('background-color', 'white');
+				});
 			}
 		});
 
