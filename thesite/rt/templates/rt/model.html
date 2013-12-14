@@ -9,8 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">    
-    
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">   
+     <!--
+    <link rel="stylesheet" href="{% static 'webfontkit/specimen_files/specimen_stylesheet.css' %}" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="{% static 'webfontkit/stylesheet.css" type="text/css' %}" charset="utf-8" />
+    <style type="text/css">
+          p{
+        font-family: 'flavorsregular';
+              }
+    </style>
+    -->
     {% block define_CSS %}
     {% endblock define_CSS %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -22,7 +30,6 @@
 
   </head>
 <body>
-
 {% block login_fade_modal %}
 {% csrf_token %}
 <!-- Modal -->
