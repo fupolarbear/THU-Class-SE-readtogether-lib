@@ -307,7 +307,12 @@ class MyUser(models.Model):
         bo = Borrowing.objects.filter(
             myuser=self, status=0, is_active=False
             ).order_by('datetime')
-        re = [borr.book_copy for borr in bo]
+        re = [
+            borr.book_copy for borr in bo if not Borrowing.objects.filter(
+                myuser=self, status__in = [1, 2], is_active=True,
+                book_copy=borr.book_copy
+                ).exists()
+            ]
         return re
 
     @staticmethod
