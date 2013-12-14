@@ -16,7 +16,7 @@
 	<!-- Custom styles for this template -->
 	<link href="{% static 'rt/user-panel.css' %}" rel="stylesheet">
 {% endblock define_CSS %}
-
+{% block nav_user %}active{% endblock nav_user %}
 {% block main %}
 
 {% if user.is_authenticated %}

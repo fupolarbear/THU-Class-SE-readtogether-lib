@@ -189,7 +189,7 @@
       </ul>
 {% endblock nav_search %}
       <ul class="nav navbar-nav navbar-right">
-        <li>
+        <li class="{% block nav_user %}{% endblock nav_user %}">
           {% if user.is_authenticated %}
           <a href="{% url 'rt:user' %}" >{{ user.myuser.name }}</a>
           {% else %}
@@ -232,7 +232,7 @@
           csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
         },
       function(res){
-          var Obj= eval("("+res+")");//转换为json对象   
+          var Obj = $.parseJSON(res);//转换为json对象   
           if(Obj.status=="OK")
           {
               $("[name='sRespondD']").hide();
@@ -275,7 +275,7 @@
           csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
         },
       function(res){
-          var Obj= eval("("+res+")");//转换为json对象   
+          var Obj = $.parseJSON(res); 
           if(Obj.status=="OK")
           {
               $("[name='rRespondD']").hide();
