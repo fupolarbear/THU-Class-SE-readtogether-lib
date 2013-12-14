@@ -49,18 +49,34 @@
         <thead>
            <tr>
             <th></th>
-            <th>Rank </th>
-            <th style="width:50px"><a href="{% url 'rt:rank' %}">更多</a></th>
-            
+            <th>
+              <div class="row"> 
+                <div class="col-xs-6 ">
+                  排行榜
+                </div>
+                <div class="col-xs-6 text-right">
+                  <a href="{% url 'rt:rank' %}">更多榜单</a>
+                </div>
+              </div>
+            </th>
+                       
           </tr>
         </thead>
         <tbody>
 	      {% for item in rank %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }}</a></td>
+            <td>
+              <div class="row"> 
+                <div class="col-lg-10 col-md-8 col-sm-8  col-xs-9">
+                  <a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name|truncatewords:7 }}</a>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-3 text-right">
+                  {{ item.value|floatformat:1 }}
+                </div>
+              </div>
+            </td>
             
-            <td class="ranktd">{{ item.value|floatformat:1 }}</td>
           </tr>
         {% empty %}
           <tr><td></td><td>No content.</td><td></td><td></td></tr>
@@ -75,7 +91,7 @@
         <thead>
           <tr>
             <th></th>
-            <th>News</th>
+            <th>新闻</th>
             <th></th>
           </tr>
         </thead>
@@ -99,7 +115,7 @@
         <thead>
           <tr>
             <th></th>
-            <th>Guide</th>
+            <th>用户指南</th>
             <th></th>
           </tr>
         </thead>

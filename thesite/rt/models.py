@@ -8,10 +8,12 @@ from django.db.models.query import QuerySet
 
 
 class PermException(Exception):
+    """define Exception reporting permission Exceprtion"""
     pass
 
 
 def get_field_changeable(obj):
+    """get all field that can be changed in models"""
     return [
         name for name in obj.__dict__.keys()
         if not (name.startswith('_') or name.endswith('id'))
@@ -20,6 +22,7 @@ def get_field_changeable(obj):
 
 @transaction.atomic
 def change_model(obj, dic):
+    """update model by dict"""
     field_changeable = get_field_changeable(obj)
     for key, value in dic.iteritems():
         if key not in field_changeable:
@@ -33,12 +36,25 @@ class Book(models.Model):
     """the Book Model
     saved all Book related information.
 
-    duartion : the duartion of the book
+    Field:
+    duartion        -- the duartion of the book, It can only be 0, 7, 14
+    name_cn         -- Chinese name of the book
+    author          -- authors of the book, separatr by ','
+    press           -- the press of the book
+    pub_year        -- the publish year of the book
+    revision        -- the newest version of the book
+    ISBN            -- the distinct mark of the book
+    name_origin     -- the origin name of English book
+    translator      -- the persion who translates the book
+    pub_year_origin -- the publish year of the origin version
+    revision_origin -- the revision of the origin version
+    rate            -- the avg score of the book
+    rate_num        -- the number of persion who gives rate
     """
 
-    duartion = models.SmallIntegerField(default=14)  # It can only be 0, 7, 14
+    duartion = models.SmallIntegerField(default=14)
     name_cn = models.CharField(max_length=200, default="")
-    author = models.CharField(max_length=300)  # separate by ","
+    author = models.CharField(max_length=300)
     press = models.CharField(max_length=200)
     pub_year = models.SmallIntegerField(default=1900)
     revision = models.SmallIntegerField(default=0)
@@ -61,7 +77,8 @@ class Book(models.Model):
     @staticmethod
     def search(string):
         """
-        make the word split with whitespace and get their search result union.
+        make the word split with whitespace
+        and get their search result union.
         """
         s = string.split()
         re = Book.objects.none()
@@ -82,7 +99,8 @@ class Book(models.Model):
             self.revision_origin, self.pub_year_origin,
             )
 
-    def __unicode__(self):  # only for debug
+    def __unicode__(self):
+        """only for debug"""
         return self.name_cn+" "+self.author+": "+str(self.duartion)+" " + \
             str(self.rate)
 
@@ -91,6 +109,10 @@ class BookCopy(models.Model):
 
     """the BookCopy model
     saved information of BookCopy. as a foreign key of book.
+
+    Field:
+    book     -- the book
+    loaction -- the loaction where is the bookcopy
     """
 
     book = models.ForeignKey(Book)
@@ -99,6 +121,17 @@ class BookCopy(models.Model):
     def get_status(self):
         """
         Do get the book status, return a dict.
+
+        dict:
+        text               : one of ['borrowing', 'arranging',
+                                'disappear', 'on shelf']
+        expire             : the expire time of the book
+        reborrow_count  : reborrowing time of the book
+        queue              : the number of the persion who has queued
+        outdated           : whether the book is expired
+
+        the key "expire","reborrowing_count","queue","outdated" is visible
+            only when text is "borrowing"
         """
         re = {}
         all_borrowing = self.borrowing_set.filter(is_active=True)
@@ -110,15 +143,20 @@ class BookCopy(models.Model):
             re['expire'] = borr.datetime.date() + datetime.timedelta(days=k)
             re['reborrow_count'] = borr.status
             re['queue'] = all_borrowing.filter(status=4).count()
+            re['outdated'] = (timezone.now().date > re['expire'])
         elif all_borrowing.filter(status=3).exists():
-            re = {'text': 'arranging'}
+            re = {
+                'text': 'arranging',
+                'queue': all_borrowing.filter(status=4).count(),
+                }
         elif all_borrowing.filter(status=5).exists():
             re = {'text': 'disappear'}
         else:
             re = {'text': 'on shelf'}
         return re
 
-    def __unicode__(self):  # only for debug
+    def __unicode__(self):
+        """only for debug"""
         return str(self.id) + ": " + self.book.simple_name()
 
 
@@ -127,16 +165,26 @@ class MyUser(models.Model):
     """the myuser model.
     extend Django.User model, as a one-to-one relationship with Django.User.
     add group and permission.
+
+    Field:
+    user            -- django user
+    name            -- the user's name, can be Chinese
+    grouplist       -- groups that the user can be
+    permission_list -- Boolearn, perssions that the user may have
+                        'can_manage' includes
+                        ('can_midify_book', 'can_change_perm',
+                        'can_generate_tempuser', 'can_manage_blacklist',
+                        'can_delete_user')
+    permission_num_list -- Int, perssions that the user may have
+    permission_num  -- the permissions of different group
+    admin_type      -- the type of admin,
+                        can only be user, book manager or user manager
     """
 
     user = models.OneToOneField(User)
     name = models.CharField(max_length=100)
     group_list = ['NormalUser', 'AdvancedUser', 'Blacklist', 'Admin']  # guest
     permission_list = ['can_search', 'can_comment', 'can_manage']
-    """
-    'can_manage' includes ('can_midify_book', 'can_change_perm',
-    'can_generate_tempuser', 'can_manage_blacklist', 'can_delete_user')
-    """
     permission_num_list = [
         'borrowing_num', 'borrowing_coefficient', 'queue_book_num'
         ]
@@ -163,6 +211,7 @@ class MyUser(models.Model):
     admin_type = models.IntegerField(choices=species_admin, default=0)
 
     def get_admin_type(self):
+        """Do get admin type, return string"""
         return self.get_admin_type_display()
 
     @transaction.atomic
@@ -226,6 +275,7 @@ class MyUser(models.Model):
             ).count()
 
     def get_all_borrowing(self):
+        """get all the book that the user borrowed now"""
         bo = Borrowing.objects.filter(
             myuser=self, status__in=[0, 1, 2], is_active=True
             )
@@ -235,6 +285,7 @@ class MyUser(models.Model):
         return re
 
     def get_all_queue(self):
+        """get all the book that the user queued"""
         bo = Borrowing.objects.filter(
             myuser=self, status=4, is_active=True
             )
@@ -244,6 +295,7 @@ class MyUser(models.Model):
         return re
 
     def get_all_borrowed(self):
+        """get all the book that the user had been borrowed"""
         bo = Borrowing.objects.filter(
             myuser=self, status=0, is_active=False
             )
@@ -252,13 +304,15 @@ class MyUser(models.Model):
 
     @staticmethod
     def search(s):
+        """search for string in name, nameuser, email, userid"""
         re1 = MyUser.objects.filter(name__contains=s)
         re2 = MyUser.objects.filter(user__username__contains=s)
         re3 = MyUser.objects.filter(user__email__contains=s)
-        re4 = MyUser.objects.filter(user__id__contains=s)
+        re4 = MyUser.objects.filter(id__contains=s)
         return re1 | re2 | re3 | re4
 
     def __unicode__(self):
+        """only for debug"""
         return self.name
 
 
@@ -266,6 +320,13 @@ class Borrowing(models.Model):
 
     """the borrowing model
     saves the user borrowing information
+
+    Field:
+    status      -- the status of book, the choice is in status_choice
+    datetime    -- the time when the borrowing is added
+    book_copy   -- the bookcopy which is related to borrowing
+    myuser      -- the user who borrows the book
+    is_active   -- lazy delete, whether the item is active
     """
 
     status_choice = (
@@ -284,7 +345,10 @@ class Borrowing(models.Model):
 
     @staticmethod
     def borrow(myuser, book_copy):
-        """User myuser borrow a book_copy."""
+        """
+        User myuser borrow a book_copy.
+        the book must on shelf, and the user must has permission that borrows
+        """
         if (book_copy.get_status()['text'] != 'on shelf'):
             raise PermException("the book is not on shelf")
         elif (myuser.has_borrowing_num() >= myuser.get_perm('borrowing_num')):
@@ -298,7 +362,12 @@ class Borrowing(models.Model):
 
     @staticmethod
     def reborrow(myuser, book_copy):
-        """User myuser reborrow the book again."""
+        """
+        User myuser reborrow the book again.
+        the book must be borrowed,
+        no one queues the book,
+        you can't reborrow again.
+        """
         if (not Borrowing.objects.filter(
                 myuser=myuser, book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
@@ -324,12 +393,15 @@ class Borrowing(models.Model):
     @staticmethod
     @transaction.atomic
     def return_book(book_copy):
-        """User myuser return the book"""
+        """
+        User myuser return the book
+        the book must be borrowed by someone.
+        """
         if (not Borrowing.objects.filter(
                 book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
                 ).exists()):
-            raise PermException("noone borrows this book!")
+            raise PermException("no one borrows this book!")
         b = Borrowing.objects.get(
             is_active=True, status__in=[0, 1, 2], book_copy=book_copy
             )
@@ -345,7 +417,12 @@ class Borrowing(models.Model):
     @staticmethod
     @transaction.atomic
     def queue_next(myuser, book_copy):
-        """the admin gives the returned book to the one who queue first."""
+        """
+        the admin gives the returned book to the one who queue first.
+        the book must be arraging,
+        someone queues the book,
+        the user must be the first one queues the book.
+        """
         if (not Borrowing.objects.filter(
                 is_active=True, status=3, book_copy=book_copy
                 ).exists()):
@@ -353,7 +430,7 @@ class Borrowing(models.Model):
         elif (not Borrowing.objects.filter(
                 is_active=True, status=4, book_copy=book_copy
                 ).exists()):
-            raise PermException("no one queue") 
+            raise PermException("no one queue")
         u = Borrowing.objects.filter(
             is_active=True, status=4, book_copy=book_copy
             ).order_by('datetime')[0]
@@ -374,7 +451,10 @@ class Borrowing(models.Model):
 
     @staticmethod
     def readify(book_copy):
-        """the admin moves the returned book to shelf."""
+        """
+        the admin moves the returned book to shelf.
+        the book must be arraging.
+        """
         if (not Borrowing.objects.filter(
                 is_active=True, status=3, book_copy=book_copy
                 ).exists()):
@@ -390,6 +470,12 @@ class Borrowing(models.Model):
 
     @staticmethod
     def queue(myuser, book_copy):
+        """
+        queue  a book.
+        the book must be borrowed, be not you,
+        you must not queue the book,
+        you must has perssion that queue the book.
+        """
         if (Borrowing.objects.filter(
                 myuser=myuser, book_copy=book_copy, is_active=True, status=0
                 ).exists()):
@@ -400,7 +486,6 @@ class Borrowing(models.Model):
             raise PermException("you have been queuing this book!")
         elif (myuser.get_perm("queue_book_num") <= myuser.has_queue_num()):
             raise PermException("you can't queue so many books.")
-        """queue a book."""
         if (
             Borrowing.objects.filter(
                 is_active=True, status__in=[0, 1, 2], book_copy=book_copy
@@ -413,12 +498,15 @@ class Borrowing(models.Model):
 
     @staticmethod
     def disappear(book_copy):
-        """the book which myuser borrowed has disappeared"""
+        """
+        the book which myuser borrowed has disappeared.
+        the book must be borrowed.
+        """
         if (not Borrowing.objects.filter(
                 book_copy=book_copy, is_active=True,
                 status__in=[0, 1, 2]
                 ).exists()):
-            raise PermException("noone borrows this book!")
+            raise PermException("no one borrows this book!")
         b = Borrowing.objects.get(
             is_active=True, status__in=[0, 1, 2], book_copy=book_copy
             )
@@ -433,7 +521,8 @@ class Borrowing(models.Model):
             myuser=myuser,
             )
 
-    def __unicode__(self):  # only for debug
+    def __unicode__(self):
+        """only for debug"""
         return self.myuser.name + " " + str(self.book_copy.id) + ":" + \
             self.book_copy.book.simple_name() + \
             " " + self.get_status_display()
@@ -443,6 +532,12 @@ class Info(models.Model):
 
     """the model info
     saved the info in home page.
+
+    Field:
+    title       -- the title of the info
+    content     -- the content of the info
+    date        -- the time when the info is published.
+    species     -- the species of the book
     """
 
     species_choice = (
@@ -466,7 +561,8 @@ class Info(models.Model):
         """get local time of publish the info"""
         return timezone.localtime(self.date)
 
-    def __unicode__(self):  # only for debug
+    def __unicode__(self):
+        """only for debug"""
         return self.title+" "+str(self.date)
 
 
@@ -525,7 +621,17 @@ class Comment(models.Model):
 
 
 class Rank(models.Model):
-    """save range every month"""
+    """
+    save range every month.
+
+    Field:
+    RANK_NUM        -- the max number of rank
+    version         -- the version of the rank
+    book            -- the book in rank
+    value           -- the value which the sort based on
+    sort_method     -- the method that the sort based on
+    ranl            -- the rank of the book
+    """
 
     RANK_NUM = 10
     version = models.IntegerField()
@@ -541,6 +647,7 @@ class Rank(models.Model):
 
     @staticmethod
     def get_maxversion():
+        """get the newest version, if None it's 0."""
         agg = Rank.objects.all().aggregate(models.Max('version'))
         n = agg['version__max']
         if agg['version__max'] is None:
@@ -549,6 +656,7 @@ class Rank(models.Model):
 
     @staticmethod
     def _cal_value(books, species):
+        """cal the value of all books by sepcies."""
         re = []
         for book in books:
             if species == 0:
@@ -591,6 +699,7 @@ class Rank(models.Model):
 
     @staticmethod
     def get_top(species=2, v=0):
+        """get the rank by species and version."""
         if v == 0:
             v = Rank.get_maxversion()
         return Rank.objects.filter(
@@ -598,5 +707,6 @@ class Rank(models.Model):
             ).order_by('rank')
 
     def __unicode__(self):
+        """only for debug"""
         return self.book.simple_name()+" "+str(self.value)+" " + \
             str(self.sort_method)+" "+str(self.rank)
