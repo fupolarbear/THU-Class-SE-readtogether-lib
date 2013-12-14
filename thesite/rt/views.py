@@ -20,7 +20,15 @@ COMMENT_PAGE_SIZE = 2
 
 
 def index(request):
-    """Render index page with rank, news and guide."""
+    """Show index page.
+
+    GET:
+
+    Renders rt/index.html with:
+    rank  -- latest rank list by rate
+    news  -- latest 5 pieces of news
+    guide -- latest 5 pieces of guide
+    """
     return render(request, 'rt/index.html', {
         'rank': Rank.get_top(),
         'news': Info.get_all('news')[:5],
@@ -29,7 +37,15 @@ def index(request):
 
 
 def search(request):
-    """Search for books."""
+    """Search for books.
+
+    GET:
+    q -- the query string
+
+    Renders rt/searchResult.html with:
+    q      -- the query string
+    result -- search result, as a list of books
+    """
     q = request.GET.get('q', '')
     return render(request, 'rt/searchResult.html', {
         'q': q,
@@ -38,7 +54,16 @@ def search(request):
 
 
 def book(request, book_id):
-    """Show the detail page for a certain book."""
+    """Show the detail page for a certain book.
+    
+    GET:
+
+    Renders rt/book-detail.html with:
+    book             -- the book object
+    copy             -- a list of all copies of this book
+    comment_count    -- number of comments on this book
+    comment & range5 -- latest comment list, and template helper
+    """
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
     comment = book.comment_set.all()[:COMMENT_PAGE_SIZE_0]
@@ -185,6 +210,7 @@ def user(request):
         'book_queue': myuser.get_all_queue(),
         'book_borrowed': myuser.get_all_borrowed(),
         'comment': myuser.comment_set.all(),
+        'range5': range(1, 6),
         })
 
 
