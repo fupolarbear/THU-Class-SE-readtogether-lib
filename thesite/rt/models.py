@@ -310,7 +310,7 @@ class MyUser(models.Model):
             ).order_by('datetime')
         re = [
             borr.book_copy for borr in bo if not Borrowing.objects.filter(
-                myuser=self, status__in = [1, 2], is_active=True,
+                myuser=self, status__in=[1, 2], is_active=True,
                 book_copy=borr.book_copy
                 ).exists()
             ]
@@ -323,7 +323,7 @@ class MyUser(models.Model):
         re2 = MyUser.objects.filter(user__username__contains=s)
         re3 = MyUser.objects.filter(user__email__contains=s)
         re4 = MyUser.objects.filter(id__contains=s)
-        return (re1 | re2 | re3 | re4).exclude(admin_type__in=[1,2])
+        return (re1 | re2 | re3 | re4).exclude(admin_type__in=[1, 2])
 
     def __unicode__(self):
         """only for debug"""
