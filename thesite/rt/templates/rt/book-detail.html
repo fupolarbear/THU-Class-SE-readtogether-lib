@@ -180,7 +180,7 @@
 		  <div class="panel-body">
 		  	{% if copy and copy|length > 0%}
 			
-			当前馆藏 <strong>{{ copy|length }}</strong> 本。有 <strong>3</strong> 本空闲中 or 最近即将到期的已借出的书时间为 <strong>2013-11-19</strong> .
+			当前馆藏 <strong>{{ copy|length }}</strong> 本。
 		  </div>
 
 		  <!-- Table -->
@@ -272,8 +272,8 @@
 	        	<div class="panel-body" id="ording-info">
 	        	</div>
 	        </div>
-	        <p><div class="alert alert-success">预约成功！</div>
-	        <div class="alert alert-danger">预约失败！<strong id="detailed-alert"></strong></div></p>
+	        <p><div class="alert alert-success">预约成功～！</div>
+	        <div class="alert alert-danger">噢哟～预约失败！<strong id="detailed-alert"></strong></div></p>
 	        <input type="hidden" id="ording-book-id" value="">
 	        {% csrf_token %}
 	      </div>

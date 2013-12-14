@@ -150,7 +150,7 @@
 						  <td>{{ copy.get_status.expire|timeuntil }}</td>
 						  <td>{{ copy.get_status.reborrow_count }}</td>
 						  <td>{{ copy.get_status.queue }}</td>
-						  <td><button type="button" class="btn btn-default btn-xs">续借</button></td>
+						  <td><button type="button" class="btn btn-default btn-xs reborrow-button" uid="{{ user.id }}" bid="{{ copy.id }}" curl="{% url 'rt:reborrow' copy.id %}">续借</button></td>
 						</tr>
 						{% endfor %}
 					  </tbody>
@@ -166,7 +166,7 @@
 				  </div>
 				  {% if book_queue %}
 				  <div class="panel-body">
-					当前预约 <strong>{{ book_queue|length }}</strong> 本。最近一本可于 <strong>{{ book_queue.0.get_status.expire }}</strong> ({{ book_queue.0.get_status.expire|timeuntil }}) 来图书馆取.
+					当前预约 <strong>{{ book_queue|length }}</strong> 本。{% if copy.get_status.expire %}正在整理状态最近一本可于 <strong>{{ book_queue.0.get_status.expire }}</strong> ({{ book_queue.0.get_status.expire|timeuntil }}) 来图书馆取.{% endif %}
 				  </div>
 				  {% else %}
 				  	  <div class="panel-body">
@@ -195,11 +195,11 @@
 						  <td>{{ copy.id }}</td>
 						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
 						  <td>{{ copy.book.ISBN }}</td>
-						  <td>{{ copy.get_status.expire }}</td>
-						  <td>{{ copy.get_status.expire|timeuntil }}</td>
-						  <td>{{ copy.get_status.reborrow_count }}</td>
+						  <td>{% if copy.get_status.expire %}{{ copy.get_status.expire }}{% else %}正在整理状态{% endif %}</td>
+						  <td>{% if copy.get_status.expire|timeuntil %}{{ copy.get_status.expire|timeuntil }}{% else %}正在整理状态{% endif %}</td>
+						  <td>{% if copy.get_status.reborrow_count %}{{ copy.get_status.reborrow_count }}{% else %}正在整理状态{% endif %}</td>
 						  <td>{{ copy.get_status.queue }}</td>
-						  <td><button type="button" class="btn btn-default btn-xs">取消预约</button></td>
+						  <td><button type="button" class="btn btn-default btn-xs" {% if not copy.get_status.expire %}disabled="disabled"{% endif %}>取消预约</button></td>
 						</tr>
 						{% endfor %}
 					  </tbody>

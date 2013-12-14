@@ -68,17 +68,17 @@ $(document).ready(
 								$('#ordingModal').modal('hide');
 								location.reload();
 							},
-							1200
+							2000
 						);
 					} else {
-						$('#ordingModal').find(".alert-danger").find("#detailed-alert").html(got.err);
+						$('#ordingModal').find(".alert-danger").find("#detailed-alert").html('<br>error: ' + got.err + '<br>message: ' + got.message);
 						$('#ordingModal').find(".alert-danger").show();
 						setTimeout(
 							function(){
 								$('#ordingModal').find(".alert").hide();
 								$('#ordingModal').modal('hide');
 							},
-							2000
+							4000
 						);
 					}
 				}
