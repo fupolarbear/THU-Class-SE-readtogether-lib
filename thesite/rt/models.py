@@ -291,7 +291,7 @@ class MyUser(models.Model):
             myuser=self, status__in=[0, 1, 2], is_active=True
             )
         re = [borr.book_copy for borr in bo]
-        re.sort(cmp=lambda x, y: x.get_expire()-y.get_expire())
+        re.sort(cmp=lambda x, y: (x.get_expire()-y.get_expire()).days)
         return re
 
     def get_all_queue(self):
