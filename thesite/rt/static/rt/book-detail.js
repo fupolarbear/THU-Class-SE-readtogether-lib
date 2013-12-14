@@ -59,7 +59,7 @@ $(document).ready(
 					csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
 				},
 				function(res){
-					var got = eval("(" + res + ")");
+					var got = $.parseJSON(res);
 					if(got.status == "OK"){
 						$('#ordingModal').find(".alert-success").show();
 						setTimeout(
