@@ -27,13 +27,13 @@ urlpatterns = patterns(
     url(r'^disappear/(\d+)/$', views.disappear, name='disappear'),
 
     url(r'^admin/book/$', views.ad_book, name='ad_book'),
-    url(r'^admin/user/$', views.ad_user, name='ad_user'),
+#    url(r'^admin/user/$', views.ad_user, name='ad_user'),
     url(r'^ajax/myuser/$', views.ajax_myuser, name='ajax_myuser'),
-    url(r'^ajax/book/(\d+)/$', views.ajax_book, name='ajax_book'),
+#    url(r'^ajax/book/(\d+)/$', views.ajax_book, name='ajax_book'),
 
     url(r'^info/list/$', views.info, name='info'),
     url(r'^info/(\d+)/$', views.info_detail, name='info_detail'),
 
     url(r'^rank/$', views.rank, name='rank'),
-    url(r'^test/$', views.test, name='test'),
+#    url(r'^test/$', views.test, name='test'),
     )

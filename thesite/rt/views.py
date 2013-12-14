@@ -438,8 +438,8 @@ def ad_book(request):
     return render(request, 'rt/book-manager-panel.html', {})
 
 
-def ad_user(request):
-    pass
+# def ad_user(request):
+#     pass
 
 
 def ajax_myuser(request):
@@ -459,8 +459,8 @@ def ajax_myuser(request):
         })
 
 
-def ajax_book(request, book_id):
-    pass
+# def ajax_book(request, book_id):
+#     pass
 
 
 def info(request):
@@ -515,10 +515,10 @@ def rank(request):
         })
 
 
-def test(request):
-    """Dummy page for various on-hand snippets."""
-    comment = Comment.objects.all()
-    return render(request, 'rt/fetch_comment.html', {
-        'comment': comment,
-        'range5': range(1, 6),
-        })
+# def test(request):
+#     """Dummy page for various on-hand snippets."""
+#     comment = Comment.objects.all()
+#     return render(request, 'rt/fetch_comment.html', {
+#         'comment': comment,
+#         'range5': range(1, 6),
+#         })
