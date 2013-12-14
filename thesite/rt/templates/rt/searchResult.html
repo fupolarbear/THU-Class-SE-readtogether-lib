@@ -43,32 +43,46 @@
   <div class="col-xs-12 col-md-10 ">
     <div class="alert alert-success">
       <h3><strong class="text-danger"> {% if q|default:"null" != "null" %}{{ q }}</strong><strong> 的{% endif %}</strong><strong>搜索结果</strong></h3>
-      <table class="table table-striped">
+      <table class="table table-striped magword">
         <thead>
           <tr>
             <th></th>
+            <!--<th></th>
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
+            <th></th>-->
           </tr>
         </thead>
         <tbody>
           {% if q|default:"null" == "null" %}
-            <tr><td><br><h4>您还没有输入想要搜索的内容</h4><br>建议：<br>直接使用上方的搜索框吧~</td><td></td><td></td><td></td></tr>
+            <tr><td><br><h4>您还没有输入想要搜索的内容</h4><br>建议：<br>直接使用上方的搜索框吧~<!--</td><td></td><td></td><td></td><td>--></td><td></td></tr>
           {% else %}
           {% for item in result %}
           <tr>
+            <td>
+              {{ forloop.counter }}
+            </td>
+            <td>
+            <div class="row">
+              <div class="col-lg-3 col-sm-3 col-xs-12"><a href="{% url 'rt:book' item.id %}">{{ item.simple_name }}</a></div>
+              <div class="col-lg-2 col-sm-2 col-xs-12">{{ item.author }}</div>
+              <div class="col-lg-2 col-sm-2 col-xs-12">{{ item.press }}</div>
+              <div class="col-lg-2 col-sm-3 col-xs-12">{% for i in "abcde" %}{% if forloop.counter <= item.rate %}<span class="glyphicon glyphicon-star"></span>{% else %}<span class="glyphicon glyphicon-star-empty"></span>{% endif %}{% endfor %} {{ item.rate|floatformat:1 }}</div>
+              <div class="col-lg-3 col-sm-2 col-xs-12">{{ item.simple_version }}</div>
+            </div>
+            </td>  
+            <!--
             <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'rt:book' item.id %}">{{ item.simple_name }}</a></td>
             <td>{{ item.author }}</td>
             <td>{{ item.press }}</td>
             <td>{% for i in "abcde" %}{% if forloop.counter <= item.rate %}<span class="glyphicon glyphicon-star"></span>{% else %}<span class="glyphicon glyphicon-star-empty"></span>{% endif %}{% endfor %} {{ item.rate|floatformat:1 }}</td>
             <td>{{ item.simple_version }}</td>
+          -->
           </tr>
           {% empty %}
-          <tr><td><br><h4>抱歉，没有找到与<em class="text-danger"> “{{ q }}” </em>相关的书籍</h4><br>建议：<br>检查输入是否正确<br>尝试用作者、出版社等其他信息来搜索</td><td></td><td></td><td></td></tr>
+          <tr><td><br><h4>抱歉，没有找到与<em class="text-danger"> “{{ q }}” </em>相关的书籍</h4><br>建议：<br>检查输入是否正确<br>尝试用作者、出版社等其他信息来搜索<!--</td><td></td><td></td><td></td><td>--></td><td></td></tr>
           {% endfor %}
           {% endif %}
         </tbody>
