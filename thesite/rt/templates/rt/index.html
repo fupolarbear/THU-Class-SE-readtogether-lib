@@ -27,15 +27,15 @@
   <form action="{% url 'rt:search' %}" method="get">
     <div class="row magxs">
       <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
-      <div class="col-lg-8 col-md-10 col-sm-10 col-xs-12"><input class="form-control" type="text" placeholder="which book do you want?" name="q"></div>
+      <div class="col-lg-8 col-md-10 col-sm-10 col-xs-12"><input class="form-control" type="text" placeholder="生活里没有书籍，就好象没有阳光，智慧里没有书籍，就好象鸟儿没有翅膀。———莎士比亚 " name="q"></div>
       <div class="col-lg-2 col-md-1 col-sm-1 col-xs-0"></div>
     </div>
 
     <div class="row magmd">
       <div class="col-lg-4 col-md-3 col-sm-3 col-xs-0"></div>
-      <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6"><button type="submit" class="btn btn-primary btn-block">Search books</button></div>
+      <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6"><button type="submit" class="btn btn-primary btn-block">搜一下</button></div>
       
-      <div class="col-lg-2 col-md-3 col-sm-3  col-xs-6"><button type="button" class="btn btn-primary btn-block" title="oops......>_< " data-content="this function is still in the brain!">I feel lucky</button></div>
+      <div class="col-lg-2 col-md-3 col-sm-3  col-xs-6"><button type="button" class="btn btn-primary btn-block" title="oops......>_< " data-content="this function is still in the brain!">人品爆发</button></div>
       <div class="col-lg-4 col-md-3 col-sm-3  col-xs-0"></div>
     </div>
   </form>
@@ -55,8 +55,7 @@
                   排行榜
                 </div>
                 <div class="col-xs-6 text-right">
-                  <a href="{% url 'rt:rank' %}">更多榜单</a>
-                </div>
+                  <a href="{% url 'rt:rank' %}"><div class="maghot"><span class="label label-danger"><em>更多榜单!!</em></span></div></a>
               </div>
             </th>
                        

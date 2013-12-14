@@ -32,19 +32,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span> Sign in</h4>
+        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span> 登录</h4>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Username:</h4></div>
+          <div class="col-xs-2 "><h5>用户名:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="sUsername"></div>
           <div class="col-xs-2 "></div>
         </div>
         <p></p>
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Password:</h4></div>
+          <div class="col-xs-2 "><h5>密码:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="sPassword"></div>
           <div class="col-xs-2 "></div>
         </div>
@@ -71,8 +71,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary"  name="sSubmit">Login !</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary"  name="sSubmit">登录!</button>
       </div>
     </div><!-- /.modal-content -->  
   </div><!-- /.modal-dialog -->
@@ -83,19 +83,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-tower"></span> Sign up</h4>
+        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-tower"></span> 注册</h4>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Username:</h4></div>
+          <div class="col-xs-2 "><h5>用户名:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rUsername"></div>
           <div class="col-xs-2 "></div>
         </div>
         <p></p>
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Password:</h4></div>
+          <div class="col-xs-2 "><h5>密码:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword"></div>
           <div class="col-xs-2 "></div>
 
@@ -103,14 +103,14 @@
         <p></p>
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Confirm</h4></div>
+          <div class="col-xs-2 "><h5>再输一次:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="password" placeholder="" name="rPassword2"></div>
           <div class="col-xs-2 "></div>
         </div>
         <p></p>
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Email:</h4></div>
+          <div class="col-xs-2 "><h5>邮箱:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rEmail"></div>
           <div class="col-xs-2 "></div>
 
@@ -118,7 +118,7 @@
         <p></p>
         <div class="row">
           <div class="col-xs-2 "></div>
-          <div class="col-xs-2 "><h4>Name:</h4></div>
+          <div class="col-xs-2 "><h5>昵称:</h5></div>
           <div class="col-xs-6 "><input class="form-control" type="text" placeholder="" name="rName"></div>
           <div class="col-xs-2 "></div>
         </div>
@@ -146,8 +146,8 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary"  name="rSubmit">Sign up !</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary"  name="rSubmit">注册!</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -168,21 +168,21 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li>
-          <a href="{% url 'rt:index' %}">Home</a>
+          <a href="{% url 'rt:index' %}">首页</a>
         </li>
         <li>
-          <a href="{% url 'rt:rank' %}">Rank</a>
+          <a href="{% url 'rt:rank' %}">排行榜</a>
           <!-- {% url 'rt:rank' %} -->
         </li>
         <li>
-          <a href="{% url 'rt:info' %}">Info</a>
+          <a href="{% url 'rt:info' %}">公告板</a>
         </li>
       </ul>
 {% block nav_search %}
       <ul class="nav navbar-nav">
         <form class="navbar-form navbar-left" role="search" action="{% url 'rt:search' %}" method="get">
           <div class="form-group">
-            <input type="text" class="form-control" name="q" placeholder="Just search something !" value="{% block query_str %}{% endblock query_str %}">
+            <input type="text" class="form-control" name="q" placeholder="在这里搜索感兴趣的书吧" value="{% block query_str %}{% endblock query_str %}">
           </div>
           <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
         </form>
