@@ -33,8 +33,8 @@
       <h3><strong>公告板</strong></h3>   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs">
-        <li class="{% if info.get_species_display == "news" %} active {% endif %} {% if info|default:"null" == "null" %} active {% endif %}"><a href="#news" data-toggle="tab">News</a></li>
-        <li class="{% if info.get_species_display == "guide" %} active {% endif %}"><a href="#guide" data-toggle="tab">User Guide</a></li>  
+        <li class="{% if info.get_species_display == "news" %} active {% endif %} {% if info|default:"null" == "null" %} active {% endif %}"><a href="#news" data-toggle="tab">新闻</a></li>
+        <li class="{% if info.get_species_display == "guide" %} active {% endif %}"><a href="#guide" data-toggle="tab">用户指南</a></li>  
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
@@ -44,9 +44,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-                    {{ item.title }} {{ item.date }}
-                  </a>
+                  <div class="row">
+                    <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
+                      <div class="col-xs-6">{{ item.title }}</div>
+                    </a>
+                    <div class="col-xs-6 text-right" >{{ item.date }}</div>
+                  </div> 
                 </h4>
               </div>
               <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">
@@ -64,9 +67,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion2" href="#collapse2_{{ forloop.counter }}">
-                    {{ item.title }}
-                  </a>
+                  <div class="row">
+                    <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion2" href="#collapse2_{{ forloop.counter }}">
+                      <div class="col-xs-6">{{ item.title }}</div>
+                    </a>
+                    <div class="col-xs-6 text-right" >{{ item.date }}</div>
+                  </div> 
                 </h4>
               </div>
               <div id="collapse2_{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">

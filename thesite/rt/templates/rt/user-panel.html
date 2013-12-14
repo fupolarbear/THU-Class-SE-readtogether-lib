@@ -34,7 +34,29 @@
 	  <div class="panel panel-default">
 	  	<div class="panel-body">
 			<h2>欢迎！ {{ user.myuser.name }}</h2>
-			<p class="lead">you should return the book at 2013-11-11, and your ordring book will get returned at tomorrow.</p>
+			<p class="lead">
+			您当前
+			{% if book_borrowing %}
+				借阅 <strong>{{ book_borrowing|length }}</strong> 本
+			{% else %}
+				没有任何借阅
+			{% endif %}
+			{% if book_queue %}
+				预约 <strong>{{ book_queue|length }}</strong> 本
+			{% else %}
+				没有任何预约
+			{% endif %}
+			{% if book_borrowed %}
+				历史借阅 <strong>{{ book_borrowed|length }}</strong> 本
+			{% else %}
+				没有任何历史借阅
+			{% endif %}
+
+			{% if book_borrowing %}
+			<hr>
+			最近一本借阅应在 <strong>{{ book_borrowing.0.get_status.expire }}</strong> ({{ book_borrowing.0.get_status.expire|timeuntil }}) 日期之前归还
+			{% endif %}
+			</p>
 		</div>
 	  </div>	
 	</div><!-- /.container -->
@@ -92,10 +114,16 @@
 		  <div class="tab-pane fade in active" id="borrowing">
 				<div class="panel panel-default">
 				  <!-- Default panel contents -->
-				  <div class="panel-heading"><span class="glyphicon glyphicon-book"></span> 用户 yoyo 的借阅</div>
-				  <div class="panel-body">
-					当前借阅 <strong>6</strong> 本。最近一本到期时间 <strong>2013-11-19</strong> .
-				  </div>
+				  <div class="panel-heading"><span class="glyphicon glyphicon-book"></span> 用户 <span class="label label-info">{{ user.myuser.name }}</span> 的借阅</div>
+				  {% if book_borrowing %}
+					  <div class="panel-body">
+						当前借阅 <strong>{{ book_borrowing|length }}</strong> 本。最近一本借阅应在 <strong>{{ book_borrowing.0.get_status.expire }}</strong> ({{ book_borrowing.0.get_status.expire|timeuntil }}) 日期之前归还。
+					  </div>
+				  {% else %}
+				  	  <div class="panel-body">
+				  	  	嗯。。您当前没有借阅任何书籍。。。
+					  </div>
+				  {% endif %}
 
 				  <!-- Table -->
 				  <div class="table-responsive">
@@ -104,33 +132,27 @@
 						<tr>
 						  <th>#</th>
 						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
+						  <th>ISBN</th>
+						  <th>还书时间</th>
+						  <th>剩余日期</th>
+						  <th>已续借次数</th>
+						  <th>预约排队人数</th>
 						  <th>操作</th>
 						</tr>
 					  </thead>
 					  <tbody>
+						{% for copy in book_borrowing %}
 						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">续期</button></td>
+						  <td>{{ copy.id }}</td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
+						  <td>{{ copy.book.ISBN }}</td>
+						  <td>{{ copy.get_status.expire }}</td>
+						  <td>{{ copy.get_status.expire|timeuntil }}</td>
+						  <td>{{ copy.get_status.reborrow_count }}</td>
+						  <td>{{ copy.get_status.queue }}</td>
+						  <td><button type="button" class="btn btn-default btn-xs reborrow-button" uid="{{ user.id }}" bid="{{ copy.id }}" curl="{% url 'rt:reborrow' copy.id %}">续借</button></td>
 						</tr>
-						<tr class="danger">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td><button type="button" class="btn btn-default btn-xs">续期</button></td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td><button type="button" class="btn btn-default btn-xs">续期</button></td>
-						</tr>
+						{% endfor %}
 					  </tbody>
 				  </table>
 				  </div>
@@ -140,11 +162,17 @@
 				<div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-bookmark"></span> 用户 yoyo 的预约					
+					<span class="glyphicon glyphicon-bookmark"></span> 用户 <span class="label label-info">{{ user.myuser.name }}</span> 的预约					
 				  </div>
+				  {% if book_queue %}
 				  <div class="panel-body">
-					当前预约 <strong>6</strong> 本。最近一本可于 <strong>2013-11-19</strong> 来图书馆取.
+					当前预约 <strong>{{ book_queue|length }}</strong> 本。{% if copy.get_status.expire %}正在整理状态最近一本可于 <strong>{{ book_queue.0.get_status.expire }}</strong> ({{ book_queue.0.get_status.expire|timeuntil }}) 来图书馆取.{% endif %}
 				  </div>
+				  {% else %}
+				  	  <div class="panel-body">
+				  	  	嗯。。您当前没有预约任何书籍。。。
+					  </div>
+				  {% endif %}
 
 				  <!-- Table -->
 				  <div class="table-responsive">
@@ -153,33 +181,27 @@
 						<tr>
 						  <th>#</th>
 						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
+						  <th>ISBN</th>
+						  <th>还书时间</th>
+						  <th>剩余日期</th>
+						  <th>已续借次数</th>
+						  <th>预约排队人数</th>
 						  <th>操作</th>
 						</tr>
 					  </thead>
 					  <tbody>
+						{% for copy in book_queue %}
 						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td><button type="button" class="btn btn-default btn-xs">预约</button></td>
+						  <td>{{ copy.id }}</td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
+						  <td>{{ copy.book.ISBN }}</td>
+						  <td>{% if copy.get_status.expire %}{{ copy.get_status.expire }}{% else %}正在整理状态{% endif %}</td>
+						  <td>{% if copy.get_status.expire|timeuntil %}{{ copy.get_status.expire|timeuntil }}{% else %}正在整理状态{% endif %}</td>
+						  <td>{% if copy.get_status.reborrow_count %}{{ copy.get_status.reborrow_count }}{% else %}正在整理状态{% endif %}</td>
+						  <td>{{ copy.get_status.queue }}</td>
+						  <td><button type="button" class="btn btn-default btn-xs" {% if not copy.get_status.expire %}disabled="disabled"{% endif %}>取消预约</button></td>
 						</tr>
-						<tr>
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						</tr>
+						{% endfor %}
 					  </tbody>
 				  </table>
 				  </div>
@@ -189,9 +211,15 @@
 			<div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span> 用户 yoyo 的借阅历史</div>
+				  {% if book_borrowed %}
 				  <div class="panel-body">
-					当前预约 <strong>6</strong> 本。最近一本可于 <strong>2013-11-19</strong> 来图书馆取.
+					您已经读过 <strong>{{ book_borrowed|length }}</strong> 本书了。书山有路勤为径～加油！
 				  </div>
+				  {% else %}
+				  	  <div class="panel-body">
+				  	  	咦？您没有任何读书借阅记录诶。。。
+					  </div>
+				  {% endif %}
 
 				  <!-- Table -->
 				  <div class="table-responsive">
@@ -200,135 +228,78 @@
 						<tr>
 						  <th>#</th>
 						  <th>书名</th>
-						  <th>条形码</th>
-						  <th>状态</th>
+						  <th>作者</th>
+						  <th>版本</th>
+						  <th>ISBN</th>						  
 						  <th>操作</th>
 						</tr>
 					  </thead>
 					  <tbody>
+						{% for copy in book_borrowed %}
 						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>@mdo</td>
+						  <td>{{ copy.id }}</td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
+						  <td><a href="{% url 'rt:search' %}?q={{ copy.book.author }}">{{ copy.book.author }}</a></td>
+						  <td>{{ copy.book.simple_version }}</td>
+						  <td>{{ copy.book.ISBN }}</td>
+						  <td><button type="button" class="btn btn-default btn-xs">分享</button></td>
 						</tr>
-						<tr class="success">
-						  <td>2</td>
-						  <td>Jacob</td>
-						  <td>Thornton</td>
-						  <td>@fat</td>
-						  <td>@mdo</td>
-						</tr>
-						<tr>
-						  <td>3</td>
-						  <td>Larry</td>
-						  <td>the Bird</td>
-						  <td>@twitter</td>
-						  <td>@mdo</td>
-						</tr>
+						{% endfor %}
 					  </tbody>
 				  </table>
 				  </div>
+
 				</div>
 		  </div>
 		  <div class="tab-pane fade" id="comments">
 			 <div class="panel panel-default comment-widget">
             <div class="panel-heading">
                 <span class="glyphicon glyphicon-comment"></span> 我的历史评论
-                <span class="label label-info">78</span>
+                 <span class="label label-info">{{ comment|length }} 条</span>
             </div>
             <div class="panel-body">
                 <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1">
-                                <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
-                                        Google Style Login Page Design Using Bootstrap</a>
-                                    <div class="mic-info">
-                                        By: <a href="#">Bhaumik Patel</a> on 2 Aug 2013
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Awesome design
-                                </div>
-                                <div class="action">
-                                    <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-xs" title="Approved">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1">
-                                <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="http://bootsnipp.com/BhaumikPatel/snippets/Obgj">Admin Panel Quick Shortcuts</a>
-                                    <div class="mic-info">
-                                        By: <a href="#">Bhaumik Patel</a> on 11 Nov 2013
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                                    euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                                </div>
-                                <div class="action">
-                                    <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-xs" title="Approved">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2 col-md-1">
-                                <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
-                            <div class="col-xs-10 col-md-11">
-                                <div>
-                                    <a href="http://bootsnipp.com/BhaumikPatel/snippets/4ldn">Cool Sign Up</a>
-                                    <div class="mic-info">
-                                        By: <a href="#">Bhaumik Patel</a> on 11 Nov 2013
-                                    </div>
-                                </div>
-                                <div class="comment-text">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                                    euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                                </div>
-                                <div class="action">
-                                    <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-xs" title="Approved">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+
+                	{% for item in comment %}
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-xs-2 col-md-1">
+								{% if forloop.counter0 < 8 %}
+								<img src="http://placekitten.com/{{ forloop.counter0|add:"80" }}/{{ forloop.counter0|add:"80" }}" class="img-circle img-responsive" alt="comment-pic" />
+								{% else %}
+								<img src="http://placekitten.com/{{ forloop.counter0|add:"72" }}/{{ forloop.counter0|add:"72" }}" class="img-circle img-responsive" alt="comment-pic" />
+								{% endif %}
+							</div>
+							<div class="col-xs-10 col-md-11">
+								<div>
+									<strong>{{ item.title }}</strong>
+									<div class="mic-info">
+										By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }} {{ item.content|wordcount }} words.
+									</div>
+								</div>
+								{% if item.spoiler %}
+									<div class="comment-text spoiler-comment">
+								{% else %}
+									<div class="comment-text">
+								{% endif %}
+										{{ item.content }}
+									</div>
+								<div class="rate-star-panel">
+									<ul class="list-unstyled">
+										<li class="small-star">
+											评分：
+											{% for i in range5 %}{% if forloop.counter <= item.rate %}<span class="glyphicon glyphicon-star"></span>{% else %}<span class="glyphicon glyphicon-star-empty"></span>{% endif %}{% endfor %}
+										<span class="rate-score">{{ item.rate }}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+
                 </ul>
-                <a href="#" class="btn btn-default btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
+                <button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵=w=～</button>
             </div>
           </div>
 		  </div>
@@ -352,7 +323,7 @@
 					   <br/>
 						<i class="glyphicon glyphicon-phone"></i> 123-4567-8901
 					   <br />
-						<i class="glyphicon glyphicon-globe"></i> www.google.com
+						<i class="glyphicon glyphicon-globe"></i> <a href="www.{{ user.username }}.com">www.{{ user.username }}.com</a>
 					   <br />
 						<i class="glyphicon glyphicon-gift"></i> January 30, 1974
 					</p>
@@ -374,13 +345,14 @@
 						最后一次登录时间
 					  </li>
 					  <li class="list-group-item">
-						<span class="badge">56</span>
+						<span class="badge">{{ book_borrowed|length }}</span>
 						已经读的书
 					  </li>
 					  <li class="list-group-item">
-						<span class="badge">23</span>
+						<span class="badge">{{ comment|length }}</span>
 						发表的评论
 					  </li>
+					  <!--
 					  <li class="list-group-item">
 						<span class="badge">18</span>
 						被点赞次数
@@ -389,6 +361,7 @@
 						<span class="badge">14</span>
 						我的好友数
 					  </li>
+						-->
 					</ul>
 				</div>
 				</div>

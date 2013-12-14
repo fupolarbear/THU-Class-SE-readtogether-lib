@@ -1,6 +1,9 @@
 import json
 
 from django.http import HttpResponse, Http404
+from django.core.paginator import EmptyPage, PageNotAnInteger
+
+from rt.models import PermException
 
 
 def FC(prototype, *args):
@@ -33,7 +36,25 @@ def render_JSON_Error(message, data={}):
     return HttpResponse(json.dumps(res))
 
 
+def get_page(paginator, page):
+    """Shortcut. Get certain page from paginator.
+    
+    Argument
+    paginator -- paginator to get page from
+    page      -- string from GET parameter
+
+    Catch format errors and fall back gracefully.
+    """
+    try:
+        return paginator.page(page)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
+
+
 def POST_required(*field_list):
+    """View decorator. Check HTTP method and certain field."""
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             if request.method != 'POST':
@@ -48,20 +69,41 @@ def POST_required(*field_list):
     return decorator
 
 
-def login_required_JSON(func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return render_JSON_Error('Not logged in.')
-        return func(request, *args, **kwargs)
-    return wrapper
+def login_required_JSON(admin_type=None):
+    """View decorator. Check logged in user."""
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            if not request.user.is_authenticated():
+                return render_JSON_Error('Not logged in.')
+            if admin_type is not None and \
+                    request.user.myuser.get_admin_type() != admin_type:
+                return render_JSON_Error('Only {} can access.'.format(
+                    admin_type,
+                    ))
+            return func(request, *args, **kwargs)
+        return wrapper
+    return decorator
 
 
 def catch_404_JSON(func):
+    """View decorator. Convert Http404 to JSON output."""
     def wrapper(request, *args, **kwargs):
         try:
             return func(request, *args, **kwargs)
         except Http404 as err:
             return render_JSON_Error('404 raised.', {
                 'message': err.message,
+                })
+    return wrapper
+
+
+def catch_PermException_JSON(func):
+    """View decorator. Convert PermException to JSON output."""
+    def wrapper(request, *args, **kwargs):
+        try:
+            return func(request, *args, **kwargs)
+        except PermException as err:
+            return render_JSON_Error('Permission denied.', {
+                'message': err.args[0],
                 })
     return wrapper
