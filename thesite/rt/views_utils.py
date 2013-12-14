@@ -38,7 +38,7 @@ def render_JSON_Error(message, data={}):
 
 def get_page(paginator, page):
     """Shortcut. Get certain page from paginator.
-    
+
     Argument
     paginator -- paginator to get page from
     page      -- string from GET parameter

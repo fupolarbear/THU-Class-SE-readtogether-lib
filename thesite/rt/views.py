@@ -64,7 +64,7 @@ def search(request):
 
 def book(request, book_id):
     """Show the detail page for a certain book.
-    
+
     GET:
 
     Renders rt/book-detail.html with:
@@ -146,7 +146,7 @@ def ajax_comment(request, book_id):
 @POST_required()
 def login(request):
     """Backend for AJAX login.
-    
+
     POST:
     username -- username to login
     password -- password of the username
@@ -184,7 +184,7 @@ def login(request):
 @POST_required()
 def register(request):
     """Backend for AJAX register.
-    
+
     POST:
     username  -- username of the new user
     password  -- password of the new user
@@ -228,11 +228,11 @@ def register(request):
 
 def logout(request):
     """Backend for AJAX logout.
-    
+
     GET or POST:
 
     Renders JSON: (besides 'status' or 'err')
-    
+
     Always returns OK.
     """
     auth.logout(request)
@@ -242,7 +242,7 @@ def logout(request):
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def user(request):
     """Show the user panel page.
-    
+
     GET:
 
     Renders rt/user-panel.html with:
@@ -278,7 +278,7 @@ def user(request):
 @catch_PermException_JSON
 def queue(request, copy_id):
     """Backend for AJAX book queueing.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -302,7 +302,7 @@ def queue(request, copy_id):
 @catch_PermException_JSON
 def reborrow(request, copy_id):
     """Backend for AJAX book reborrow.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -326,7 +326,7 @@ def reborrow(request, copy_id):
 @catch_PermException_JSON
 def borrow(request, copy_id, myuser_id):
     """Backend for AJAX book borrow.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -346,7 +346,7 @@ def borrow(request, copy_id, myuser_id):
 @catch_PermException_JSON
 def back(request, copy_id):
     """Backend for AJAX book return.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -365,7 +365,7 @@ def back(request, copy_id):
 @catch_PermException_JSON
 def queue_next(request, copy_id, myuser_id):
     """Backend for AJAX book queue_next.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -385,7 +385,7 @@ def queue_next(request, copy_id, myuser_id):
 @catch_PermException_JSON
 def readify(request, copy_id):
     """Backend for AJAX book readify.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -404,7 +404,7 @@ def readify(request, copy_id):
 @catch_PermException_JSON
 def disappear(request, copy_id):
     """Backend for AJAX book disappear.
-    
+
     POST:
 
     Renders JSON: (besides 'status' or 'err')
@@ -420,7 +420,7 @@ def disappear(request, copy_id):
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def ad_book(request):
     """Show the book admin panel page.
-    
+
     GET:
 
     Renders rt/book-manager-panel.html with:
@@ -498,7 +498,7 @@ def info_detail(request, info_id):
 
 def rank(request):
     """Show the rank page.
-    
+
     GET:
 
     Renders rt/rank.html with:
