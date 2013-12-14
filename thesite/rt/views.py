@@ -119,13 +119,7 @@ def ajax_comment(request, book_id):
     a good idea to put them into URL.
 
     Renders rt/fetch_comment.html for AJAX load with:
-    comment -- (on 'OK') a list of comments
-      myuser   -- the user who posted this comment
-      datetime -- datetime when the comment was posted
-      title    -- title of the comment
-      content  -- content of the comment
-      rate     -- rate of the comment
-      spoiler  -- whether this comment is a spoiler
+    comment & range5 -- (on 'OK') a list of comments, and template helper
 
     Everyone can view comments.
     """
@@ -142,7 +136,19 @@ def ajax_comment(request, book_id):
 
 @POST_required()
 def login(request):
-    """Backend for AJAX login."""
+    """Backend for AJAX login.
+    
+    POST:
+    username -- username to login
+    password -- password of the username
+
+    Renders JSON: (besides 'status' or 'err')
+    username -- (on 'OK') username of the logged in user
+    name     -- (on 'OK') name of the logged in user
+    detail   -- (on 'Error') error list from form validation
+
+    POST data will be validated by LoginForm.
+    """
     form = LoginForm(request.POST)
     if form.is_valid():
         user = auth.authenticate(
@@ -164,7 +170,22 @@ def login(request):
 
 @POST_required()
 def register(request):
-    """Backend for AJAX register."""
+    """Backend for AJAX register.
+    
+    POST:
+    username  -- username of the new user
+    password  -- password of the new user
+    password2 -- password confirm
+    email     -- email of the new user
+    name      -- name of the new user
+
+    Renders JSON: (besides 'status' or 'err')
+    username -- (on 'OK') username of the logged in user
+    name     -- (on 'OK') name of the logged in user
+    detail   -- (on 'Error') error list from form validation
+
+    POST data will be validated by RegisterForm.
+    """
     form = RegisterForm(request.POST)
     if form.is_valid():
         u = MyUser()
@@ -193,14 +214,34 @@ def register(request):
 
 
 def logout(request):
-    """Backend for AJAX logout."""
+    """Backend for AJAX logout.
+    
+    GET or POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    
+    Always returns OK.
+    """
     auth.logout(request)
     return render_JSON_OK({})
 
 
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def user(request):
-    """Show the user panel page."""
+    """Show the user panel page.
+    
+    GET:
+
+    Renders rt/user-panel.html with:
+    profile          -- myuser object of the current user
+    book_borrowing   -- list of all borrowing copies
+    book_queue       -- list of all queuing copies
+    book_borrowed    -- list of all borrowed copies
+    comment & range5 -- list of all comments posted, and template helper
+
+    Redirect to rt:index if not logged in.
+    Redirect to rt:ad_book if book admin logged in.
+    """
     myuser = request.user.myuser
     if myuser.get_admin_type() == 'book manager':
         return redirect('rt:ad_book')
@@ -219,7 +260,17 @@ def user(request):
 @catch_404_JSON
 @catch_PermException_JSON
 def queue(request, copy_id):
-    """Backend for AJAX book queueing."""
+    """Backend for AJAX book queueing.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    username -- (on 'OK') username of the queuing user
+    copy_id  -- (on 'OK') copy_id of the queued copy
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Queuing is done by myuser itself.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.queue(request.user.myuser, copy)
     return render_JSON_OK({
@@ -233,7 +284,17 @@ def queue(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def reborrow(request, copy_id):
-    """Backend for AJAX book reborrow."""
+    """Backend for AJAX book reborrow.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    username -- (on 'OK') username of the reborrowing user
+    copy_id  -- (on 'OK') copy_id of the reborrowed copy
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Reborrowing is done by myuser itself.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.reborrow(request.user.myuser, copy)
     return render_JSON_OK({
@@ -247,6 +308,15 @@ def reborrow(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def borrow(request, copy_id, myuser_id):
+    """Backend for AJAX book borrow.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Can only be called by book admin.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     myuser = get_object_or_404(MyUser, pk=myuser_id)
     Borrowing.borrow(myuser, copy)
@@ -258,6 +328,15 @@ def borrow(request, copy_id, myuser_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def back(request, copy_id):
+    """Backend for AJAX book return.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Can only be called by book admin.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.return_book(copy)
     return render_JSON_OK({})
@@ -268,6 +347,15 @@ def back(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def queue_next(request, copy_id, myuser_id):
+    """Backend for AJAX book queue_next.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Can only be called by book admin.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     myuser = get_object_or_404(MyUser, pk=myuser_id)
     Borrowing.queue_next(myuser, copy)
@@ -279,6 +367,15 @@ def queue_next(request, copy_id, myuser_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def readify(request, copy_id):
+    """Backend for AJAX book readify.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Can only be called by book admin.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.readify(copy)
     return render_JSON_OK({})
@@ -289,6 +386,15 @@ def readify(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def disappear(request, copy_id):
+    """Backend for AJAX book disappear.
+    
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404 or Permission Error
+
+    Can only be called by book admin.
+    """
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.disappear(copy)
     return render_JSON_OK({})
@@ -296,6 +402,17 @@ def disappear(request, copy_id):
 
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def ad_book(request):
+    """Show the book admin panel page.
+    
+    GET:
+
+    Renders rt/book-manager-panel.html with:
+
+    Redirect to rt:index if not logged in.
+    Redirect to rt:user if not book admin.
+    """
+    if request.user.myuser.get_admin_type() != 'book manager':
+        return redirect('rt:user')
     return render(request, 'rt/book-manager-panel.html', {})
 
 
@@ -304,6 +421,16 @@ def ad_user(request):
 
 
 def ajax_myuser(request):
+    """Search myuser according to query string.
+
+    GET:
+    q -- the query string, default ''
+
+    Renders rt/fetch_myuser.html for AJAX load with:
+    myuser_list -- (on 'OK') a list of matched myuser
+
+    No error check whether called by book admin.
+    """
     q_myuser = request.GET.get('q', '')
     return render(request, 'rt/fetch_myuser.html', {
         'myuser_list': MyUser.search(q_myuser),
@@ -315,7 +442,14 @@ def ajax_book(request, book_id):
 
 
 def info(request):
-    """Show news and guide list."""
+    """Show news and guide list.
+
+    GET:
+
+    Renders rt/info.html with:
+    news  -- list of all news
+    guide -- list of all guide
+    """
     return render(request, 'rt/info.html', {
         'news': Info.get_all('news'),
         'guide': Info.get_all('guide'),
@@ -323,7 +457,15 @@ def info(request):
 
 
 def info_detail(request, info_id):
-    """Show the content of the specific news of guide."""
+    """Show the content of the specific news of guide.
+
+    GET:
+
+    Renders rt/info.html with:
+    info  -- current info object
+    news  -- list of all news
+    guide -- list of all guide
+    """
     info = get_object_or_404(Info, pk=info_id)
     return render(request, 'rt/info.html', {
         'info': info,
@@ -333,7 +475,16 @@ def info_detail(request, info_id):
 
 
 def rank(request):
-    """Show the rank page."""
+    """Show the rank page.
+    
+    GET:
+
+    Renders rt/rank.html with:
+    rank_by_borrow  -- latest rank list by borrow count
+    rank_by_comment -- latest rank list by comment count
+    rank_by_rate    -- latest rank list by rate
+    range5          -- template helper
+    """
     return render(request, 'rt/rank.html', {
         'rank_by_borrow': Rank.get_top(0),
         'rank_by_comment': Rank.get_top(1),
