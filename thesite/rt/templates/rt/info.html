@@ -54,7 +54,7 @@
               </div>
               <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">
                 <div class="panel-body">
-                  {{ item.content }}
+                  {{ item.content|linebreaks }}
                 </div>
               </div>
             </div>
@@ -77,7 +77,7 @@
               </div>
               <div id="collapse2_{{ forloop.counter }}" class="panel-collapse collapse{% if info.id == item.id %} in{% endif %}">
                 <div class="panel-body">
-                  {{ item.content }}
+                  {{ item.content|linebreaks }}
                 </div>
               </div>
             </div>

@@ -274,7 +274,7 @@
               $("[name='sRespondD']").show();
               $("[name='sRespondD']").text(Obj.status+": 请输入");
               $.each(Obj.detail,function(key,value){
-                $("[name='sRespondD']").append(" <strong>" + key +"<strong> ");
+                $("[name='sRespondD']").append(" " + key );
               })
           }
       });
@@ -325,7 +325,7 @@
                 $("[name='rRespondD']").show();
                 $("[name='rRespondD']").text(Obj.status+": 请输入");
                 $.each(Obj.detail,function(key,value){
-                  $("[name='rRespondD']").append(" <strong>" + key +"<strong> "); 
+                  $("[name='rRespondD']").append(" " + key ); 
                 })
             }
           }
