@@ -19,7 +19,7 @@ class MySeleniumTests(LiveServerTestCase):
     def test_registers_success(self):
         self.selenium.get(self.live_server_url)
         self.selenium.find_element_by_xpath(
-            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()
+            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()  # click_register
         time.sleep(0.2)
         username_input = self.selenium.find_element_by_name('rUsername')
         print(username_input.is_displayed())
@@ -39,7 +39,7 @@ class MySeleniumTests(LiveServerTestCase):
             '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()  # logout
         time.sleep(1)
         self.selenium.find_element_by_xpath(
-            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()
+            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()  # click_register
         time.sleep(0.2)
         password_input = self.selenium.find_element_by_name('rPassword')
         password_input.send_keys('secret')
@@ -56,7 +56,7 @@ class MySeleniumTests(LiveServerTestCase):
             '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()  # logout
         time.sleep(1)
         self.selenium.find_element_by_xpath(
-            '/html/body/div[3]/div/div[2]/ul[2]/li/a').click()
+            '/html/body/div[3]/div/div[2]/ul[2]/li/a').click()  # click_login
         time.sleep(0.2)
         username_input2 = self.selenium.find_element_by_xpath(
             '/html/body/div/div/div/div[2]/div/div[3]/input')
@@ -65,4 +65,4 @@ class MySeleniumTests(LiveServerTestCase):
             '/html/body/div/div/div/div[2]/div[2]/div[3]/input')
         password_input2.send_keys('secret')
         self.selenium.find_element_by_xpath(
-            '/html/body/div/div/div/div[3]/button[2]').click()
+            '/html/body/div/div/div/div[3]/button[2]').click()  # login

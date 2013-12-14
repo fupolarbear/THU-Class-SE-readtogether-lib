@@ -16,7 +16,7 @@ class MySeleniumTests(LiveServerTestCase):
         cls.selenium.quit()
         super(MySeleniumTests, cls).tearDownClass()
 
-    def test_login(self):
+    def test_login_failure(self):
         self.selenium.get(self.live_server_url)
         self.selenium.find_element_by_xpath(
             '/html/body/div[3]/div/div[2]/ul[2]/li/a').click()  # click_login

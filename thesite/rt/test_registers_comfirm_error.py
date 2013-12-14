@@ -19,10 +19,9 @@ class MySeleniumTests(LiveServerTestCase):
     def test_registers_comfirm_error(self):
         self.selenium.get(self.live_server_url)
         self.selenium.find_element_by_xpath(
-            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()
+            '/html/body/div[3]/div/div[2]/ul[2]/li[2]/a').click()  # click_register
         time.sleep(0.2)
         username_input = self.selenium.find_element_by_name('rUsername')
-        print(username_input.is_displayed())
         username_input.send_keys('myuser')
         self.selenium.find_element_by_xpath(
             '/html/body/div[2]/div/div/div[3]/button[2]').click()
@@ -38,4 +37,4 @@ class MySeleniumTests(LiveServerTestCase):
         name_input = self.selenium.find_element_by_name('rName')
         name_input.send_keys('secret')
         self.selenium.find_element_by_xpath(
-            '/html/body/div[2]/div/div/div[3]/button[2]').click()
+            '/html/body/div[2]/div/div/div[3]/button[2]').click()  # click_submit
