@@ -241,8 +241,12 @@ def user(request):
 
     Redirect to rt:index if not logged in.
     Redirect to rt:ad_book if book admin logged in.
+    Redirect to admin:index if root.
     """
-    myuser = request.user.myuser
+    try:
+        myuser = request.user.myuser
+    except MyUser.DoesNotExist as err:
+        return redirect('admin:index')
     if myuser.get_admin_type() == 'book manager':
         return redirect('rt:ad_book')
     return render(request, 'rt/user-panel.html', {
@@ -410,8 +414,13 @@ def ad_book(request):
 
     Redirect to rt:index if not logged in.
     Redirect to rt:user if not book admin.
+    Redirect to admin:index if root.
     """
-    if request.user.myuser.get_admin_type() != 'book manager':
+    try:
+        myuser = request.user.myuser
+    except MyUser.DoesNotExist as err:
+        return redirect('admin:index')
+    if myuser.get_admin_type() != 'book manager':
         return redirect('rt:user')
     return render(request, 'rt/book-manager-panel.html', {})
 

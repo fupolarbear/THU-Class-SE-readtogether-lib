@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse, Http404
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
-from rt.models import PermException
+from rt.models import PermException, MyUser
 
 
 def FC(prototype, *args):
@@ -75,6 +75,10 @@ def login_required_JSON(admin_type=None):
         def wrapper(request, *args, **kwargs):
             if not request.user.is_authenticated():
                 return render_JSON_Error('Not logged in.')
+            try:
+                request.user.myuser
+            except MyUser.DoesNotExist as err:
+                return render_JSON_Error('Root not allowed.')
             if admin_type is not None and \
                     request.user.myuser.get_admin_type() != admin_type:
                 return render_JSON_Error('Only {} can access.'.format(
