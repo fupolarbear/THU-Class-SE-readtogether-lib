@@ -50,6 +50,8 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -61,6 +63,8 @@
             <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'rt:book' item.id %}">{{ item.simple_name }}</a></td>
             <td>{{ item.author }}</td>
+            <td>{{ item.press }}</td>
+            <td>{% for i in "abcde" %}{% if forloop.counter <= item.rate %}<span class="glyphicon glyphicon-star"></span>{% else %}<span class="glyphicon glyphicon-star-empty"></span>{% endif %}{% endfor %} {{ item.rate|floatformat:1 }}</td>
             <td>{{ item.simple_version }}</td>
           </tr>
           {% empty %}
