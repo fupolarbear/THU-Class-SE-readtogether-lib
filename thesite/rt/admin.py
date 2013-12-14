@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from rt.models import Book, BookCopy, MyUser, Borrowing, Info
+from rt.models import Book, BookCopy, MyUser, Borrowing, Info, Comment, Rank
 
 
 class BookCopyInline(admin.StackedInline):
@@ -22,9 +22,11 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Book, BookAdmin)
-admin.site.register(BookCopy)
-admin.site.register(MyUser)
+# admin.site.register(BookCopy)
+# admin.site.register(MyUser)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Borrowing)
 admin.site.register(Info)
+admin.site.register(Comment)
+admin.site.register(Rank)
