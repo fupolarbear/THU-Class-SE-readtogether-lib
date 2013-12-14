@@ -38,6 +38,10 @@ img.center-img {
   margin-right: auto;
 }
 
+div.comment-text{
+	padding-top: 6px;
+}
+
 .rate-star-panel .glyphicon.glyphicon-star {
 	color: #FF4500;
 }

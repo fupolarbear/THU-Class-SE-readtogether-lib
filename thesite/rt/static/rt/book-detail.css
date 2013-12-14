@@ -40,6 +40,10 @@ img.center-img {
 	margin-bottom: 0px;
 }
 
+div.comment-text{
+	padding-top: 6px;
+}
+
 .rate-star-panel .big-star {
 	margin-top: 6px;
 	margin-bottom: 6px;
@@ -64,7 +68,7 @@ img.center-img {
 }
 
 #comment-panel .rate-star-panel .small-star {
-	padding-top: 8px;
+	padding-top: 0px;
 }
 
 

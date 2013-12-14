@@ -277,7 +277,7 @@
 							</div>
 							<div class="col-xs-10 col-md-11">
 								<div>
-									<strong>{{ item.title }}</strong>
+									<strong>{{ item.title }} (<a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }})</a></strong>
 									<div class="mic-info">
 										By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }} {{ item.content|wordcount }} words.
 									</div>
@@ -287,7 +287,7 @@
 								{% else %}
 									<div class="comment-text">
 								{% endif %}
-										{{ item.content }}
+										{{ item.content|linebreaks }}
 									</div>
 								<div class="rate-star-panel">
 									<ul class="list-unstyled">
