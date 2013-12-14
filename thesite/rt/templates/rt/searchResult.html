@@ -42,7 +42,7 @@
   <div class="col-xs-0 col-md-1 "></div>
   <div class="col-xs-12 col-md-10 ">
     <div class="alert alert-success">
-      <h3><strong>搜索结果</strong></h3>
+      <h3><strong class="text-danger"> {% if q|default:"null" != "null" %}{{ q }}</strong><strong> 的{% endif %}</strong><strong>搜索结果</strong></h3>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -53,6 +53,9 @@
           </tr>
         </thead>
         <tbody>
+          {% if q|default:"null" == "null" %}
+            <tr><td><br><h4>您还没有输入想要搜索的内容</h4><br>建议：<br>直接使用上方的搜索框吧~</td><td></td><td></td><td></td></tr>
+          {% else %}
           {% for item in result %}
           <tr>
             <td>{{ forloop.counter }}</td>
@@ -60,7 +63,10 @@
             <td>{{ item.author }}</td>
             <td>{{ item.simple_version }}</td>
           </tr>
+          {% empty %}
+          <tr><td><br><h4>抱歉，没有找到与<em class="text-danger"> “{{ q }}” </em>相关的书籍</h4><br>建议：<br>检查输入是否正确<br>尝试用作者、出版社等其他信息来搜索</td><td></td><td></td><td></td></tr>
           {% endfor %}
+          {% endif %}
         </tbody>
       </table>
     </div>
