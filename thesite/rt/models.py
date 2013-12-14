@@ -68,11 +68,12 @@ class Book(models.Model):
 
     @staticmethod
     def _search_part(string):
-        """search for string in name_cn, name_origin or author"""
+        """search for string in name_cn, name_origin ,author or press"""
         re1 = Book.objects.filter(name_cn__contains=string)
         re2 = Book.objects.filter(name_origin__contains=string)
         re3 = Book.objects.filter(author__contains=string)
-        return re1 | re2 | re3
+        re4 = Book.objects.filter(press__contains=string)
+        return re1 | re2 | re3 | re4
 
     @staticmethod
     def search(string):
