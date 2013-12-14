@@ -71,6 +71,9 @@ div.comment-text{
 	padding-top: 0px;
 }
 
+div.spoiler-comment{
+	color: #B6A7A7;
+}
 
 .panel .table{
 	margin-bottom: 0px;
