@@ -37,6 +37,14 @@ def render_JSON_Error(message, data={}):
 
 
 def get_page(paginator, page):
+    """Shortcut. Get certain page from paginator.
+    
+    Argument
+    paginator -- paginator to get page from
+    page      -- string from GET parameter
+
+    Catch format errors and fall back gracefully.
+    """
     try:
         return paginator.page(page)
     except PageNotAnInteger:
@@ -46,6 +54,7 @@ def get_page(paginator, page):
 
 
 def POST_required(*field_list):
+    """View decorator. Check HTTP method and certain field."""
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             if request.method != 'POST':
@@ -61,6 +70,7 @@ def POST_required(*field_list):
 
 
 def login_required_JSON(admin_type=None):
+    """View decorator. Check logged in user."""
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             if not request.user.is_authenticated():
@@ -76,6 +86,7 @@ def login_required_JSON(admin_type=None):
 
 
 def catch_404_JSON(func):
+    """View decorator. Convert Http404 to JSON output."""
     def wrapper(request, *args, **kwargs):
         try:
             return func(request, *args, **kwargs)
@@ -87,6 +98,7 @@ def catch_404_JSON(func):
 
 
 def catch_PermException_JSON(func):
+    """View decorator. Convert PermException to JSON output."""
     def wrapper(request, *args, **kwargs):
         try:
             return func(request, *args, **kwargs)
