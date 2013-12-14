@@ -262,6 +262,12 @@
               $("[name='sRespondD']").show();
               $("[name='sRespondD']").text(Obj.status+": 用户名与密码不匹配");
           }
+          else if(Obj.err=="Root cannot login here.")
+          {
+              $("[name='sRespondS']").hide();
+              $("[name='sRespondD']").show();
+              $("[name='sRespondD']").text(Obj.status+": "+Obj.err);
+          }
           else
           {
               $("[name='sRespondS']").hide();
