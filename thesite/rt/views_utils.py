@@ -96,7 +96,7 @@ def catch_404_JSON(func):
             return func(request, *args, **kwargs)
         except Http404 as err:
             return render_JSON_Error('404 raised.', {
-                'message': err.message,
+                'message': err.args[0],
                 })
     return wrapper
 
