@@ -38,6 +38,18 @@ img.center-img {
   margin-right: auto;
 }
 
+.rate-star-panel .glyphicon.glyphicon-star {
+	color: #FF4500;
+}
+
+.rate-star-panel .glyphicon.glyphicon-star-empty {
+	color: #D3D3D3;
+}
+
+.rate-star-panel .glyphicon.rate-bar {
+	height:14px;
+	background-color:#f5cbad;
+}
 
 /*
 .panel-body .btn:not(.btn-block){ width:120px;margin-bottom:10px; }
