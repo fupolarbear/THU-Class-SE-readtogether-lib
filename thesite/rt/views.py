@@ -176,8 +176,13 @@ def logout(request):
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def user(request):
     """Show the user panel page."""
+    myuser = request.user.myuser
     return render(request, 'rt/user-panel.html', {
-        'profile': request.user.myuser,
+        'profile': myuser,
+        'book_borrowing': myuser.get_all_borrowing(),
+        'book_queue': myuser.get_all_queue(),
+        'book_borrowed': myuser.get_all_borrowed(),
+        'comment': myuser.comment_set.all(),
         })
 
 

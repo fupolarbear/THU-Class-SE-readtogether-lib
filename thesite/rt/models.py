@@ -243,6 +243,13 @@ class MyUser(models.Model):
             re.append(borr.book_copy)
         return re
 
+    def get_all_borrowed(self):
+        bo = Borrowing.objects.filter(
+            myuser=self, status=0, is_active=False
+            )
+        re = [borr.book_copy for borr in bo]
+        return re
+
     @staticmethod
     def search(s):
         re1 = MyUser.objects.filter(name__contains=s)
