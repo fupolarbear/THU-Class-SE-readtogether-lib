@@ -143,7 +143,7 @@ class BookCopy(models.Model):
             re['expire'] = borr.datetime.date() + datetime.timedelta(days=k)
             re['reborrow_count'] = borr.status
             re['queue'] = all_borrowing.filter(status=4).count()
-            re['outdated'] = (timezone.now().date > re['expire'])
+            re['outdated'] = (timezone.now().date() > re['expire'])
         elif all_borrowing.filter(status=3).exists():
             re = {
                 'text': 'arranging',
