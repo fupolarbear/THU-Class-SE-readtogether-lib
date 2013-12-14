@@ -85,7 +85,7 @@ class Book(models.Model):
         re = Book.objects.none()
         for ss in s:
             re = re | Book._search_part(ss)
-        return re
+        return re.order_by('-rate')
 
     def simple_name(self):
         """return a simple name"""
@@ -163,7 +163,7 @@ class BookCopy(models.Model):
             return None
         else:
             return s['expire']
-    
+
     def __unicode__(self):
         """only for debug"""
         return str(self.id) + ": " + self.book.simple_name()
@@ -323,7 +323,7 @@ class MyUser(models.Model):
         re2 = MyUser.objects.filter(user__username__contains=s)
         re3 = MyUser.objects.filter(user__email__contains=s)
         re4 = MyUser.objects.filter(id__contains=s)
-        return re1 | re2 | re3 | re4
+        return (re1 | re2 | re3 | re4).exclude(admin_type__in=[1,2])
 
     def __unicode__(self):
         """only for debug"""
