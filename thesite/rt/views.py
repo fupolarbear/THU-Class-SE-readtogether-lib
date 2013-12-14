@@ -166,6 +166,10 @@ def login(request):
             )
         if user is not None:
             if user.is_active:
+                try:
+                    user.myuser
+                except MyUser.DoesNotExist as err:
+                    return render_JSON_Error('Root cannot login here.')
                 auth.login(request, user)
                 return render_JSON_OK({
                     'username': user.username,
