@@ -1,4 +1,5 @@
 from datetime import datetime
+from random import choice
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import auth
@@ -40,13 +41,21 @@ def search(request):
     """Search for books.
 
     GET:
-    q -- the query string
+    q     -- the query string
+    lucky -- whether the lucky button is clicked
 
     Renders rt/searchResult.html with:
     q      -- the query string
     result -- search result, as a list of books
     """
     q = request.GET.get('q', '')
+    lucky = 'lucky' in request.GET
+    if lucky:
+        try:
+            book = choice(Book.objects.all())
+            return redirect('rt:book', book.id)
+        except IndexError as err:
+            pass
     return render(request, 'rt/searchResult.html', {
         'q': q,
         'result': Book.search(q),
