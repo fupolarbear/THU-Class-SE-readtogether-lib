@@ -155,6 +155,14 @@ class BookCopy(models.Model):
             re = {'text': 'on shelf'}
         return re
 
+    def get_expire(self):
+        """get the time of expired"""
+        s = self.get_status()
+        if 'expire' not in s:
+            return None
+        else:
+            return s['expire']
+    
     def __unicode__(self):
         """only for debug"""
         return str(self.id) + ": " + self.book.simple_name()
@@ -275,30 +283,30 @@ class MyUser(models.Model):
             ).count()
 
     def get_all_borrowing(self):
-        """get all the book that the user borrowed now"""
+        """
+        get all the book that the user borrowed now.
+        sort by expired date.
+        """
         bo = Borrowing.objects.filter(
             myuser=self, status__in=[0, 1, 2], is_active=True
             )
-        re = []
-        for borr in bo:
-            re.append(borr.book_copy)
+        re = [borr.book_copy for borr in bo]
+        re.sort(cmp=lambda x, y: x.get_expire()-y.get_expire())
         return re
 
     def get_all_queue(self):
         """get all the book that the user queued"""
         bo = Borrowing.objects.filter(
             myuser=self, status=4, is_active=True
-            )
-        re = []
-        for borr in bo:
-            re.append(borr.book_copy)
+            ).order_by('datetime')
+        re = [borr.book_copy for borr in bo]
         return re
 
     def get_all_borrowed(self):
         """get all the book that the user had been borrowed"""
         bo = Borrowing.objects.filter(
             myuser=self, status=0, is_active=False
-            )
+            ).order_by('datetime')
         re = [borr.book_copy for borr in bo]
         return re
 
