@@ -558,7 +558,7 @@ class Info(models.Model):
         (1, 'guide'),
     )
     title = models.CharField(max_length=200)
-    content = models.CharField(max_length=10000)
+    content = models.TextField(max_length=10000)
     date = models.DateTimeField(auto_now=True)
     species = models.IntegerField(choices=species_choice, default=0)
 
@@ -590,7 +590,7 @@ class Comment(models.Model):
         (5, 'terrible'),
     )
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=10000)
+    content = models.TextField(max_length=10000)
     datetime = models.DateTimeField(auto_now=True)
     rate = models.IntegerField(choices=species_rate, default=3)
     spoiler = models.BooleanField(default=False)
