@@ -46,6 +46,7 @@ $( document ).ready(function() {
 				$('#borrow-book-uid').val(uid);
 				$('#find-user-tbody').html('');
 				$('#borrow-book-tbody').html('');
+				$('#borrow-book-bid').focus();
 				return false;
 			});
     	});
@@ -89,6 +90,7 @@ $( document ).ready(function() {
     	);
     });
 
+	// return book
 	$('#magic-return').click(function(){
 		var bid = $('#return-book-bid').val();
 
@@ -115,6 +117,7 @@ $( document ).ready(function() {
 							+ '<strong>还书成功！'
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
+					$('#return-book-num').text(parseInt($('#return-book-num').text())+1);
 				}
 				$('#return-tbody').append(txt);
 				$('#return-book-bid').val('');
@@ -139,6 +142,7 @@ $( document ).ready(function() {
 				$('#borrow-book-uid2').val(uid);
 				$('#find-user-tbody2').html('');
 				$('#borrow-book-tbody2').html('');
+				$('#borrow-book-bid2').focus();
 				return false;
 			});
     	});
@@ -209,6 +213,8 @@ $( document ).ready(function() {
 							+ '<strong>还书成功！'
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
+					$('#return-book-shelf-num').text(parseInt($('#return-book-shelf-num').text())+1);
+
 				}
 				$('#return-tbody2').append(txt);
 				$('#return-book-bid2').val('');
@@ -244,11 +250,96 @@ $( document ).ready(function() {
 							+ '<strong>图书丢失下架成功！'
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
+					$('#del-book-num').text(parseInt($('#del-book-num').text())+1);
 				}
 				$('#return-tbody3').append(txt);
 				$('#return-book-bid3').val('');
     		}
     	);
 	});
+
+	// realize enter
+	// borrow
+	$('#find-user-input').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic').click();
+	});
+
+	$('#find-user-input').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	$('#borrow-book-bid').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic-borrow').click();
+	});
+
+	$('#borrow-book-bid').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	// return book
+	$('#return-book-bid').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic-return').click();
+	});
+
+	$('#return-book-bid').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	// ording book
+	$('#borrow-book-bid2').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic-borrow2').click();
+	});
+
+	$('#borrow-book-bid2').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	$('#find-user-input2').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic2').click();
+	});
+
+	$('#find-user-input2').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	// get book to shelf
+	$('#return-book-bid2').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic-return2').click();
+	});
+
+	$('#return-book-bid2').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
+	// lose the book
+	$('#return-book-bid3').bind("enterKey",function(e){
+		//do stuff here
+		$('#magic-return3').click();
+	});
+
+	$('#return-book-bid3').keyup(function(e){
+		if(e.keyCode == 13){
+			$(this).trigger("enterKey");
+		}
+	});
+
 
 }); // end of window
