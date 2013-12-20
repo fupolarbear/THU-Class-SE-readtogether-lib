@@ -221,27 +221,73 @@ class MyUser(models.Model):
         )
 
     admin_type = models.IntegerField(choices=species_admin, default=0)
+    species_pending = (
+        (0, 'Normal'),
+        (1, 'register'),
+        (2, 'upward'),
+    )
+    pending = models.IntegerField(choices=species_pending, default=1)
+
+    def reg_pass(self):
+        assert self.pending == 1, "User is not pending."
+        self.pending = 0
+        self.save()
+
+    @transaction.atomic
+    def upward(self):
+        assert self.pending == 2, "No upward request."
+        self.pending = 0
+        self.save()
+        group = self.get_group_name()
+        if group == "Blacklist":
+            self.set_group("NormalUser")
+        elif group == "NormalUser":
+            self.set_group('AdvancedUser')
+        else:
+            raise PermException("User can't be upward.")
+
+    @transaction.atomic
+    def downward(self):
+        group = self.get_group_name()
+        if group == "AdvancedUser":
+            self.set_group("NormalUser")
+        elif group == "NormalUser":
+            self.set_group("Blacklist")
+        else:
+            raise PermException("User can't be downward.")
+
+    def upward_request(self):
+        assert pending == 0, "You can't be upward."
+        pending = 2
+        self.save()
 
     def get_admin_type(self):
         """Do get admin type, return string"""
         return self.get_admin_type_display()
 
     @transaction.atomic
-    def register(self, username, password, email, name, group='NormalUser'):
+    def register(self, username, password, email, name):
         """
         user register,
         Usage():
             >>> myuser = MyUser()
             >>> myuser.register(username, password, email, name, group)
         """
+        group = 'Blacklist'
         u = User.objects.create_user(username, email, password)
         self.user = u
         self.name = name
-        if group in self.group_list:
-            self.set_group(group)
-        else:
-            raise TypeError()
+        self.set_group(group)
         self.save()
+
+    @transaction.atomic
+    def update_user(self, email, pass_old = None, pass_new = None):
+        self.user.email = email
+        if pass_old is not None:
+            assert self.user.check_password(pass_old), "Wrong password."
+            assert pass_new is not None, "Parameter doesn't not match."
+            self.user.set_password(pass_new)
+        self.user.save()
 
     def set_group(self, group):
         """set user group"""
@@ -252,10 +298,6 @@ class MyUser(models.Model):
     def get_group_name(self):
         """get my group name"""
         return self.user.groups.all()[0].name
-
-    def get_group(self):
-        """get my group queryset"""
-        return self.user.groups.all()
 
     @transaction.atomic
     def erase(self):
