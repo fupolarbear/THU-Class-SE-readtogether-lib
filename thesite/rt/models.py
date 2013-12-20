@@ -228,10 +228,12 @@ class MyUser(models.Model):
     )
     pending = models.IntegerField(choices=species_pending, default=1)
 
+    @transaction.atomic
     def reg_pass(self):
         assert self.pending == 1, "User is not pending."
         self.pending = 0
         self.save()
+        self.set_group("NormalUser")
 
     @transaction.atomic
     def upward(self):
