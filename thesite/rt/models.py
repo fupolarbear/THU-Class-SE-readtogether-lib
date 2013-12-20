@@ -258,6 +258,8 @@ class MyUser(models.Model):
 
     def upward_request(self):
         assert self.pending == 0, "You can't be upward."
+        group = self.get_group_name()
+        assert group in ["NormalUser", "Blacklist"], "You can't be upward."
         self.pending = 2
         self.save()
 
