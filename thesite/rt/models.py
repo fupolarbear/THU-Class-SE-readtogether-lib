@@ -576,7 +576,7 @@ class Info(models.Model):
     title       -- the title of the info
     content     -- the content of the info
     date        -- the time when the info is published.
-    species     -- the species of the book
+    species     -- the species of the info
     """
 
     species_choice = (
@@ -587,6 +587,9 @@ class Info(models.Model):
     content = models.TextField(max_length=10000)
     date = models.DateTimeField(auto_now=True)
     species = models.IntegerField(choices=species_choice, default=0)
+
+    class Meta:
+        ordering = ['-date']
 
     @staticmethod
     def get_all(sp=None):
@@ -654,7 +657,7 @@ class Comment(models.Model):
         self.book.save()
         self.delete()
 
-    def __unicode__(self):  # only for debug
+    def __unicode__(self):
         return self.myuser.name+" "+self.book.simple_name()+" " + \
             self.title+" : "+self.content+" "+str(self.rate)
 
@@ -669,7 +672,7 @@ class Rank(models.Model):
     book            -- the book in rank
     value           -- the value which the sort based on
     sort_method     -- the method that the sort based on
-    ranl            -- the rank of the book
+    rank            -- the rank of the book
     """
 
     RANK_NUM = 10
