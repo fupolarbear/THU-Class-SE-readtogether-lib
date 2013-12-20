@@ -688,17 +688,25 @@ def ajax_myuser(request):
     """Search myuser according to query string.
 
     GET:
-    q -- the query string, default ''
+    q      -- the query string, default ''
+    admin  -- (optional) parameter that determines which template to render
 
-    Renders rt/fetch_myuser.html for AJAX load with:
+    if admin == 'user':
+        rt/fetch_myuser_down.html
+    else:
+        rt/fetch_myuser.html
+
+    Renders template for AJAX load with:
     myuser_list -- (on 'OK') a list of matched myuser
 
     No error check whether called by book admin.
     """
     q_myuser = request.GET.get('q', '')
-    return render(request, 'rt/fetch_myuser.html', {
-        'myuser_list': MyUser.search(q_myuser),
-        })
+    context = {'myuser_list': MyUser.search(q_myuser)}
+    admin = request.GET.get('admin', None)
+    if admin == 'user':
+        return render(request, 'rt/fetch_myuser_down.html', context)
+    return render(request, 'rt/fetch_myuser.html', context)
 
 
 # def ajax_book(request, book_id):
