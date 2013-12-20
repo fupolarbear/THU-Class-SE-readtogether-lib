@@ -257,8 +257,8 @@ class MyUser(models.Model):
             assert 0, "User can't be downward."
 
     def upward_request(self):
-        assert pending == 0, "You can't be upward."
-        pending = 2
+        assert self.pending == 0, "You can't be upward."
+        self.pending = 2
         self.save()
 
     def get_admin_type(self):
