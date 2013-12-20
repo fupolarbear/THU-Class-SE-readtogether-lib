@@ -8,12 +8,13 @@ from django.core import urlresolvers
 from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment, Rank
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
     POST_required, login_required_JSON, catch_404_JSON, get_page, \
-    catch_PermException_JSON
+    catch_PermException_JSON, catch_Assertion_JSON
 
 
 COMMENT_PAGE_SIZE_0 = 0
@@ -270,6 +271,59 @@ def user(request):
         'comment': myuser.comment_set.all(),
         'range5': range(1, 6),
         })
+
+
+@POST_required('email')
+@login_required_JSON()
+@catch_Assertion_JSON
+def user_edit(request):
+    """Backend for AJAX modification of user's email and password.
+
+    POST:
+    email  -- new email address
+    pass0  -- (optional) old password
+    pass1  -- (optional) new password
+    pass2  -- (optional) new password repeated
+
+    Renders JSON: (besides 'status' or 'err')
+    """
+    pass_mod = map(lambda f: f in request.POST, ['pass0', 'pass1', 'pass2'])
+    pass_none = not reduce(bool.__or__, pass_mod)
+    pass_all = reduce(bool.__and__, pass_mod)
+    myuser = request.user.myuser
+    if pass_none:
+        myuser.update_user(request.POST['email'])
+    elif pass_all:
+        assert request.POST['pass1'] != request.POST['pass2'], \
+            'New passwords does not match!'
+        myuser.update_user(
+            request.POST['email'],
+            request.POST['pass0'],
+            request.POST['pass1'],
+            )
+    else:
+        return render_JSON_Error('Password fields incomplete.')
+    return render_JSON_OK({})
+
+
+@POST_required('title', 'content')
+@login_required_JSON()
+def feedback(request):
+    """Backend for AJAX feedback. Sends an email to all admins.
+
+    POST:
+    title    -- title of the feedback email
+    content  -- content of the feedback email
+
+    Renders JSON: (besides 'status' or 'err')
+    """
+    send_mail(
+        request.POST['title'],
+        request.POST['content'],
+        request.user.email,
+        ['admin@rt.com'],  # Which admin to send to?
+        fail_silently=False,
+        )
 
 
 @POST_required()
