@@ -31,8 +31,9 @@
 		<ul class="nav nav-tabs nav-justified">
 		  <li class="active"><a href="#borrowing" data-toggle="tab" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-book"></span> 借出管理</a></li>
 		  <li><a href="#editabook" data-toggle="tab" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-pencil"></span> 图书归还</a></li>
+		   <li><a href="#returnbook" data-toggle="tab" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list-alt"></span> 图书上架</a></li>
 		  <li><a href="#booking" data-toggle="tab" class="btn btn-success" role="button"><span class="glyphicon glyphicon-bookmark"></span> 预约管理</a></li>
-		  <li><a href="#addnewbook" data-toggle="tab" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list-alt"></span> 图书上架</a></li>
+		  <li><a href="#addnewbook" data-toggle="tab" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-list-alt"></span> 添加新书</a></li>
 		  <li><a href="#deloldbook" data-toggle="tab" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-trash"></span> 图书丢失</a></li>
 		</ul>
 
@@ -59,9 +60,9 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
+						  <th>#</th>
 						  <th>ID</th>
-						  <th>昵称</th>
-						  <th>用户名</th>
+						  <th>姓名</th>
 						  <th>邮箱</th>
 						  <th>借书权限</th>
 						  <th>选择用户</th>
@@ -72,6 +73,9 @@
 				  </table>
 				  </div>
 				</div>
+
+			
+
 				
 				<div class="maskforpanel">
 				<div class="panel panel-default" id="userborrow">
@@ -116,6 +120,40 @@
 				</div>
 				-->
 		  </div>
+		  	 <div class="tab-pane fade" id="returnbook">
+
+		  	<div class="panel panel-default">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading">
+					<span class="glyphicon glyphicon-import"></span> 书籍归还上架
+				  </div>
+				  <div class="panel-body">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 input-group">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid2">
+						  <span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="magic-return2">选择</button>
+						  </span>
+						</div><!-- /input-group -->
+					</div>
+				  </div>
+				  
+				  <!-- Table -->
+				  <div class="table-responsive" id="usertable">
+				  <table class="table table-hover "> <!-- table-bordered? -->
+					   <thead>
+						<tr>
+						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-shelf-num">0</span> 件</span></th>
+						</tr>
+					  </thead>
+					  <tbody id="return-tbody2">
+					  </tbody>
+				  </table>
+				  </div>
+				</div>		
+
+
+		  </div>
 		  
 		  <!-- 预约管理 -->
 		  
@@ -141,9 +179,9 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
+						  <th>#</th>
 						  <th>ID</th>
-						  <th>昵称</th>
-						  <th>用户名</th>
+						  <th>姓名</th>
 						  <th>邮箱</th>
 						  <th>借书权限</th>
 						  <th>选择用户</th>
@@ -171,7 +209,7 @@
 						  <input type="hidden" id="borrow-book-url2" value="{% url 'rt:borrow' 1 2 %}">
 						  <input type="hidden" id="borrow-book-uid2" value="">
 						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic-borrow2">取书</button>
+							<button class="btn btn-default" type="button" id="magic-borrow2">预约</button>
 						  </span>
 						</div><!-- /input-group -->
 					</div>
@@ -207,27 +245,117 @@
 				  <div class="panel-body">
 					<div class="row addnewbook-row">
 				<div class="col-xs-12 col-sm-12 col-md-12">
-					<form action="#" method="post" class="form" role="form">
-					<div class="row">
-						<div class="col-xs-6 col-md-6">
-							<input class="form-control" name="firstname" placeholder="First Name" type="text"
-								required autofocus />
-						</div>
-						<div class="col-xs-6 col-md-6">
-							<input class="form-control" name="lastname" placeholder="Last Name" type="text" required />
-						</div>
+					
+				
+				<form class="form-horizontal" role="form" id="fixbookinfo-form">
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">标准名</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="标准名" id="name_cn">
 					</div>
-					<input class="form-control" name="youremail" placeholder="Your Email" type="email" />
-					<input class="form-control" name="reenteremail" placeholder="Re-enter Email" type="email" />
-					<input class="form-control" name="password" placeholder="New Password" type="password" />
-					<div class="row">
-						<div class="col-xs-6 col-sm-9 "></div>
-						<div class="col-xs-6 col-sm-3 ">
-							<button class="btn btn-md btn-primary col-md-8 col-md-offset-2" type="submit">
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="作者" id="author">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="出版社" id="press">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="外文原名" id="name_origin">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">原版出版年</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="原版出版年" id="pub_year_origin">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="译者" id="translator">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="出版年" id="pub_year">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
+					<div class="col-sm-9">
+					  <input type="number" class="form-control" placeholder="版次" id="revision">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder=" 借书期限" id="duration">
+					</div>
+				  </div>
+				  
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">ISBN</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="ISBN" id="ISBN">
+					</div>
+				  </div>
+				  {% csrf_token %}
+				  	<div class="row">
+						
+							<button class="btn btn-md btn-primary  " type="button"  id="super-submit" style="float:right; margin-right: 20px;" >
 						添加这本书</button>
+
+					
 					</div>
-					</div>
-					</form>
+
+				</form>
+					
 				</div>
 			 </div>
 				  </div>
@@ -240,7 +368,7 @@
 						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-shelf-num">0</span> 件</span></th>
 						</tr>
 					  </thead>
-					  <tbody id="return-tbody2">
+					  <tbody id="super-body">
 					  </tbody>
 				  </table>
 				  </div>
@@ -322,4 +450,41 @@
 
 {% block define_js %}
 	<script src="{% static 'rt/book-manager-panel.js' %}"></script>
+	<script type="text/javascript">
+	$("#super-submit").click(function(){
+        $.post("{% url 'rt:book_add' %}",
+          {
+            name_cn: $("#name_cn").val(),
+            author: $("#author").val(),
+            press: $("#press").val(),
+            name_origin: $("#name_origin").val(),
+            pub_year_origin: $("#pub_year_origin").val(),
+            pub_year: $("#pub_year").val(),
+            revision: $("#revision").val(),
+            revision_origin: $("#revision_origin").val(),
+            ISBN: $("#ISBN").val(),
+            translator: $("#translator").val(),
+            duration: $("#duration").val(),
+            
+            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+          },
+        function(res){
+        	
+        		var obj = $.parseJSON(res);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong> OK！'
+							+ '</strong>permalink: <strong>' + '<a href="'+obj.permalink+'">new book</a>'
+							+ '</strong></div></td></tr>';
+				}
+				$('#super-body').append(txt);
+
+        });
+      });
+      </script>
 {% endblock define_js %}

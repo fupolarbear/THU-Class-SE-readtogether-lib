@@ -53,6 +53,8 @@ $( document ).ready(function() {
     	return false;
     });
 
+    
+
     $('#magic-borrow').click(function(){
     	var curl = $('#borrow-book-url').val();
     	var uid = $('#borrow-book-uid').val();
@@ -148,6 +150,8 @@ $( document ).ready(function() {
     	});
     	return false;
     });
+
+
 
     $('#magic-borrow2').click(function(){
     	var curl = $('#borrow-book-url2').val();
