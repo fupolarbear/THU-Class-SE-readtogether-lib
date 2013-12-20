@@ -31,8 +31,9 @@
 		<ul class="nav nav-tabs nav-justified">
 		  <li class="active"><a href="#borrowing" data-toggle="tab" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-book"></span> 借出管理</a></li>
 		  <li><a href="#editabook" data-toggle="tab" class="btn btn-warning" role="button"><span class="glyphicon glyphicon-pencil"></span> 图书归还</a></li>
+		   <li><a href="#returnbook" data-toggle="tab" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list-alt"></span> 图书上架</a></li>
 		  <li><a href="#booking" data-toggle="tab" class="btn btn-success" role="button"><span class="glyphicon glyphicon-bookmark"></span> 预约管理</a></li>
-		  <li><a href="#addnewbook" data-toggle="tab" class="btn btn-info" role="button"><span class="glyphicon glyphicon-list-alt"></span> 图书上架</a></li>
+		  <li><a href="#addnewbook" data-toggle="tab" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-list-alt"></span> 添加新书</a></li>
 		  <li><a href="#deloldbook" data-toggle="tab" class="btn btn-danger" role="button"><span class="glyphicon glyphicon-trash"></span> 图书丢失</a></li>
 		</ul>
 
@@ -72,6 +73,42 @@
 				  </table>
 				  </div>
 				</div>
+
+				 <div class="tab-pane fade" id="returnbook">
+
+		  	<div class="panel panel-default">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading">
+					<span class="glyphicon glyphicon-import"></span> 书籍归还上架
+				  </div>
+				  <div class="panel-body">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 input-group">
+						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid2">
+						  <span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="magic-return2">选择</button>
+						  </span>
+						</div><!-- /input-group -->
+					</div>
+				  </div>
+				  
+				  <!-- Table -->
+				  <div class="table-responsive" id="usertable">
+				  <table class="table table-hover "> <!-- table-bordered? -->
+					   <thead>
+						<tr>
+						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-shelf-num">0</span> 件</span></th>
+						</tr>
+					  </thead>
+					  <tbody id="return-tbody2">
+					  </tbody>
+				  </table>
+				  </div>
+				</div>		
+
+
+		  </div>
+
 				
 				<div class="maskforpanel">
 				<div class="panel panel-default" id="userborrow">
