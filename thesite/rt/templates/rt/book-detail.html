@@ -14,7 +14,7 @@
 {% endblock define_CSS %}
 
 {% block main %}
-
+	<div id="para" name="{{ is_book_admin }}"></div>
 	<div class="container">
 
 	  <div class="starter-template">
@@ -28,7 +28,11 @@
 	  <!-- <h3>Harry Potter - The Philosopher Stone</h3> -->
 	  <div class="panel panel-default">
 		  <div class="panel-heading">
-			<span class="glyphicon glyphicon-book"></span> 书籍信息<button type="button" class="btn btn-default btn-xs"  data-toggle="modal" data-target="#fixbookinfo" style="float:right;">我要纠错</button>
+		  	
+			<span class="glyphicon glyphicon-book"></span> 书籍信息
+			{% if is_book_admin %}
+			<button type="button" class="btn btn-default btn-xs"  data-toggle="modal" data-target="#fixbookinfo" style="float:right;">修改信息</button>
+			{% endif %}
 		  </div>
 		  <div class="panel-body">
 			<ul class="media-list signle-item">
@@ -204,7 +208,11 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>在架上</td>
-				  <td><button type="button" class="btn btn-default btn-xs " disabled="disabled">在架上不可预约</button></td>
+				  <td><button type="button" class="btn btn-default btn-xs " disabled="disabled">不可预约</button>
+				  	{% if is_book_admin %}
+				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  	{% endif %}
+				  </td>
 				</tr>
 			  	{% elif item.get_status.text == 'borrowing' %}
 			  	<!-- un-returned -->
@@ -212,10 +220,10 @@
 				  <td>{{ item.location }}</td>
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
-				  <td>已借出（将在 <strong>{{ item.get_status.expire|date:"Y-m-d" }} </strong>到期{% if item.get_status.outdated %} <strong>超期未归还</strong>{% endif %}{% if item.get_status.queue != 0 %} +{{ item.get_status.queue }} 已预约 {% endif %}）</td>
+				  <td>已借出（将在 <strong>{{ item.get_status.expire|date:"Y-m-d" }} </strong>到期{% if item.get_status.outdated %} <strong>超期未归还</strong>{% endif %}{% if item.get_status.queue != 0 %} +{{ item.get_status.queue }}, 已预约 {% endif %}）</td>
 				  <td>
 				  	<button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">预约</button>
-				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  	
 				  </td>
 				</tr>
 			  	{% elif item.get_status.text == 'disappear' %}
@@ -234,7 +242,11 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>正在整理中</td>
-				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">整理中不可预约</button></td>
+				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">不可预约</button>
+				  	{% if is_book_admin %}
+				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  	{% endif %}
+				  </td>
 				</tr>
 			  	{% else %}
 			  	<tr>
@@ -390,7 +402,7 @@
 				</li>
 			</ul>
 			-->
-			<a href="{% url 'rt:ajax_comment' book.id %}" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
+			<a href="{% url 'rt:ajax_comment' book.id  %}" class="btn btn-default btn-sm btn-block scroll-next" role="button"><span class="glyphicon glyphicon-refresh"></span> Load More</a>
 		</div>
 	  </div>
 	  </div>
@@ -484,7 +496,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">标准名</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="标准名" value="{% if book.name_cn %}{{ book.name_cn }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="标准名" id="name_cn" value="{% if book.name_cn %}{{ book.name_cn }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -493,7 +505,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="作者" value="{% if book.author %}{{ book.author }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="作者" id="author" value="{% if book.author %}{{ book.author }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -502,7 +514,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="出版社" value="{% if book.press %}{{ book.press }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="出版社" id="press" value="{% if book.press %}{{ book.press }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -511,7 +523,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="外文原名" value="{% if book.name_origin %}{{ book.name_origin }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="外文原名" id="name_origin" value="{% if book.name_origin %}{{ book.name_origin }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -520,7 +532,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">原版出版年</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="原版出版年" value="{% if book.pub_year_origin %}{{ book.pub_year_origin }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="原版出版年" id="pub_year_origin" value="{% if book.pub_year_origin %}{{ book.pub_year_origin }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -529,7 +541,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="原版版次" value="{% if book.revision_origin %}{{ book.revision_origin }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin" value="{% if book.revision_origin %}{{ book.revision_origin }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -538,7 +550,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="译者" value="{% if book.translator %}{{ book.translator }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="译者" id="translator" value="{% if book.translator %}{{ book.translator }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -547,7 +559,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="出版年" value="{% if book.pub_year %}{{ book.pub_year }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="出版年" id="pub_year" value="{% if book.pub_year %}{{ book.pub_year }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -556,7 +568,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
 					<div class="col-sm-9">
-					  <input type="number" class="form-control" placeholder="版次" value="{% if book.revision %}{{ book.revision }}{% endif %}">
+					  <input type="number" class="form-control" placeholder="版次" id="revision" value="{% if book.revision %}{{ book.revision }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -565,7 +577,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder=" 借书期限" value="{% if book.type %}{{ book.duration }}{% endif %}">
+					  <input type="text" class="form-control" placeholder=" 借书期限" id="duration" value="{% if book.duartion %}{{ book.duartion }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -574,11 +586,15 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">ISBN</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="ISBN" value="{% if book.ISBN %}{{ book.ISBN }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="ISBN" id="ISBN" value="{% if book.ISBN %}{{ book.ISBN }}{% endif %}">
 					</div>
 				  </div>
-				  
-
+				  <div class="row">
+				  <div class="col-sm-3"></div>
+				  <div class="col-sm-9">
+				  <div id="super-body"></div>
+					</div>
+				</div>
 				</form>
 
 				<div class="alert alert-danger alert-dismissable hidden" id="fixbookinfo-warning">
@@ -589,7 +605,8 @@
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="tooltip" title="（不刷新页面内容是不会丢失的，可以回来继续编辑）">关闭</button>
-				<button type="button" class="btn btn-primary" id="fixbookinfo-submit">好了，快改过来吧</button>
+				<button type="button" class="btn btn-primary" id="super-submit">好了，快改过来吧</button>
+				
 			  </div>
 			</div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -620,4 +637,44 @@
 	var csrftoken = null;
 
 	</script>
+	<script type="text/javascript">
+	
+
+
+	$("#super-submit").click(function(){
+        $.post("{% url 'rt:book_edit' book.id %}",
+          {
+            name_cn: $("#name_cn").val(),
+            author: $("#author").val(),
+            press: $("#press").val(),
+            name_origin: $("#name_origin").val(),
+            pub_year_origin: $("#pub_year_origin").val(),
+            pub_year: $("#pub_year").val(),
+            revision: $("#revision").val(),
+            revision_origin: $("#revision_origin").val(),
+            ISBN: $("#ISBN").val(),
+            translator: $("#translator").val(),
+            duration: $("#duration").val(),
+            
+            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+          },
+        function(res){
+        		
+        		var obj = $.parseJSON(res);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<div class="alert alert-danger"><strong>Error!</strong>'+obj.err+'</div>' ;
+					$('#super-body').html("");
+					$('#super-body').append(txt);
+				} else if(obj.status == 'OK'){
+					txt = '<div class="alert alert-success"><strong> OK！</strong></div>';
+					$('#super-body').html("");
+					$('#super-body').append(txt);
+					location.reload();
+				}
+
+
+        });
+      });
+      </script>
 {% endblock define_js %}

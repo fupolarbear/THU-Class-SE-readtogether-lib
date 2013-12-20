@@ -46,6 +46,31 @@ $(document).ready(
 					$(this).css('color', '#B6A7A7');
 					$(this).css('background-color', 'white');
 				});
+				 $(document).ready(function(){
+				      
+				      if($("#para").attr("name")!="True"){
+				      	$(".btn-qt").hide();
+				      }
+				      });
+				
+				$(".btn-qt").click(function(){
+			        $.post($(this).attr("xxurl"),
+			          {
+			           
+			            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+			          },
+			        function(res){
+			        		
+			        		var obj = $.parseJSON(res);
+			        		if(obj.status=="OK"){
+			        			location.reload();
+			        		}
+			    			
+
+
+			        });
+			      });
+ 
 			}
 		});
 
