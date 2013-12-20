@@ -61,7 +61,7 @@ def POST_required(*field_list):
                 return render_JSON_Error('Only POST method is accepted.')
             for field in field_list:
                 if field not in request.POST:
-                    return render_JSON_Error('POST data not found:{}.'.format(
+                    return render_JSON_Error('POST data not found: {}.'.format(
                         field,
                         ))
             return func(request, *args, **kwargs)

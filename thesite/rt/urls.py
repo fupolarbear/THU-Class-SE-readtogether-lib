@@ -35,6 +35,7 @@ urlpatterns = patterns(
 
     url(r'^info/list/$', views.info, name='info'),
     url(r'^info/(\d+)/$', views.info_detail, name='info_detail'),
+    url(r'^info/add/$', views.info_add, name='info_add'),
 
     url(r'^rank/$', views.rank, name='rank'),
 #    url(r'^test/$', views.test, name='test'),

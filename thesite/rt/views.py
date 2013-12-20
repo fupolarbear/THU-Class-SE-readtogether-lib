@@ -518,7 +518,7 @@ def info(request):
 
 
 def info_detail(request, info_id):
-    """Show the content of the specific news of guide.
+    """Show the content of the specific news or guide.
 
     GET:
 
@@ -533,6 +533,33 @@ def info_detail(request, info_id):
         'news': Info.get_all('news'),
         'guide': Info.get_all('guide'),
         })
+
+
+@POST_required('title', 'content', 'species')
+@login_required_JSON('user manager')
+def info_add(request):
+    """Backend for AJAX info add.
+
+    POST:
+    title    -- title of the news or guide
+    content  -- content of the news or guide
+    species  -- 'news' or 'guide'
+
+    Renders JSON: (besides 'status' or 'err')
+
+    Can only be called by user admin.
+    """
+    name2id = {name: id for id, name in Info.species_choice}
+    if request.POST['species'] not in name2id:
+        return render_JSON_Error('Neither news nor guide: {}.'.format(
+            request.POST['species'],
+            ))
+    Info.objects.create(
+        title=request.POST['title'],
+        content=request.POST['content'],
+        species=name2id[request.POST['species']],
+        )
+    return render_JSON_OK({})
 
 
 def rank(request):
