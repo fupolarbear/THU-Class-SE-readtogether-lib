@@ -116,7 +116,7 @@ class BookCopy(models.Model):
 
     Field:
     book     -- the book
-    loaction -- the loaction where is the bookcopy
+    location -- the location where is the bookcopy
     """
 
     book = models.ForeignKey(Book)

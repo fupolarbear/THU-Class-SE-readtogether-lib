@@ -9,8 +9,10 @@ from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
+from django.http import HttpResponse
 
 from rt.models import Book, Info, MyUser, BookCopy, Borrowing, Comment, Rank
+from rt.models import change_model
 from rt.forms import RegisterForm, LoginForm
 from rt.views_utils import FC, render_JSON_OK, render_JSON_Error, \
     POST_required, login_required_JSON, catch_404_JSON, get_page, \
@@ -500,6 +502,24 @@ BOOK_FIELDS = [
     ]
 
 
+def book_fields_clean(post_data):
+    clean_data = {}
+    for field in BOOK_FIELDS:
+        try:
+            if field in [
+                    'duration', 'pub_year', 'revision', 'pub_year_origin',
+                    'revision_origin',
+                    ]:
+                clean_data[field] = int(post_data[field])
+            else:
+                clean_data[field] = post_data[field]
+        except ValueError as err:
+                return render_JSON_Error('Field not int: {}.'.format(field))
+    clean_data['duartion'] = clean_data['duration']
+    del clean_data['duration']
+    return clean_data
+
+
 @POST_required(*BOOK_FIELDS)
 @login_required_JSON('book manager')
 def book_add(request):
@@ -514,39 +534,82 @@ def book_add(request):
 
     Can only be called by book admin.
     """
-    clean_data = {}
-    for field in BOOK_FIELDS:
-        try:
-            if field in [
-                    'duration', 'pub_year', 'revision', 'pub_year_origin',
-                    'revision_origin',
-                    ]:
-                clean_data[field] = int(request.POST[field])
-            else:
-                clean_data[field] = request.POST[field]
-        except ValueError as err:
-                return render_JSON_Error('Field not int: {}.'.format(field))
-    clean_data['duartion'] = clean_data['duration']
-    del clean_data['duration']
+    clean_data = book_fields_clean(request.POST)
+    if isinstance(clean_data, HttpResponse):
+        return clean_data
     book = Book.objects.create(**clean_data)
     permalink = urlresolvers.reverse_lazy('rt:book', args=(book.id, ))
-    return render_JSON_OK({'permalink': permalink})
+    return render_JSON_OK({'permalink': str(permalink)})
 
 
+@POST_required(*BOOK_FIELDS)
+@login_required_JSON('book manager')
+@catch_404_JSON
 def book_edit(request, book_id):
-    pass
+    """Backend for AJAX book edit.
+
+    POST:
+    duration, name_cn, author, press, pub_year, revision, ISBN,
+    name_origin, translator, pub_year_origin, revision_origin
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Can only be called by book admin.
+    """
+    book = get_object_or_404(Book, pk=book_id)
+    clean_data = book_fields_clean(request.POST)
+    if isinstance(clean_data, HttpResponse):
+        return clean_data
+    change_model(book, clean_data)
+    return render_JSON_OK({})
 
 
+@POST_required('location')
+@login_required_JSON('book manager')
+@catch_404_JSON
 def copy_add(request, book_id):
-    pass
+    """Backend for AJAX copy add for the specified book.
+
+    POST:
+    location  -- location of the new copy
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Can only be called by book admin.
+    """
+    book = get_object_or_404(Book, pk=book_id)
+    BookCopy.objects.create(book=book, location=request.POST['location'])
+    return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
+@catch_Assertion_JSON
 def copy_del(request, copy_id):
-    pass
+    """Backend for AJAX copy deletion for the specified copy.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Can only be called by book admin.
+    """
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    copy.set_dead(request.user.myuser)
+    return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('book manager')
+@catch_404_JSON
 def comment_del(request, comment_id):
-    pass
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.remove()
+    return render_JSON_OK({})
 
 
 @POST_required()
@@ -625,17 +688,25 @@ def ajax_myuser(request):
     """Search myuser according to query string.
 
     GET:
-    q -- the query string, default ''
+    q      -- the query string, default ''
+    admin  -- (optional) parameter that determines which template to render
 
-    Renders rt/fetch_myuser.html for AJAX load with:
+    if admin == 'user':
+        rt/fetch_myuser_down.html
+    else:
+        rt/fetch_myuser.html
+
+    Renders template for AJAX load with:
     myuser_list -- (on 'OK') a list of matched myuser
 
     No error check whether called by book admin.
     """
     q_myuser = request.GET.get('q', '')
-    return render(request, 'rt/fetch_myuser.html', {
-        'myuser_list': MyUser.search(q_myuser),
-        })
+    context = {'myuser_list': MyUser.search(q_myuser)}
+    admin = request.GET.get('admin', None)
+    if admin == 'user':
+        return render(request, 'rt/fetch_myuser_down.html', context)
+    return render(request, 'rt/fetch_myuser.html', context)
 
 
 # def ajax_book(request, book_id):
