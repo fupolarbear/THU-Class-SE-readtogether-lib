@@ -306,6 +306,21 @@ def user_edit(request):
     return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON()
+@catch_Assertion_JSON
+def user_upward(request):
+    """Backend for AJAX user upward request.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    """
+    myuser = request.user.myuser
+    myuser.upward_request()
+    return render_JSON_OK({})
+
+
 @POST_required('title', 'content')
 @login_required_JSON()
 def feedback(request):
@@ -474,6 +489,7 @@ def disappear(request, copy_id):
 @POST_required()
 @login_required_JSON('user manager')
 @catch_404_JSON
+@catch_Assertion_JSON
 def updown(request, action, myuser_id):
     """Backend for AJAX user registration pass, upward and downward.
 
@@ -485,6 +501,13 @@ def updown(request, action, myuser_id):
     Can only be called by user admin.
     """
     myuser = get_object_or_404(MyUser, pk=myuser_id)
+    if action == 'reg_pass':
+        myuser.reg_pass()
+    elif action == 'upward':
+        myuser.upward()
+    else:
+        assert action == 'downward'
+        myuser.downward()
     return render_JSON_OK({})
 
 
@@ -516,8 +539,8 @@ def ad_user(request):
     GET:
 
     Renders rt/user-manager-panel.html with:
-    user_register
-    user_advance
+    user_register  -- list of MyUser objects waiting for reg_pass
+    user_advance   -- list of MyUser objects waiting for upward
 
     Redirect to rt:index if not logged in.
     Redirect to rt:user if not user admin.
@@ -530,8 +553,8 @@ def ad_user(request):
     if myuser.get_admin_type() != 'user manager':
         return redirect('rt:user')
     return render(request, 'rt/user-manager-panel.html', {
-        'user_register': [],
-        'user_advance': [],
+        'user_register': MyUser.objects.filter(pending=1),
+        'user_advance': MyUser.objects.filter(pending=2),
         })
 
 

@@ -17,6 +17,7 @@ urlpatterns = patterns(
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^user/$', views.user, name='user'),
     url(r'^user/edit/$', views.user_edit, name='user_edit'),
+    url(r'^user/upward/$', views.user_edit, name='user_upward'),
     url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
@@ -34,7 +35,6 @@ urlpatterns = patterns(
 #    url(r'^book/(\d+)/add/$', views.copy_add, name='copy_add'),
 #    url(r'^copy/(\d+)/del/$', views.copy_del, name='copy_del'),
 #    url(r'^comment/(\d+)/del/$', views.comment_del, name='comment_del'),
-#    url(r'^user/(\d+)/del/$', views.user_del, name='user_del'),
 
     url(r'^(reg_pass|upward|downward)/u(\d+)/$', views.updown, name='updown'),
 
