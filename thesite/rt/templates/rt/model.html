@@ -12,9 +12,15 @@
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">   
     <link rel="stylesheet" href="{% static 'webfontkit/stylesheet.css' %}" type="text/css"charset="utf-8" />
     <style type="text/css">
-          .flavor{
-        font-family: 'flavorsregular';
-              }
+          .flavor{font-family: 'flavorsregular';}
+          #footer {
+          color: #999;
+          padding: 6px 0;
+          margin-top: 36px;
+          overflow: hidden;
+          zoom: 1;
+          border-top: 1px dashed #ddd;
+          }
     </style>
     
     {% block define_CSS %}
@@ -219,6 +225,48 @@
 
     {% block main %}
     {% endblock main %}
+
+{% block pagetail %}
+<div class="container">
+  <div class="row">
+<div id="footer"><span style="float:left"> © 2013－2014 ReadTogether Library Manage System, MarkAsRead SE Group. All rights reserved</span><span style="float:right"><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#contact-us">联系我们</button></span></div>
+</div></div>
+
+<!-- Modal -->
+<div class="modal fade" id="contact-us" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-tower"></span> 联系我们</h4>
+      </div>
+      <form class="form-horizontal" role="form" method="post" action="{% url 'rt:feedback' %}">
+      <div class="modal-body">
+        <span class="help-block">如果您找不到书籍、图书馆服务或者对我们的网站有任何建议。欢迎向我们提出来。</span>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="title" placeholder="Title">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">Feed Back</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="7" name="content" placeholder="Feed Back"></textarea>
+          </div>
+        </div>
+        {% csrf_token %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% endblock pagetail %}
 
 
   <!-- Bootstrap core JavaScript

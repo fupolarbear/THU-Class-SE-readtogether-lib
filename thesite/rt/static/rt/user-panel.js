@@ -112,6 +112,36 @@ $(document).ready(
 				}
 			);
 
+		});// end of 
+
+		csrftoken = getCookie('csrftoken');
+		$('.discard-order-btn').click(function(){
+			var disurl = $(this).attr('disurl');
+			csrftoken = getCookie('csrftoken');
+
+			var that = this;
+			$.post(
+				disurl,
+				{
+					'csrfmiddlewaretoken':csrftoken
+				},
+				function(data){
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+						$(that).removeClass('btn-default');
+						$(that).addClass('btn-danger');
+						$(that).text("取消预约失败");
+						$(that).attr("disabled", "disabled");
+					} else if(obj.status == 'OK'){
+						$(that).removeClass('btn-default');
+						$(that).addClass('btn-success');
+						$(that).text("取消预约成功");
+						$(that).attr("disabled", "disabled");
+					}
+				}
+			);
 		});
-	}
+
+	}// end of ready function
 );
