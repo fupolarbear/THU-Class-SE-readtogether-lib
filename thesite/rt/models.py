@@ -281,7 +281,7 @@ class MyUser(models.Model):
         self.save()
 
     @transaction.atomic
-    def update_user(self, email, pass_old = None, pass_new = None):
+    def update_user(self, email, pass_old=None, pass_new=None):
         self.user.email = email
         if pass_old is not None:
             assert self.user.check_password(pass_old), "Wrong password."
@@ -601,6 +601,33 @@ class Borrowing(models.Model):
             book_copy=book_copy,
             myuser=myuser,
             )
+
+    @staticmethod
+    def notify():
+        bs = Borrowing.objects.filter(
+            is_active=True, status__in=[0, 1, 2]
+            )
+        for b in bs:
+            date = b.book_copy.get_expire()
+            if timezone.now().date() == date+datetime.timedelta(days=1):
+                book_title = b.book_copy.book.simple_name()
+                send_mail(
+                    u'[ReadTogether] Time Out: {}'.format(book_title),
+                    dedent(u'''\
+                    Dear reader {},
+
+                    The book you borrowed will expire tomorrow.
+                    Come and return it.
+
+                    Title: {}
+                    Copy ID: {}
+
+                    Sent from ReadTogether.
+                    ''').format(b.myuser.name, book_title, b.book_copy.id),
+                    'ReadTogether NoReply <rt_noreply@int01.com>',
+                    [b.myuser.user.email],
+                    fail_silently=False,
+                    )
 
     def __unicode__(self):
         """only for debug"""

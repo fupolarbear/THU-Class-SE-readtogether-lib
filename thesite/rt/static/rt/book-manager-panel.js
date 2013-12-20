@@ -175,7 +175,7 @@ $( document ).ready(function() {
 							+ '</strong></div></td></tr>';
 				} else if(obj.status == 'OK'){
 					txt = '<tr><td><div class="alert alert-success">' 
-							+ '<strong>归还上架成功！'
+							+ '<strong>预约取书成功！'
 							+ '</strong> uid: <strong>' + uid 
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
@@ -210,7 +210,7 @@ $( document ).ready(function() {
 							+ '</strong></div></td></tr>';
 				} else if(obj.status == 'OK'){
 					txt = '<tr><td><div class="alert alert-success">' 
-							+ '<strong>还书成功！'
+							+ '<strong>图书整理上架成功！'
 							+ '</strong> bid: <strong>' + bid
 							+ '</strong></div></td></tr>';
 					$('#return-book-shelf-num').text(parseInt($('#return-book-shelf-num').text())+1);
