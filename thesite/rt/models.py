@@ -155,6 +155,8 @@ class BookCopy(models.Model):
                 }
         elif all_borrowing.filter(status=5).exists():
             re = {'text': 'disappear'}
+        elif all_borrowing.filter(status=6).exists():
+            re = {'text': 'dead'}
         else:
             re = {'text': 'on shelf'}
         return re
@@ -166,6 +168,17 @@ class BookCopy(models.Model):
             return None
         else:
             return s['expire']
+
+    def set_dead(self, myuser):
+        text = self.get_status()['text']
+        assert text in {"on shelf", "arranging"}, "Copy not here."
+        if text == "arranging":
+            Borrowing.readify(self)
+        Borrowing.objects.create(
+            status=6,
+            book_copy=self,
+            myuser=myuser,
+            )
 
     def __unicode__(self):
         """only for debug"""
@@ -399,7 +412,9 @@ class Borrowing(models.Model):
         (3, 'arranging'),
         (4, 'queue'),
         (5, 'disappear'),
+        (6, 'dead'),
         )
+
     status = models.IntegerField(choices=status_choice)
     datetime = models.DateTimeField(auto_now=True)
     book_copy = models.ForeignKey(BookCopy)
