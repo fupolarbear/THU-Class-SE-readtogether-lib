@@ -213,7 +213,10 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>已借出（将在 <strong>{{ item.get_status.expire|date:"Y-m-d" }} </strong>到期{% if item.get_status.outdated %} <strong>超期未归还</strong>{% endif %}{% if item.get_status.queue != 0 %} +{{ item.get_status.queue }} 已预约 {% endif %}）</td>
-				  <td><button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">预约</button></td>
+				  <td>
+				  	<button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">预约</button>
+				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  </td>
 				</tr>
 			  	{% elif item.get_status.text == 'disappear' %}
 			  	<!-- over time -->
