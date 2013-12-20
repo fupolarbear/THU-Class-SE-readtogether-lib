@@ -296,7 +296,7 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-comment"></span> 书评
 			<span class="label label-info" >{{ comment_count }} 条</span>
-			<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
+			<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
 		</div>
 		<div class="panel-body" id="comment-panel">
 			<!--
@@ -408,13 +408,13 @@
 				
 				<form class="form-horizontal" role="form" id="makemycomment-form">
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">标题</label>
+					<label for="inputTitle" class="col-sm-3 control-label">标题</label>
 					<div class="col-sm-10">
 					  <input type="text" class="form-control" id="input-comment-title" placeholder="给评论取个标题吧=w=">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="inputRate" class="col-sm-2 control-label">评分</label>
+					<label for="inputRate" class="col-sm-3 control-label">评分</label>
 					<div class="col-sm-10">
 						<label class="radio-inline">
 						  <input type="radio" name="optionsRadios" id="inlineRadio5" value="5"> <span class="label label-danger">力荐</span>
@@ -434,7 +434,7 @@
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="input-comment" class="col-sm-2 control-label">评论</label>
+					<label for="input-comment" class="col-sm-3 control-label">评论</label>
 					<div class="col-sm-10">
 					  <textarea class="form-control" rows="8" id="input-comment" placeholder="写点什么好呢…"></textarea>
 					</div>
@@ -480,104 +480,104 @@
 			  </div>
 			  <div class="modal-body">
 				<form class="form-horizontal" role="form" id="fixbookinfo-form">
-				  {% if book.name_cn %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">标准名</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="标准名" value="{{ book.name_cn }}">
+					<label for="inputTitle" class="col-sm-3 control-label">标准名</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="标准名" value="{% if book.name_cn %}{{ book.name_cn }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.author %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">作者</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="作者" value="{{ book.author }}">
+					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="作者" value="{% if book.author %}{{ book.author }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.press %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">出版社</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="出版社" value="{{ book.press }}">
+					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="出版社" value="{% if book.press %}{{ book.press }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.name_origin %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">外文原名</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="外文原名" value="{{ book.name_origin }}">
+					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="外文原名" value="{% if book.name_origin %}{{ book.name_origin }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.pub_year_origin %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">原版出版年</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="原版出版年" value="{{ book.pub_year_origin }}">
+					<label for="inputTitle" class="col-sm-3 control-label">原版出版年</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="原版出版年" value="{% if book.pub_year_origin %}{{ book.pub_year_origin }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.revision_origin %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">原版版次</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="原版版次" value="{{ book.revision_origin }}">
+					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="原版版次" value="{% if book.revision_origin %}{{ book.revision_origin }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.translator %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">译者</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="译者" value="{{ book.translator }}">
+					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="译者" value="{% if book.translator %}{{ book.translator }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.pub_year %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">出版年</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="出版年" value="{{ book.pub_year }}">
+					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="出版年" value="{% if book.pub_year %}{{ book.pub_year }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.revision %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">版次</label>
-					<div class="col-sm-10">
-					  <input type="number" class="form-control" placeholder="版次" value="{{ book.revision }}">
+					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
+					<div class="col-sm-9">
+					  <input type="number" class="form-control" placeholder="版次" value="{% if book.revision %}{{ book.revision }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.type %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">书籍分类</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="书籍分类" value="{{ book.type }}">
+					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder=" 借书期限" value="{% if book.type %}{{ book.duration }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
-				  {% if book.ISBN %}
+				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-2 control-label">ISBN</label>
-					<div class="col-sm-10">
-					  <input type="text" class="form-control" placeholder="ISBN" value="{{ book.ISBN }}">
+					<label for="inputTitle" class="col-sm-3 control-label">ISBN</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="ISBN" value="{% if book.ISBN %}{{ book.ISBN }}{% endif %}">
 					</div>
 				  </div>
-				  {% endif %}
+				  
 
 				</form>
 

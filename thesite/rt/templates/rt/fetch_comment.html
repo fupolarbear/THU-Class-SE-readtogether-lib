@@ -8,6 +8,7 @@
 			<div class="col-xs-10 col-md-11">
 				<div>
 					<strong>{{ item.title }}{% if item.spoiler %} <span style="color:red;">[有关键情节透露QAQ]</span>{% endif %}</strong>
+					<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right; margin-right:5px"><span class="glyphicon glyphicon-remove"></span></button>
 					<div class="mic-info">
 						By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }}
 					</div>
