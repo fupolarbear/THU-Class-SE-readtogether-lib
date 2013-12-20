@@ -16,15 +16,25 @@ urlpatterns = patterns(
     url(r'^register/$', views.register, name='register'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^user/$', views.user, name='user'),
+#    url(r'^user/edit/$', views.user_edit, name='user_edit'),
+#    url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
     url(r'^reborrow/(\d+)/$', views.reborrow, name='reborrow'),
+#    url(r'^queue/(\d+)/del/$', views.queue_del, name='queue_del'),
 
     url(r'^borrow/(\d+)/u(\d+)/$', views.borrow, name='borrow'),
     url(r'^return/(\d+)/$', views.back, name='return'),
     url(r'^next/(\d+)/u(\d+)/$', views.queue_next, name='queue_next'),
     url(r'^readify/(\d+)/$', views.readify, name='readify'),
     url(r'^disappear/(\d+)/$', views.disappear, name='disappear'),
+
+#    url(r'^book/add/$', views.book_add, name='book_add'),
+#    url(r'^book/(\d+)/edit/$', views.book_edit, name='book_edit'),
+#    url(r'^book/(\d+)/add/$', views.copy_add, name='copy_add'),
+#    url(r'^copy/(\d+)/del/$', views.copy_del, name='copy_del'),
+#    url(r'^comment/(\d+)/del/$', views.comment_del, name='comment_del'),
+#    url(r'^user/(\d+)/del/$', views.user_del, name='user_del'),
 
     url(r'^(reg_pass|upward|downward)/u(\d+)/$', views.updown, name='updown'),
 
