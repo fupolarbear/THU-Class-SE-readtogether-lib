@@ -159,3 +159,8 @@ LOGGING = {
 }
 
 ADMIN_FOR = ('rt')
+
+EMAIL_HOST = 'int01.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'rt_noreply@int01.com'
+EMAIL_HOST_PASSWORD = '-@z1.~ab'

@@ -1,10 +1,13 @@
-from django.db import models, transaction
+from __future__ import unicode_literals
 import datetime
+from textwrap import dedent
+
+from django.db import models, transaction
 from django.utils import timezone
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate
 from django.db.models.query import QuerySet
-# Create your models here.
+from django.core.mail import send_mail
 
 
 class PermException(Exception):
@@ -427,6 +430,28 @@ class Borrowing(models.Model):
             book_copy=book_copy,
             myuser=myuser,
             )
+        queue_log_list = Borrowing.objects.filter(
+            is_active=True, status=4, book_copy=book_copy
+            ).order_by('datetime')
+        if queue_log_list:
+            myuser = queue_log_list[0].myuser
+            book_title = book_copy.book.simple_name()
+            send_mail(
+                u'[ReadTogether] Book Ready: {}'.format(book_title),
+                dedent(u'''\
+                Dear reader {},
+
+                The book you queued is ready now. Come and get it.
+
+                Title: {}
+                Copy ID: {}
+
+                Sent from ReadTogether.
+                ''').format(myuser.name, book_title, book_copy.id),
+                'ReadTogether NoReply <rt_noreply@int01.com>',
+                [myuser.user.email],
+                fail_silently=False,
+                )
 
     @staticmethod
     @transaction.atomic
