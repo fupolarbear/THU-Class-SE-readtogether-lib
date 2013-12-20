@@ -244,7 +244,7 @@ class MyUser(models.Model):
         elif group == "NormalUser":
             self.set_group('AdvancedUser')
         else:
-            raise PermException("User can't be upward.")
+            assert 0, "User can't be upward."
 
     @transaction.atomic
     def downward(self):
@@ -254,7 +254,7 @@ class MyUser(models.Model):
         elif group == "NormalUser":
             self.set_group("Blacklist")
         else:
-            raise PermException("User can't be downward.")
+            assert 0, "User can't be downward."
 
     def upward_request(self):
         assert pending == 0, "You can't be upward."

@@ -16,8 +16,8 @@ urlpatterns = patterns(
     url(r'^register/$', views.register, name='register'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^user/$', views.user, name='user'),
-#    url(r'^user/edit/$', views.user_edit, name='user_edit'),
-#    url(r'^feedback/$', views.feedback, name='feedback'),
+    url(r'^user/edit/$', views.user_edit, name='user_edit'),
+    url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
     url(r'^reborrow/(\d+)/$', views.reborrow, name='reborrow'),

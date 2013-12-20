@@ -111,3 +111,13 @@ def catch_PermException_JSON(func):
                 'message': err.args[0],
                 })
     return wrapper
+
+
+def catch_Assertion_JSON(func):
+    """View decorator. Convert AssertionError to JSON output."""
+    def wrapper(request, *args, **kwargs):
+        try:
+            return func(request, *args, **kwargs)
+        except AssertionError as err:
+            return render_JSON_Error(err.args[0])
+    return wrapper
