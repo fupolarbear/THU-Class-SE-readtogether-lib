@@ -17,7 +17,7 @@ urlpatterns = patterns(
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^user/$', views.user, name='user'),
     url(r'^user/edit/$', views.user_edit, name='user_edit'),
-    url(r'^user/upward/$', views.user_edit, name='user_upward'),
+    url(r'^user/upward/$', views.user_upward, name='user_upward'),
     url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
@@ -30,11 +30,11 @@ urlpatterns = patterns(
     url(r'^readify/(\d+)/$', views.readify, name='readify'),
     url(r'^disappear/(\d+)/$', views.disappear, name='disappear'),
 
-#    url(r'^book/add/$', views.book_add, name='book_add'),
-#    url(r'^book/(\d+)/edit/$', views.book_edit, name='book_edit'),
-#    url(r'^book/(\d+)/add/$', views.copy_add, name='copy_add'),
-#    url(r'^copy/(\d+)/del/$', views.copy_del, name='copy_del'),
-#    url(r'^comment/(\d+)/del/$', views.comment_del, name='comment_del'),
+    url(r'^book/add/$', views.book_add, name='book_add'),
+    url(r'^book/(\d+)/edit/$', views.book_edit, name='book_edit'),
+    url(r'^book/(\d+)/add/$', views.copy_add, name='copy_add'),
+    url(r'^copy/(\d+)/del/$', views.copy_del, name='copy_del'),
+    url(r'^comment/(\d+)/del/$', views.comment_del, name='comment_del'),
 
     url(r'^(reg_pass|upward|downward)/u(\d+)/$', views.updown, name='updown'),
 

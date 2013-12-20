@@ -77,12 +77,20 @@ def book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     copy = book.bookcopy_set.all()
     comment = book.comment_set.all()[:COMMENT_PAGE_SIZE_0]
+    is_book_admin = request.user.is_authenticated()
+    if is_book_admin:
+        try:
+            myuser = request.user.myuser
+            is_book_admin = myuser.get_admin_type() == 'book manager'
+        except MyUser.DoesNotExists as err:
+            is_book_admin = False
     return render(request, 'rt/book-detail.html', {
         'book': book,
         'copy': copy,
         'comment_count': book.comment_set.all().count(),
         'comment': comment,
         'range5': range(1, 6),
+        'is_book_admin': is_book_admin,
         })
 
 
@@ -484,6 +492,61 @@ def disappear(request, copy_id):
     copy = get_object_or_404(BookCopy, pk=copy_id)
     Borrowing.disappear(copy)
     return render_JSON_OK({})
+
+
+BOOK_FIELDS = [
+    'duration', 'name_cn', 'author', 'press', 'pub_year', 'revision', 'ISBN',
+    'name_origin', 'translator', 'pub_year_origin', 'revision_origin',
+    ]
+
+
+@POST_required(*BOOK_FIELDS)
+@login_required_JSON('book manager')
+def book_add(request):
+    """Backend for AJAX book add.
+
+    POST:
+    duration, name_cn, author, press, pub_year, revision, ISBN,
+    name_origin, translator, pub_year_origin, revision_origin
+
+    Renders JSON: (besides 'status' or 'err')
+    permalink  -- (on 'OK') URL to the newly added book
+
+    Can only be called by book admin.
+    """
+    clean_data = {}
+    for field in BOOK_FIELDS:
+        try:
+            if field in [
+                    'duration', 'pub_year', 'revision', 'pub_year_origin',
+                    'revision_origin',
+                    ]:
+                clean_data[field] = int(request.POST[field])
+            else:
+                clean_data[field] = request.POST[field]
+        except ValueError as err:
+                return render_JSON_Error('Field not int: {}.'.format(field))
+    clean_data['duartion'] = clean_data['duration']
+    del clean_data['duration']
+    book = Book.objects.create(**clean_data)
+    permalink = urlresolvers.reverse_lazy('rt:book', args=(book.id, ))
+    return render_JSON_OK({'permalink': permalink})
+
+
+def book_edit(request, book_id):
+    pass
+
+
+def copy_add(request, book_id):
+    pass
+
+
+def copy_del(request, copy_id):
+    pass
+
+
+def comment_del(request, comment_id):
+    pass
 
 
 @POST_required()
