@@ -26,8 +26,10 @@ urlpatterns = patterns(
     url(r'^readify/(\d+)/$', views.readify, name='readify'),
     url(r'^disappear/(\d+)/$', views.disappear, name='disappear'),
 
+    url(r'^(reg_pass|upward|downward)/u(\d+)/$', views.updown, name='updown'),
+
     url(r'^admin/book/$', views.ad_book, name='ad_book'),
-#    url(r'^admin/user/$', views.ad_user, name='ad_user'),
+    url(r'^admin/user/$', views.ad_user, name='ad_user'),
     url(r'^ajax/myuser/$', views.ajax_myuser, name='ajax_myuser'),
 #    url(r'^ajax/book/(\d+)/$', views.ajax_book, name='ajax_book'),
 

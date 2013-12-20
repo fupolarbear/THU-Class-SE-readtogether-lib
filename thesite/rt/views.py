@@ -85,9 +85,6 @@ def book(request, book_id):
         })
 
 
-# Error checking below should work as standard or example for similar views.
-# A decorator may be introduced to DRY the code.
-# queue should be modified to meet this standard, as well as login/out/reg.
 @POST_required('title', 'content', 'rate', 'spoiler')
 @login_required_JSON()
 @catch_404_JSON
@@ -254,6 +251,7 @@ def user(request):
 
     Redirect to rt:index if not logged in.
     Redirect to rt:ad_book if book admin logged in.
+    Redirect to rt:ad_user if user admin logged in.
     Redirect to admin:index if root.
     """
     try:
@@ -262,6 +260,8 @@ def user(request):
         return redirect('admin:index')
     if myuser.get_admin_type() == 'book manager':
         return redirect('rt:ad_book')
+    elif myuser.get_admin_type() == 'user manager':
+        return redirect('rt:ad_user')
     return render(request, 'rt/user-panel.html', {
         'profile': myuser,
         'book_borrowing': myuser.get_all_borrowing(),
@@ -417,6 +417,23 @@ def disappear(request, copy_id):
     return render_JSON_OK({})
 
 
+@POST_required()
+@login_required_JSON('user manager')
+@catch_404_JSON
+def updown(request, action, myuser_id):
+    """Backend for AJAX user registration pass, upward and downward.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Can only be called by user admin.
+    """
+    myuser = get_object_or_404(MyUser, pk=myuser_id)
+    return render_JSON_OK({})
+
+
 @login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
 def ad_book(request):
     """Show the book admin panel page.
@@ -438,8 +455,30 @@ def ad_book(request):
     return render(request, 'rt/book-manager-panel.html', {})
 
 
-# def ad_user(request):
-#     pass
+@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+def ad_user(request):
+    """Show the user admin panel page.
+
+    GET:
+
+    Renders rt/user-manager-panel.html with:
+    user_register
+    user_advance
+
+    Redirect to rt:index if not logged in.
+    Redirect to rt:user if not user admin.
+    Redirect to admin:index if root.
+    """
+    try:
+        myuser = request.user.myuser
+    except MyUser.DoesNotExist as err:
+        return redirect('admin:index')
+    if myuser.get_admin_type() != 'user manager':
+        return redirect('rt:user')
+    return render(request, 'rt/user-manager-panel.html', {
+        'user_register': [],
+        'user_advance': [],
+        })
 
 
 def ajax_myuser(request):
