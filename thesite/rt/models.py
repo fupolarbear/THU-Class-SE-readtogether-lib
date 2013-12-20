@@ -280,6 +280,8 @@ class MyUser(models.Model):
 
     def get_admin_type(self):
         """Do get admin type, return string"""
+        if self.get_group_name() != "Admin":
+            return 'user'
         return self.get_admin_type_display()
 
     @transaction.atomic
@@ -315,12 +317,6 @@ class MyUser(models.Model):
     def get_group_name(self):
         """get my group name"""
         return self.user.groups.all()[0].name
-
-    @transaction.atomic
-    def erase(self):
-        """delete user in both myuser and Django.User"""
-        self.user.delete()
-        self.delete()
 
     def has_perm(self, perm):
         """return whether has the permission"""
@@ -595,6 +591,14 @@ class Borrowing(models.Model):
                 book_copy=book_copy,
                 myuser=myuser,
                 )
+
+    @staticmethod
+    def queue_del(myuser, book_copy):
+        bo = Borrowing.objects.filter(
+            is_active=True, myuser=myuser, book_copy=book_copy, status=4
+            )
+        assert bo.exists(), "You don't queue this copy."
+        bo.update(is_active=False)
 
     @staticmethod
     def disappear(book_copy):
