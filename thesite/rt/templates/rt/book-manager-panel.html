@@ -202,17 +202,34 @@
 		  	<div class="panel panel-default">
 				  <!-- Default panel contents -->
 				  <div class="panel-heading">
-					<span class="glyphicon glyphicon-import"></span> 书籍归还上架
+					<span class="glyphicon glyphicon-import"></span> 新书上架
 				  </div>
 				  <div class="panel-body">
+					<div class="row addnewbook-row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<form action="#" method="post" class="form" role="form">
 					<div class="row">
-						<div class="col-md-8 col-md-offset-2 input-group">
-						  <input type="text" class="form-control" placeholder="请输入书籍的唯一编号 ，确认回车即可" id="return-book-bid2">
-						  <span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="magic-return2">选择</button>
-						  </span>
-						</div><!-- /input-group -->
+						<div class="col-xs-6 col-md-6">
+							<input class="form-control" name="firstname" placeholder="First Name" type="text"
+								required autofocus />
+						</div>
+						<div class="col-xs-6 col-md-6">
+							<input class="form-control" name="lastname" placeholder="Last Name" type="text" required />
+						</div>
 					</div>
+					<input class="form-control" name="youremail" placeholder="Your Email" type="email" />
+					<input class="form-control" name="reenteremail" placeholder="Re-enter Email" type="email" />
+					<input class="form-control" name="password" placeholder="New Password" type="password" />
+					<div class="row">
+						<div class="col-xs-6 col-sm-9 "></div>
+						<div class="col-xs-6 col-sm-3 ">
+							<button class="btn btn-md btn-primary col-md-8 col-md-offset-2" type="submit">
+						添加这本书</button>
+					</div>
+					</div>
+					</form>
+				</div>
+			 </div>
 				  </div>
 				  
 				  <!-- Table -->
