@@ -32,7 +32,7 @@ $(document).ready(
 					console.log('get reborrow data: ' + data);
 					var obj = $.parseJSON(data);
 					if(obj.status == 'Error'){
-						alert('噢哟！ ' + 'Error: ' + obj.err + ' Message: ' + obj.message);
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
 						$(that).removeClass('btn-default');
 						$(that).addClass('btn-danger');
 						$(that).text("续借失败");
@@ -45,6 +45,73 @@ $(document).ready(
 					}
 				}
 			);
+		});
+
+		$('#addmylevel-submit').click(function(){
+			var addurl = $(this).attr('addurl');
+
+			var that = $('[data-target="#addmylevel"]');
+			csrftoken = getCookie('csrftoken');
+			$.post(
+				addurl,
+				{
+					'csrfmiddlewaretoken' : csrftoken,
+				},
+				function(data){
+					console.log('get addurl data: ' + data);
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+						$(that).removeClass('btn-primary');
+						$(that).addClass('btn-danger');
+						$(that).text("申请提权失败");
+						$(that).attr("disabled", "disabled");
+						$('#addmylevel').modal('hide');
+					} else if(obj.status == 'OK'){
+						$(that).removeClass('btn-primary');
+						$(that).addClass('btn-success');
+						$(that).text("申请提权成功");
+						$(that).attr("disabled", "disabled");
+						$('#addmylevel').modal('hide');
+					}
+				}
+			);
+		});
+
+
+		$('#changemypass').submit(function(e){
+			e.preventDefault();
+			$('#changemypass-submit').click();
+		});
+		$('#changemypass-submit').click(function(){
+			var editurl = $(this).attr('editurl');
+			var email = $('#changeemail').val();
+			var pass0 = $('#changepassword1').val();
+			var pass1 = $('#changepassword2').val();
+			var pass2 = $('#changepassword3').val();
+
+			csrftoken = getCookie('csrftoken');
+			$.post(
+				editurl,
+				{
+					'csrfmiddlewaretoken' : csrftoken,
+					'email' : email,
+					'pass0' : pass0,
+					'pass1' : pass1,
+					'pass2' : pass2,
+				},
+				function(data){
+					console.log('get changemypass data: ' + data);
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ 修改信息失败！' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+					} else if(obj.status == 'OK'){
+						alert('修改信息成功！');
+						location.reload();
+					}
+				}
+			);
+
 		});
 	}
 );

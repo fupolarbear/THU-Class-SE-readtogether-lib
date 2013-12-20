@@ -15,7 +15,7 @@ $(document).ready(
 				function(data){
 					var obj = $.parseJSON(data);
 					if(obj.status == 'Error'){
-						alert('噢哟！ ' + 'Error: ' + obj.err + ' Message: ' + obj.message);
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
 						$(that).removeClass('btn-default');
 						$(that).addClass('btn-danger');
 						$(that).text("审批失败");
@@ -64,7 +64,7 @@ $(document).ready(
 							function(data){
 								var obj = $.parseJSON(data);
 								if(obj.status == 'Error'){
-									alert('噢哟！ ' + 'Error: ' + obj.err + ' Message: ' + obj.message);
+									alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
 									$(that).removeClass('btn-default');
 									$(that).addClass('btn-danger');
 									$(that).text("审批失败");

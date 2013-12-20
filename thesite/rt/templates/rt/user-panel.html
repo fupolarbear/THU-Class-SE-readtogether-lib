@@ -33,7 +33,7 @@
 	<div class="container">
 	  <div class="panel panel-default">
 	  	<div class="panel-body">
-			<h2>欢迎！ {{ user.myuser.name }}</h2>
+			<h2>欢迎！ {{ user.myuser.name }} ({{ user.myuser.get_group_name }})</h2>
 			<p class="lead">
 			您当前
 			{% if book_borrowing %}
@@ -331,14 +331,15 @@
 					   <br/>
 						<i class="glyphicon glyphicon-phone"></i> 123-4567-8901
 					   <br />
-						<i class="glyphicon glyphicon-globe"></i> <a href="//www.google.com/search?q={{ user.username }}">www.{{ user.username }}.com</a>
+						<i class="glyphicon glyphicon-globe"></i> <a href="//www.google.com/search?q={{ user.username }}" target="_blank">www.{{ user.username }}.com</a>
 					   <br />
 						<i class="glyphicon glyphicon-gift"></i> January 30, 1974
+						<br />
+						<i class="glyphicon glyphicon-glass"></i> {{ user.myuser.get_group_name }}
 					</p>
 					<p>
-						<button type="button" class="btn btn-primary btn-xs">修改信息</button>
-						<button type="button" class="btn btn-primary btn-xs">修改密码</button>
-						<button type="button" class="btn btn-primary btn-xs">修改权限</button>
+						<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#changemyinfo">修改信息或密码</button>
+						<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addmylevel">申请提升借书权限</button>
 					</p>
 				</div>
 				<!-- <div class="clearfix visible-xs"></div> -->
@@ -351,6 +352,10 @@
 					  <li class="list-group-item">
 						<span class="badge">{{ user.last_login }}</span>
 						最后一次登录时间
+					  </li>
+					  <li class="list-group-item">
+						<span class="badge">{{ user.myuser.get_group_name }}</span>
+						当前用户组
 					  </li>
 					  <li class="list-group-item">
 						<span class="badge">{{ book_borrowed|length }}</span>
@@ -378,6 +383,69 @@
 		  </div>
 		</div>
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="changemyinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span> 修改信息或密码</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-horizontal" role="form" id="changemypass">
+			  <div class="form-group">
+			    <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
+			    <div class="col-sm-10">
+			      <input type="email" class="form-control" id="changeemail" placeholder="邮箱" value="{{ user.email }}">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputPassword3" class="col-sm-2 control-label">原密码</label>
+			    <div class="col-sm-10">
+			      <input type="password" class="form-control" id="changepassword1" placeholder="原密码">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+			    <div class="col-sm-10">
+			      <input type="password" class="form-control" id="changepassword2" placeholder="新密码">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="inputPassword3" class="col-sm-2 control-label">重复新密码</label>
+			    <div class="col-sm-10">
+			      <input type="password" class="form-control" id="changepassword3" placeholder="重复新密码">
+			    </div>
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" id="changemypass-submit" editurl="{% url 'rt:user_edit' %}">提交信息更改～</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="addmylevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-open"></span> 申请提升借书权限</h4>
+	      </div>
+	      <div class="modal-body">
+	        您确定要申请提升您的借书权限么？
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" id="addmylevel-submit" addurl="{% url 'rt:user_upward' %}">确认</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 
 {% else %} {# else no authorized #}
 
