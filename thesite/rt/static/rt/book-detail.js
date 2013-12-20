@@ -26,6 +26,63 @@ function doording(bid){
 
 $(document).ready(
 	function() {
+		$('.btn-xj').click(function(){
+			var passurl = $(this).attr('passurl');
+			csrftoken = getCookie('csrftoken');
+
+			var that = this;
+			$.post(
+				passurl,
+				{
+					'csrfmiddlewaretoken':csrftoken
+				},
+				function(data){
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+						$(that).removeClass('btn-danger');
+						$(that).addClass('btn-default');
+						$(that).text("失败");
+						$(that).attr("disabled", "disabled");
+					} else if(obj.status == 'OK'){
+						$(that).removeClass('btn-danger');
+						$(that).addClass('btn-success');
+						$(that).text("成功");
+						$(that).attr("disabled", "disabled");
+					}
+				}
+			);
+		});
+		$('.btn-sj').click(function(){
+			var passurl = $(this).attr('passurl');
+			csrftoken = getCookie('csrftoken');
+
+			var that = this;
+			$.post(
+				passurl,
+				{
+					'location':$('#loc').val(),
+					'csrfmiddlewaretoken':csrftoken
+				},
+				function(data){
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ ' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+						$(that).removeClass('btn-danger');
+						$(that).addClass('btn-default');
+						$(that).text("失败");
+						$(that).attr("disabled", "disabled");
+					} else if(obj.status == 'OK'){
+						$(that).removeClass('btn-danger');
+						$(that).addClass('btn-success');
+						$(that).text("成功");
+						$(that).attr("disabled", "disabled");
+
+					}
+					location.reload();
+				}
+			);
+		});
 
 		$('#comment-panel').jscroll({
 			loadingHtml: '<div class="isloading text-center">喵小咪正在努力搬运新评论中T_T。。。</div>',

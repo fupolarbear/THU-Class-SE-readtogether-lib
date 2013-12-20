@@ -208,10 +208,12 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>在架上</td>
-				  <td><button type="button" class="btn btn-default btn-xs " disabled="disabled">不可预约</button>
+				  <td>
 				  	{% if is_book_admin %}
-				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  	<button type="button" class="btn btn-danger btn-xs btn-xj" passurl="{% url 'rt:copy_del' item.id %}" >下架</button>
 				  	{% endif %}
+				  	<button type="button" class="btn btn-default btn-xs " disabled="disabled">不可预约</button>
+				  	
 				  </td>
 				</tr>
 			  	{% elif item.get_status.text == 'borrowing' %}
@@ -220,7 +222,7 @@
 				  <td>{{ item.location }}</td>
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
-				  <td>已借出（将在 <strong>{{ item.get_status.expire|date:"Y-m-d" }} </strong>到期{% if item.get_status.outdated %} <strong>超期未归还</strong>{% endif %}{% if item.get_status.queue != 0 %} +{{ item.get_status.queue }}, 已预约 {% endif %}）</td>
+				  <td>已借出（将在 <strong>{{ item.get_status.expire|date:"Y-m-d" }} </strong>到期{% if item.get_status.outdated %} <strong>超期未归还</strong>{% endif %}{% if item.get_status.queue != 0 %} +{{ item.get_status.queue }} 已预约 {% endif %}）</td>
 				  <td>
 				  	<button type="button" class="btn btn-success btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">预约</button>
 				  	
@@ -242,10 +244,12 @@
 				  <td>{{ item.id }}</td>
 				  <td>{{ item.book.duartion }}</td>
 				  <td>正在整理中</td>
-				  <td><button type="button" class="btn btn-default btn-xs" disabled="disabled">不可预约</button>
+				  <td>
 				  	{% if is_book_admin %}
-				  	<button type="button" class="btn btn-danger btn-xs" onclick="callording(this, {{ item.id }})" myurl="{% url 'rt:queue' item.id %}">下架</button>
+				  	<button type="button" class="btn btn-danger btn-xs btn-xj" passurl="{% url 'rt:copy_del' item.id %}">下架</button>
 				  	{% endif %}
+				  	<button type="button" class="btn btn-default btn-xs" disabled="disabled">不可预约</button>
+				  	
 				  </td>
 				</tr>
 			  	{% else %}
@@ -260,6 +264,21 @@
 					<td>it's impossible! Copy list empty!</td>
 				</tr>
 				{% endfor %}
+				{% if is_book_admin %}
+				<tr class="primary">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>
+						<input type="text" class="form-control " id="loc" placeholder="请输入馆藏地点">
+					</td>
+					<td>
+						
+					  	<button type="button" class="btn btn-primary btn-xs btn-sj" passurl="{% url 'rt:copy_add' book.id %} " >添加拷贝</button>
+					  	
+					</td>
+				</tr>
+				{% endif %}
 				</tr>
 			  </tbody>
 		  </table>
@@ -308,7 +327,7 @@
 		<div class="panel-heading">
 			<span class="glyphicon glyphicon-comment"></span> 书评
 			<span class="label label-info" >{{ comment_count }} 条</span>
-			<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
+			<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#makemycomment" style="float:right;">我也要评论</button>
 		</div>
 		<div class="panel-body" id="comment-panel">
 			<!--
