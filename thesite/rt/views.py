@@ -821,21 +821,26 @@ def info_add(request):
     return render_JSON_OK({})
 
 
-def rank(request):
+def rank(request, ver=0):
     """Show the rank page.
 
     GET:
 
     Renders rt/rank.html with:
-    rank_by_borrow  -- latest rank list by borrow count
-    rank_by_comment -- latest rank list by comment count
-    rank_by_rate    -- latest rank list by rate
+    ver             -- version of the rank, 0 (default) for latest
+    rank_by_borrow  -- rank list by borrow count
+    rank_by_comment -- rank list by comment count
+    rank_by_rate    -- rank list by rate
     range5          -- template helper
     """
+    if ver == '0' or int(ver) > Rank.get_maxversion():
+        return redirect('rt:rank')
+    ver = int(ver)
     return render(request, 'rt/rank.html', {
-        'rank_by_borrow': Rank.get_top(0),
-        'rank_by_comment': Rank.get_top(1),
-        'rank_by_rate': Rank.get_top(2),
+        'ver': ver,
+        'rank_by_borrow': Rank.get_top(0, ver),
+        'rank_by_comment': Rank.get_top(1, ver),
+        'rank_by_rate': Rank.get_top(2, ver),
         'range5': range(1, 6),
         })
 
