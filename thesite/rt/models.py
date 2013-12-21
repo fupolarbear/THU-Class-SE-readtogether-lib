@@ -699,7 +699,7 @@ class Borrowing(models.Model):
                     fail_silently=False,
                     )
             elif timezone.now().date() >= date+datetime.timedelta(days=5):
-                bs.myuser.set_group('Blacklist')
+                b.myuser.set_group('Blacklist')
 
     def __unicode__(self):
         """only for debug"""
