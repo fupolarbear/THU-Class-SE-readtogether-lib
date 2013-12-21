@@ -382,6 +382,11 @@ class MyUser(models.Model):
         return re
 
     @staticmethod
+    def get_all_admin():
+        ad = Group.objects.get(name='Admin')
+        return MyUser.objects.filter(user__groups=ad, admin_type__in=[1,2])
+
+    @staticmethod
     def search(s):
         """search for string in name, nameuser, email, userid"""
         re1 = MyUser.objects.filter(name__contains=s)
@@ -459,7 +464,7 @@ class Borrowing(models.Model):
         elif (Borrowing.objects.get(
                 is_active=True, myuser=myuser, book_copy=book_copy
                 ).status == 2):
-            raise PermException("you have reborrowed once!")
+            raise PermException("you have reborrowed twice!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
