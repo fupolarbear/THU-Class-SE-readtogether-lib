@@ -46,9 +46,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
+                   <div class="row">
                   <a  {% if forloop.counter == 1 %} style="color:#FF2400"  {% elif forloop.counter == 2 %} style="color:#FF7F00" {% elif forloop.counter == 3 %} style="color:#7FFF00" {% else %}style="color:#6F4242"{% endif %} data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}">
-                    <h4>No.{{ forloop.counter }}.{{ item.book.simple_name }}</h4> 
+                  <div  class="col-xs-10 ">No.{{ forloop.counter }}.{{ item.book.simple_name }} </div>
+                  <div class="col-xs-2 text-right " >{{ item.value|floatformat:0 }}</div>
                   </a>
+                </div>
                 </h4>
               </div>
               <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse">
@@ -87,9 +90,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
+                  <div class="row">
                   <a  {% if forloop.counter == 1 %} style="color:#FF2400"  {% elif forloop.counter == 2 %} style="color:#FF7F00" {% elif forloop.counter == 3 %} style="color:#7FFF00" {% else %}style="color:#6F4242"{% endif %} data-toggle="collapse" data-toggle="collapse" data-parent="#accordion2" href="#collapse2{{ forloop.counter }}">
-                    <h4>No.{{ forloop.counter }}.{{ item.book.simple_name }}</h4> 
+                  <div  class="col-xs-10 ">No.{{ forloop.counter }}.{{ item.book.simple_name }} </div>
+                  <div class="col-xs-2 text-right " >{{ item.value|floatformat:0 }}</div>
                   </a>
+                </div>
                 </h4>
               </div>
               <div id="collapse2{{ forloop.counter }}" class="panel-collapse collapse">
@@ -128,9 +134,12 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
+                   <div class="row">
                   <a  {% if forloop.counter == 1 %} style="color:#FF2400"  {% elif forloop.counter == 2 %} style="color:#FF7F00" {% elif forloop.counter == 3 %} style="color:#7FFF00" {% else %}style="color:#6F4242"{% endif %} data-toggle="collapse" data-toggle="collapse" data-parent="#accordion3" href="#collapse3{{ forloop.counter }}">
-                    <h4>No.{{ forloop.counter }}.{{ item.book.simple_name }}</h4> 
+                  <div  class="col-xs-10 ">No.{{ forloop.counter }}.{{ item.book.simple_name }} </div>
+                  <div class="col-xs-2 text-right " >{{ item.value|floatformat:1 }}</div>
                   </a>
+                </div>
                 </h4>
               </div>
               <div id="collapse3{{ forloop.counter }}" class="panel-collapse collapse">
