@@ -105,7 +105,7 @@ $(document).ready(
 				});
 				 $(document).ready(function(){
 				      
-				      if($("#para").attr("name")!="True"){
+				      if($("#para").attr("is_admin")!="True"){
 				      	$(".btn-qt").hide();
 				      }
 				      });

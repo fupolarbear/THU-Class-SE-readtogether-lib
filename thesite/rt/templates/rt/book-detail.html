@@ -14,7 +14,7 @@
 {% endblock define_CSS %}
 
 {% block main %}
-	<div id="para" name="{{ is_book_admin }}"></div>
+	<div id="para" is_admin="{{ is_book_admin }}"></div>
 	<div class="container">
 
 	  <div class="starter-template">
@@ -252,6 +252,8 @@
 				  	
 				  </td>
 				</tr>
+				{% elif item.get_status.text == 'dead' %}
+
 			  	{% else %}
 			  	<tr>
 					<td>it's impossible! Book status error!</td>
