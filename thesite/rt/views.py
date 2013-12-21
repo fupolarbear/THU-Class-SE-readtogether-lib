@@ -304,17 +304,38 @@ def user_edit(request):
     pass_none = not reduce(bool.__or__, pass_mod)
     pass_all = reduce(bool.__and__, pass_mod)
     myuser = request.user.myuser
+    fake_register = {
+        'username': 'fake_user',
+        'password': 'fake_pass',
+        'password2': 'fake_pass',
+        'email': request.POST['email'],
+        'name': 'Fake User',
+        }
     if pass_none:
-        myuser.update_user(request.POST['email'])
+        f = RegisterForm(fake_register)
+        if f.is_valid():
+            myuser.update_user(request.POST['email'])
+        else:
+            render_JSON_Error('Invalid email address.')
     elif pass_all:
-        assert len(request.POST['pass1']) >= 5, 'New password is too short!'
-        assert request.POST['pass1'] == request.POST['pass2'], \
-            'New passwords does not match!'
-        myuser.update_user(
-            request.POST['email'],
-            request.POST['pass0'],
-            request.POST['pass1'],
-            )
+        fake_register['password'] = request.POST['pass1']
+        fake_register['password2'] = request.POST['pass2']
+        f = RegisterForm(fake_register)
+        if f.is_valid():
+            myuser.update_user(
+                request.POST['email'],
+                request.POST['pass0'],
+                request.POST['pass1'],
+                )
+        else:
+            if 'email' in f.errors:
+                render_JSON_Error('Invalid email address.')
+            elif 'password' in f.errors:
+                render_JSON_Error('New password is too short.')
+            elif 'password2' in f.errors:
+                render_JSON_Error('New passwords do not match.')
+            else:
+                render_JSON_Error('Syntax error.', {'detail': f.errors})
     else:
         return render_JSON_Error('Password fields incomplete.')
     return render_JSON_OK({})
@@ -348,7 +369,7 @@ def feedback(request):
     """
     send_mail(
         '[ReadTogether] Feedback: ' + request.POST['title'],
-        request.POST['content'] + \
+        request.POST['content'] +
         '\n\n Sent from ' + request.META.get('HTTP_REFERER', 'unknown page.'),
         request.user.email,
         ['admin@rt.com'],  # Which admin to send to?
