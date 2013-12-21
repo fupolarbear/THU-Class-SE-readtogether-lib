@@ -4,7 +4,7 @@ from random import choice
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.core import urlresolvers
+from django.core.urlresolvers import reverse_lazy
 from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
@@ -247,7 +247,7 @@ def logout(request):
     return render_JSON_OK({})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def user(request):
     """Show the user panel page.
 
@@ -611,7 +611,7 @@ def book_add(request):
     if isinstance(clean_data, HttpResponse):
         return clean_data
     book = Book.objects.create(**clean_data)
-    permalink = urlresolvers.reverse_lazy('rt:book', args=(book.id, ))
+    permalink = reverse_lazy('rt:book', args=(book.id, ))
     return render_JSON_OK({'permalink': str(permalink)})
 
 
@@ -710,7 +710,7 @@ def updown(request, action, myuser_id):
     return render_JSON_OK({})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def ad_book(request):
     """Show the book admin panel page.
 
@@ -731,7 +731,7 @@ def ad_book(request):
     return render(request, 'rt/book-manager-panel.html', {})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def ad_user(request):
     """Show the user admin panel page.
 
@@ -858,15 +858,28 @@ def rank(request, ver=0):
     rank_by_rate    -- rank list by rate
     range5          -- template helper
     """
-    if ver == '0' or int(ver) > Rank.get_maxversion():
+    ver_max = Rank.get_maxversion()
+    if ver == '0' or int(ver) > ver_max:
         return redirect('rt:rank')
-    ver = int(ver)
+    ver_real = int(ver)
+    if ver_real == 0:
+        ver_real = ver_max
+    if ver_real > 1:
+        link_old = str(reverse_lazy('rt:rank_old', args=(ver_real - 1, )))
+    else:
+        link_old = ''
+    if ver_real < ver_max:
+        link_new = str(reverse_lazy('rt:rank_old', args=(ver_real + 1, )))
+    else:
+        link_new = ''
     return render(request, 'rt/rank.html', {
-        'ver': ver,
-        'rank_by_borrow': Rank.get_top(0, ver),
-        'rank_by_comment': Rank.get_top(1, ver),
-        'rank_by_rate': Rank.get_top(2, ver),
+        'ver': ver_real,
+        'rank_by_borrow': Rank.get_top(0, ver_real),
+        'rank_by_comment': Rank.get_top(1, ver_real),
+        'rank_by_rate': Rank.get_top(2, ver_real),
         'range5': range(1, 6),
+        'link_old': link_old,
+        'link_new': link_new,
         })
 
 
