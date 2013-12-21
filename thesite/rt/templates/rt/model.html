@@ -82,6 +82,7 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-warning" name="forget" data-loading-text="处理中...">忘记密码</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         <button type="button" class="btn btn-primary"  name="sSubmit">登录!</button>
         <input type="submit" style="position: absolute; left: -9999px"/>
@@ -389,6 +390,35 @@
                 $("[name='rRespondD']").show();
                 $("[name='rRespondD']").text(Obj.status+": "+Obj.err);
             }
+        });
+      });
+
+
+
+      $("[name='forget']").click(function(){
+        $("[name='forget']").button('loading');
+        $.post("{% url 'rt:user_forget' %}",
+          {
+            username: $("[name='sUsername']").val(),
+            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+          },
+        function(res){
+            var Obj = $.parseJSON(res); 
+            if(Obj.status=="OK")
+            {
+                $("[name='sRespondD']").hide();
+                $("[name='sRespondS']").show();
+                $("[name='sRespondS']").text(Obj.status+": "+Obj.message);
+                
+                
+            }
+            else
+            {
+                $("[name='sRespondS']").hide();
+                $("[name='sRespondD']").show();
+                $("[name='sRespondD']").text(Obj.status+": "+Obj.message);
+            }
+            $("[name='forget']").button('reset');
         });
       });
 
