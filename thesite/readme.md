@@ -27,6 +27,6 @@
 
 ## Crontab
 
-    python -c 'from rt.models import Rank; Rank.update();'        # weekly or monthly
-    python -c 'from rt.models.Borrowing import notify; notify();' # daily
+    python -c 'from rt.models import Rank; Rank.update();'           # weekly or monthly
+    python -c 'from rt.models import Borrowing; Borrowing.notify();' # daily
 
