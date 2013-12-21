@@ -396,21 +396,21 @@ class MyUser(models.Model):
         self.user.set_password(p)
         self.user.save()
         send_mail(
-                u'[ReadTogether] Change Passward',
-                dedent(u'''\
-                Dear reader {},
+            u'[ReadTogether] Passward Reset',
+            dedent(u'''\
+            Dear reader {},
 
-                Your passward is changed now.
-                Please change it after you login in.
+            Your passward has been reset successfully.
+            Please change it after you login in.
 
-                Passward: {}
+            New Passward: {}
 
-                Sent from ReadTogether.
-                ''').format(self.name, p),
-                'ReadTogether NoReply <rt_noreply@int01.com>',
-                [self.user.email],
-                fail_silently=False,
-                )
+            Sent from ReadTogether.
+            ''').format(self.name, p),
+            'ReadTogether NoReply <rt_noreply@int01.com>',
+            [self.user.email],
+            fail_silently=False,
+            )
 
     @staticmethod
     def search(s):

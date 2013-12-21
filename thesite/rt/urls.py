@@ -18,6 +18,7 @@ urlpatterns = patterns(
     url(r'^user/$', views.user, name='user'),
     url(r'^user/edit/$', views.user_edit, name='user_edit'),
     url(r'^user/upward/$', views.user_upward, name='user_upward'),
+    url(r'^user/forget/$', views.user_forget, name='user_forget'),
     url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),

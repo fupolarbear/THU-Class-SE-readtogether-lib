@@ -356,6 +356,25 @@ def user_upward(request):
     return render_JSON_OK({})
 
 
+@POST_required('username')
+@catch_404_JSON
+def user_forget(request):
+    """Backend for AJAX password reset.
+
+    POST:
+    username  -- username of the user whose password will be reset
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+                (on 'OK') readable success message
+    """
+    myuser = get_object_or_404(MyUser, user__username=request.POST['username'])
+    myuser.reset_password()
+    return render_JSON_OK({
+        'message': 'Your new password has been sent to your email.',
+        })
+
+
 @POST_required('title', 'content')
 @login_required_JSON()
 def feedback(request):
@@ -558,6 +577,10 @@ def book_fields_clean(post_data):
                     ]:
                 if post_data[field] != '':
                     clean_data[field] = int(post_data[field])
+                    if not (0 <= clean_data[field] <= 32767):
+                        return render_JSON_Error(
+                            'Field not in range: {}'.format(field),
+                            )
             else:
                 clean_data[field] = post_data[field]
         except ValueError as err:
