@@ -338,7 +338,7 @@
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
 					<div class="col-sm-7">
-					  <input type="text" class="form-control" placeholder=" 借书期限" id="duration">
+					  <input type="text" class="form-control" placeholder=" 借书期限（默认14天）" id="duration">
 					</div>
 				  </div>
 				  
@@ -351,13 +351,25 @@
 					</div>
 				  </div>
 				  {% csrf_token %}
+				  <!--
 				  	<div class="row">
 						
 							<a href="#notice"><button class="btn btn-md btn-primary  " type="button"  id="super-submit" style="float:right; margin-right: 20px;" >
 						添加这本书</button></a>
 
 					
+					</div>-->
+					<div class="form-group">
+					<div class="col-sm-2">
 					</div>
+					<div class="col-sm-8">
+					  <a href="#notice"><button class="btn btn-md btn-primary  btn-block" type="button"  id="super-submit">
+						添加这本书</button></a>
+					</div>
+				  </div>
+
+				  <input type="submit" style="position: absolute; left: -9999px"/>
+				  <input type="hidden" value="{% url 'rt:book_add' %}" id="addbookurl" />
 
 				</form>
 					
@@ -455,42 +467,4 @@
 
 {% block define_js %}
 	<script src="{% static 'rt/book-manager-panel.js' %}"></script>
-	<script type="text/javascript">
-	$("#super-submit").click(function(){
-        $.post("{% url 'rt:book_add' %}",
-          {
-            name_cn: $("#name_cn").val(),
-            author: $("#author").val(),
-            press: $("#press").val(),
-            name_origin: $("#name_origin").val(),
-            pub_year_origin: $("#pub_year_origin").val(),
-            pub_year: $("#pub_year").val(),
-            revision: $("#revision").val(),
-            revision_origin: $("#revision_origin").val(),
-            ISBN: $("#ISBN").val(),
-            translator: $("#translator").val(),
-            duration: $("#duration").val(),
-            
-            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
-          },
-        function(res){
-        	
-        		var obj = $.parseJSON(res);
-    			var txt = null;
-				if(obj.status == 'Error'){
-					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
-							+ 'err: <strong>' + obj.err 
-							+ '</strong></div></td></tr>';
-				} else if(obj.status == 'OK'){
-					txt = '<tr><td><div class="alert alert-success">' 
-							+ '<strong> OK！'
-							+ '</strong>到 <strong>' + '<a href="'+obj.permalink+'">这里</a>'
-							+ '</strong>添加《'+$("#name_cn").val()+'》的拷贝<a name="notice"></div></td></tr>';
-				}
-				$('#super-body').append(txt);
-				$('#super-body').focus();
-
-        });
-      });
-      </script>
 {% endblock define_js %}

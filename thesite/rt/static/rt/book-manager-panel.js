@@ -346,4 +346,48 @@ $( document ).ready(function() {
 	});
 
 
+	$("#super-submit").click(function(){
+        $.post($('#addbookurl').val(),
+          {
+            name_cn: $("#name_cn").val(),
+            author: $("#author").val(),
+            press: $("#press").val(),
+            name_origin: $("#name_origin").val(),
+            pub_year_origin: $("#pub_year_origin").val(),
+            pub_year: $("#pub_year").val(),
+            revision: $("#revision").val(),
+            revision_origin: $("#revision_origin").val(),
+            ISBN: $("#ISBN").val(),
+            translator: $("#translator").val(),
+            duration: $("#duration").val(),
+            
+            csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+          },
+        function(res){
+        	
+        		var obj = $.parseJSON(res);
+    			var txt = null;
+				if(obj.status == 'Error'){
+					txt = '<tr><td><div class="alert alert-danger"><strong>Error!</strong> ' 
+							+ 'err: <strong>' + obj.err 
+							+ '</strong></div></td></tr>';
+				} else if(obj.status == 'OK'){
+					txt = '<tr><td><div class="alert alert-success">' 
+							+ '<strong> OK！'
+							+ '</strong>到 <strong>' + '<a href="'+obj.permalink+'" target="_blank">这里</a> '
+							+ '</strong>添加《'+$("#name_cn").val()+'》的拷贝<a name="notice"></a></div></td></tr>';
+				}
+				$('#super-body').append(txt);
+				$('#super-body').focus();
+
+        });
+      });
+
+	$('#fixbookinfo-form').submit(function(e){
+		console.log('hahha');
+		e.preventDefault();
+		$('#super-submit').click();
+	});
+	
+
 }); // end of window
