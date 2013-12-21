@@ -297,20 +297,45 @@ def user_edit(request):
 
     Renders JSON: (besides 'status' or 'err')
     """
-    pass_mod = map(lambda f: f in request.POST, ['pass0', 'pass1', 'pass2'])
+    pass_mod = map(
+        lambda f: f in request.POST and request.POST[f] != '',
+        ['pass0', 'pass1', 'pass2'],
+        )
     pass_none = not reduce(bool.__or__, pass_mod)
     pass_all = reduce(bool.__and__, pass_mod)
     myuser = request.user.myuser
+    fake_register = {
+        'username': 'fake_user',
+        'password': 'fake_pass',
+        'password2': 'fake_pass',
+        'email': request.POST['email'],
+        'name': 'Fake User',
+        }
     if pass_none:
-        myuser.update_user(request.POST['email'])
+        f = RegisterForm(fake_register)
+        if f.is_valid():
+            myuser.update_user(request.POST['email'])
+        else:
+            return render_JSON_Error('Invalid email address.')
     elif pass_all:
-        assert request.POST['pass1'] != request.POST['pass2'], \
-            'New passwords does not match!'
-        myuser.update_user(
-            request.POST['email'],
-            request.POST['pass0'],
-            request.POST['pass1'],
-            )
+        fake_register['password'] = request.POST['pass1']
+        fake_register['password2'] = request.POST['pass2']
+        f = RegisterForm(fake_register)
+        if f.is_valid():
+            myuser.update_user(
+                request.POST['email'],
+                request.POST['pass0'],
+                request.POST['pass1'],
+                )
+        else:
+            if 'email' in f.errors:
+                return render_JSON_Error('Invalid email address.')
+            elif 'password' in f.errors:
+                return render_JSON_Error('New password is too short.')
+            elif 'password2' in f.errors:
+                return render_JSON_Error('New passwords do not match.')
+            else:
+                return render_JSON_Error('Syntax error.', {'detail': f.errors})
     else:
         return render_JSON_Error('Password fields incomplete.')
     return render_JSON_OK({})
@@ -343,12 +368,14 @@ def feedback(request):
     Renders JSON: (besides 'status' or 'err')
     """
     send_mail(
-        request.POST['title'],
-        request.POST['content'],
+        '[ReadTogether] Feedback: ' + request.POST['title'],
+        request.POST['content'] +
+        '\n\n Sent from ' + request.META.get('HTTP_REFERER', 'unknown page.'),
         request.user.email,
         ['admin@rt.com'],  # Which admin to send to?
         fail_silently=False,
         )
+    return render_JSON_OK({})
 
 
 @POST_required()
@@ -356,7 +383,7 @@ def feedback(request):
 @catch_404_JSON
 @catch_PermException_JSON
 def queue(request, copy_id):
-    """Backend for AJAX book queueing.
+    """Backend for AJAX copy queueing.
 
     POST:
 
@@ -380,7 +407,7 @@ def queue(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def reborrow(request, copy_id):
-    """Backend for AJAX book reborrow.
+    """Backend for AJAX copy reborrow.
 
     POST:
 
@@ -397,6 +424,25 @@ def reborrow(request, copy_id):
         'username': request.user.username,
         'copy_id': copy_id,
         })
+
+
+@POST_required()
+@login_required_JSON()
+@catch_404_JSON
+@catch_Assertion_JSON
+def queue_del(request, copy_id):
+    """Backend for AJAX queue deletion.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Queue deletion is done by myuser itself.
+    """
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.queue_del(request.user.myuser, copy)
+    return render_JSON_OK({})
 
 
 @POST_required()
@@ -510,13 +556,15 @@ def book_fields_clean(post_data):
                     'duration', 'pub_year', 'revision', 'pub_year_origin',
                     'revision_origin',
                     ]:
-                clean_data[field] = int(post_data[field])
+                if post_data[field] != '':
+                    clean_data[field] = int(post_data[field])
             else:
                 clean_data[field] = post_data[field]
         except ValueError as err:
                 return render_JSON_Error('Field not int: {}.'.format(field))
-    clean_data['duartion'] = clean_data['duration']
-    del clean_data['duration']
+    if 'duration' in clean_data:
+        clean_data['duartion'] = clean_data['duration']
+        del clean_data['duration']
     return clean_data
 
 

@@ -273,7 +273,36 @@ $(document).ready(
 					}
 				}
 			);
-		});
-		
+		}); // end 
+
+		$('#askforbook-form [type="submit"]').button();
+
+		$('#askforbook-form').submit(function(e){
+			e.preventDefault();
+			$('#askforbook-form [type="submit"]').button('loading');
+			var editurl = $(this).attr('action');
+			var title = $('#askforbook-form [name="title"]').val();
+			var content = $('#askforbook-form [name="content"]').val();
+
+			csrftoken = getCookie('csrftoken');
+			$.post(
+				editurl,
+				{
+					'csrfmiddlewaretoken' : csrftoken,
+					'title' : title,
+					'content' : content,
+				},
+				function(data){
+					console.log('get askforbook data: ' + data);
+					var obj = $.parseJSON(data);
+					if(obj.status == 'Error'){
+						alert('噢哟！ 提交失败！' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+					} else if(obj.status == 'OK'){
+						alert('问询单提交成功！有新消息我们将会及时与您联系！');
+						location.reload();
+					}
+				}
+			);
+		});		
 
 }); // end ready funtion
