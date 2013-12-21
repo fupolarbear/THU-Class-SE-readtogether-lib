@@ -450,7 +450,7 @@ class Borrowing(models.Model):
         )
 
     status = models.IntegerField(choices=status_choice)
-    datetime = models.DateTimeField(auto_now=True)
+    datetime = models.DateTimeField(auto_now_add=True)
     book_copy = models.ForeignKey(BookCopy)
     myuser = models.ForeignKey(MyUser)
     is_active = models.BooleanField(default=True)
