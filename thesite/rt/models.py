@@ -464,7 +464,7 @@ class Borrowing(models.Model):
         elif (Borrowing.objects.get(
                 is_active=True, myuser=myuser, book_copy=book_copy
                 ).status == 2):
-            raise PermException("you have reborrowed once!")
+            raise PermException("you have reborrowed twice!")
         b = Borrowing.objects.get(
             is_active=True, myuser=myuser, book_copy=book_copy
             )
