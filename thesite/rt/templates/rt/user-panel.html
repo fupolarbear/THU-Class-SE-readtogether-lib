@@ -238,8 +238,8 @@
 						  <th>书名</th>
 						  <th>作者</th>
 						  <th>版本</th>
-						  <th>ISBN</th>						  
-						  <th>操作</th>
+						  <th>ISBN</th>
+						  <th>评分</th>
 						</tr>
 					  </thead>
 					  <tbody>
@@ -250,7 +250,7 @@
 						  <td><a href="{% url 'rt:search' %}?q={{ copy.book.author }}">{{ copy.book.author }}</a></td>
 						  <td>{{ copy.book.simple_version }}</td>
 						  <td>{{ copy.book.ISBN }}</td>
-						  <td><button type="button" class="btn btn-default btn-xs">分享</button></td>
+						  <td>{{ copy.book.rate|floatformat:1 }}</td>
 						</tr>
 						{% endfor %}
 					  </tbody>
@@ -307,7 +307,7 @@
 					{% endfor %}
 
                 </ul>
-                <button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵=w=～</button>
+                <button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 啊类类～您的所有评论都已经已经加载完毕～搬运到这里来啦喵=w=～</button>
             </div>
           </div>
 		  </div>
@@ -323,18 +323,20 @@
 					<blockquote>
 						<p>{{ user.myuser.name }}</p>
 						  <small>
-							<cite title="Source Title">{{ user.username }} <i class="glyphicon glyphicon-map-marker"></i></cite>
+							<cite title="Username">{{ user.username }} <i class="glyphicon glyphicon-map-marker"></i></cite>
 						  </small>
 					</blockquote>
 					<p>
 						<i class="glyphicon glyphicon-envelope"></i> {{ user.email }}
 					   <br/>
+					   <!--
 						<i class="glyphicon glyphicon-phone"></i> 123-4567-8901
 					   <br />
-						<i class="glyphicon glyphicon-globe"></i> <a href="//www.google.com/search?q={{ user.username }}" target="_blank">www.{{ user.username }}.com</a>
+						-->
+						<i class="glyphicon glyphicon-globe"></i> Find <a href="//www.google.com/search?q={{ user.username }}" target="_blank">me</a> on google
 					   <br />
-						<i class="glyphicon glyphicon-gift"></i> January 30, 1974
-						<br />
+						<!--<i class="glyphicon glyphicon-gift"></i> January 30, 1974
+						<br /> -->
 						<i class="glyphicon glyphicon-glass"></i> {{ user.myuser.get_group_name }}
 					</p>
 					<p>
