@@ -4,7 +4,7 @@ from random import choice
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.core import urlresolvers
+from django.core.urlresolvers import reverse_lazy
 from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
@@ -247,7 +247,7 @@ def logout(request):
     return render_JSON_OK({})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def user(request):
     """Show the user panel page.
 
@@ -354,6 +354,25 @@ def user_upward(request):
     myuser = request.user.myuser
     myuser.upward_request()
     return render_JSON_OK({})
+
+
+@POST_required('username')
+@catch_404_JSON
+def user_forget(request):
+    """Backend for AJAX password reset.
+
+    POST:
+    username  -- username of the user whose password will be reset
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+                (on 'OK') readable success message
+    """
+    myuser = get_object_or_404(MyUser, user__username=request.POST['username'])
+    myuser.reset_password()
+    return render_JSON_OK({
+        'message': 'Your new password has been sent to your email.',
+        })
 
 
 @POST_required('title', 'content')
@@ -558,10 +577,16 @@ def book_fields_clean(post_data):
                     ]:
                 if post_data[field] != '':
                     clean_data[field] = int(post_data[field])
+                    if not (0 <= clean_data[field] <= 32767):
+                        return render_JSON_Error(
+                            'Field not in range: {}'.format(field),
+                            )
             else:
                 clean_data[field] = post_data[field]
         except ValueError as err:
-                return render_JSON_Error('Field not int: {}.'.format(field))
+            return render_JSON_Error('Field not int: {}.'.format(field))
+    if clean_data['name_cn'] == '' and clean_data['name_origin'] == '':
+        return render_JSON_Error('At least one of name_cn or name_origin.')
     if 'duration' in clean_data:
         clean_data['duartion'] = clean_data['duration']
         del clean_data['duration']
@@ -586,7 +611,7 @@ def book_add(request):
     if isinstance(clean_data, HttpResponse):
         return clean_data
     book = Book.objects.create(**clean_data)
-    permalink = urlresolvers.reverse_lazy('rt:book', args=(book.id, ))
+    permalink = reverse_lazy('rt:book', args=(book.id, ))
     return render_JSON_OK({'permalink': str(permalink)})
 
 
@@ -685,7 +710,7 @@ def updown(request, action, myuser_id):
     return render_JSON_OK({})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def ad_book(request):
     """Show the book admin panel page.
 
@@ -706,7 +731,7 @@ def ad_book(request):
     return render(request, 'rt/book-manager-panel.html', {})
 
 
-@login_required(login_url=urlresolvers.reverse_lazy('rt:index'))
+@login_required(login_url=reverse_lazy('rt:index'))
 def ad_user(request):
     """Show the user admin panel page.
 
@@ -821,22 +846,35 @@ def info_add(request):
     return render_JSON_OK({})
 
 
-def rank(request):
+def rank(request, ver=0):
     """Show the rank page.
 
     GET:
 
     Renders rt/rank.html with:
-    rank_by_borrow  -- latest rank list by borrow count
-    rank_by_comment -- latest rank list by comment count
-    rank_by_rate    -- latest rank list by rate
+    ver             -- version of the rank, 0 (default) for latest
+    rank_by_borrow  -- rank list by borrow count
+    rank_by_comment -- rank list by comment count
+    rank_by_rate    -- rank list by rate
     range5          -- template helper
     """
+    ver_max = Rank.get_maxversion()
+    if ver == '0' or int(ver) > ver_max:
+        return redirect('rt:rank')
+    ver_real = int(ver) or ver_max
+    link_old = link_new = ''
+    if ver_real > 1:
+        link_old = str(reverse_lazy('rt:rank_old', args=(ver_real - 1, )))
+    if ver_real < ver_max:
+        link_new = str(reverse_lazy('rt:rank_old', args=(ver_real + 1, )))
     return render(request, 'rt/rank.html', {
-        'rank_by_borrow': Rank.get_top(0),
-        'rank_by_comment': Rank.get_top(1),
-        'rank_by_rate': Rank.get_top(2),
+        'ver': ver_real,
+        'rank_by_borrow': Rank.get_top(0, ver_real),
+        'rank_by_comment': Rank.get_top(1, ver_real),
+        'rank_by_rate': Rank.get_top(2, ver_real),
         'range5': range(1, 6),
+        'link_old': link_old,
+        'link_new': link_new,
         })
 
 

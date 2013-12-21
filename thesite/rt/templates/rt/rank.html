@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block define_head %}
-  <title>rank</title>
+  <title>图书榜单 - ReadTogether</title>
   <meta name="description" content="Index">
   <meta name="author" content="Qt">
   <link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}">
@@ -30,7 +30,7 @@
   <div class="col-xs-0 col-md-1 "></div>
   <div class="col-xs-12 col-md-10">
     <div class="alert alert-danger">
-      <h3><span class="flavor size36">Hottest Rank /</span><strong>最新榜单</strong></h3> 
+      <h3><span class="flavor size36">Hottest Rank /</span><strong>{% if not link_new %}最新榜单（第 {{ ver }} 期榜单）{% else %}第 {{ ver }} 期榜单{% endif %}</strong></h3> 
       <!-- Nav tabs -->
       <ul class="nav nav-tabs">
         
@@ -173,6 +173,14 @@
           </div>
         </div>
       </div>
+      <ul class="pager">
+        {% if link_old %}
+          <li class="previous"><a href="{{ link_old }}">&larr; 回顾上期榜单</a></li>
+        {% endif %}
+        {% if link_new %}
+          <li class="next"><a href="{{ link_new }}">浏览更新一期 &rarr;</a></li>
+        {% endif %}
+      </ul>
     </div>
   </div>
   <div class="col-xs-0 col-md-1 "></div>

@@ -18,6 +18,7 @@ urlpatterns = patterns(
     url(r'^user/$', views.user, name='user'),
     url(r'^user/edit/$', views.user_edit, name='user_edit'),
     url(r'^user/upward/$', views.user_upward, name='user_upward'),
+    url(r'^user/forget/$', views.user_forget, name='user_forget'),
     url(r'^feedback/$', views.feedback, name='feedback'),
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
@@ -41,12 +42,12 @@ urlpatterns = patterns(
     url(r'^admin/book/$', views.ad_book, name='ad_book'),
     url(r'^admin/user/$', views.ad_user, name='ad_user'),
     url(r'^ajax/myuser/$', views.ajax_myuser, name='ajax_myuser'),
-#    url(r'^ajax/book/(\d+)/$', views.ajax_book, name='ajax_book'),
 
     url(r'^info/list/$', views.info, name='info'),
     url(r'^info/(\d+)/$', views.info_detail, name='info_detail'),
     url(r'^info/add/$', views.info_add, name='info_add'),
 
     url(r'^rank/$', views.rank, name='rank'),
+    url(r'^rank/(\d+)/$', views.rank, name='rank_old'),
 #    url(r'^test/$', views.test, name='test'),
     )

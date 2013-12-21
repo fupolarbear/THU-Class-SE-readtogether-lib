@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block define_head %}
-  <title>{% if not q|default:"null" == "null" %}{{ q }} - {% endif %}ReadTogether Smart Search</title>
+  <title>{% if not q|default:"null" == "null" %}{{ q }} - {% endif %}云图智能搜索 - ReadTogether</title>
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="shortcut icon" href="{% static 'rt/img/favicon.ico' %}">
@@ -56,7 +56,8 @@
         </thead>
         <tbody>
           {% if q|default:"null" == "null" %}
-            <tr><td><br><h4>您还没有输入想要搜索的内容</h4><br>建议：<br>直接使用上方的搜索框吧~<!--</td><td></td><td></td><td></td><td>--></td><td></td></tr>
+            <tr><td><br><h4>您还没有输入想要搜索的内容</h4><br>建议：<br>直接使用上方的搜索框吧～<br>我们的智能搜索会全力帮您检索相关图书～<br>书名、作者、出版社什么的，轻松搞定！<br>或者？试试 <a href="/search/?q=&lucky=" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star"></span> I am Feeling lucky</a>？
+            </td><td></td></tr>
           {% else %}
           {% for item in result %}
           <tr>
@@ -82,7 +83,7 @@
           -->
           </tr>
           {% empty %}
-          <tr><td><br><h4>抱歉，没有找到与<em class="text-danger"> “{{ q }}” </em>相关的书籍</h4><br>建议：<br>1. 检查输入是否正确<br>2. 尝试用作者、出版社等其他信息来搜索<br>3. 点击页面右下方的按钮来联系我们吧=w=<!--</td><td></td><td></td><td></td><td>--></td><td></td></tr>
+          <tr><td><br><h4>抱歉，没有找到与<em class="text-danger"> "{{ q }}" </em>相关的书籍</h4><br>建议：<br>1. 检查输入是否正确<br>2. 尝试用作者、出版社等其他信息来搜索<br>3. 点击页面右下方的按钮来联系我们吧=w=<!--</td><td></td><td></td><td></td><td>--></td><td></td></tr>
           {% endfor %}
           {% endif %}
         </tbody>

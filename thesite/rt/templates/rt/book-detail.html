@@ -55,19 +55,19 @@
 
 							{% if book.author %}
 								<span class="displayk">作者:</span>
-								<span class="displayv"><a href="{% url 'rt:search' %}?q={{ book.author }}">{{ book.author }}</a></span>
+								<span class="displayv"><a href="{% url 'rt:search' %}?q={{ book.author }}" target="_blank">{{ book.author }}</a></span>
 								<br>
 							{% endif %}							
 							
 							{% if book.press %}
 								<span class="displayk">出版社:</span>
-								<span class="displayv"><a href="{% url 'rt:search' %}?q={{ book.press }}">{{ book.press }}</a></span>
+								<span class="displayv"><a href="{% url 'rt:search' %}?q={{ book.press }}" target="_blank">{{ book.press }}</a></span>
 							<br>
 							{% endif %}
 
 							{% if book.name_origin %}
 								<span class="displayk">外文原名:</span>
-								<span class="displayv">{{ book.name_origin }}</span>
+								<span class="displayv"><a href="{% url 'rt:search' %}?q={{ book.name_origin }}" target="_blank">{{ book.name_origin }}</a></span>
 							<br>
 							{% endif %}
 
@@ -85,7 +85,7 @@
 							
 							{% if book.translator %}
 								<span class="displayk">译者:</span>
-								<span class="displayv"><a href="...">{{ book.translator }}</a></span>
+								<span class="displayv">{{ book.translator }}</span>
 							<br>
 							{% endif %}
 							
