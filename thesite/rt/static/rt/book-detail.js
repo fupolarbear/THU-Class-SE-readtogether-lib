@@ -279,7 +279,7 @@ $(document).ready(
 
 		$('#askforbook-form').submit(function(e){
 			e.preventDefault();
-			$('#askforbook-form [type="submit"]').button('loading')
+			$('#askforbook-form [type="submit"]').button('loading');
 			var editurl = $(this).attr('action');
 			var title = $('#askforbook-form [name="title"]').val();
 			var content = $('#askforbook-form [name="content"]').val();
@@ -303,7 +303,6 @@ $(document).ready(
 					}
 				}
 			);
-
 		});		
 
 }); // end ready funtion
