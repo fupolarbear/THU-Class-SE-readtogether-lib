@@ -861,17 +861,12 @@ def rank(request, ver=0):
     ver_max = Rank.get_maxversion()
     if ver == '0' or int(ver) > ver_max:
         return redirect('rt:rank')
-    ver_real = int(ver)
-    if ver_real == 0:
-        ver_real = ver_max
+    ver_real = int(ver) or ver_max
+    link_old = link_new = ''
     if ver_real > 1:
         link_old = str(reverse_lazy('rt:rank_old', args=(ver_real - 1, )))
-    else:
-        link_old = ''
     if ver_real < ver_max:
         link_new = str(reverse_lazy('rt:rank_old', args=(ver_real + 1, )))
-    else:
-        link_new = ''
     return render(request, 'rt/rank.html', {
         'ver': ver_real,
         'rank_by_borrow': Rank.get_top(0, ver_real),
