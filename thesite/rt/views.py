@@ -307,6 +307,7 @@ def user_edit(request):
     if pass_none:
         myuser.update_user(request.POST['email'])
     elif pass_all:
+        assert len(request.POST['pass1']) >= 5, 'New password is too short!'
         assert request.POST['pass1'] == request.POST['pass2'], \
             'New passwords does not match!'
         myuser.update_user(

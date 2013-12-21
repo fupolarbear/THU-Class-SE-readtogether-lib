@@ -7,7 +7,7 @@ class RegisterForm(forms.Form):
     """Form for user registration."""
 
     username = forms.CharField(max_length=30)
-    password = forms.CharField(widget=PasswordInput)
+    password = forms.CharField(widget=PasswordInput, min_length=5)
     password2 = forms.CharField(widget=PasswordInput)
     email = forms.EmailField(max_length=75)
     name = forms.CharField(max_length=100)
