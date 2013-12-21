@@ -584,7 +584,9 @@ def book_fields_clean(post_data):
             else:
                 clean_data[field] = post_data[field]
         except ValueError as err:
-                return render_JSON_Error('Field not int: {}.'.format(field))
+            return render_JSON_Error('Field not int: {}.'.format(field))
+    if clean_data['name_cn'] == '' and clean_data['name_origin'] == '':
+        return render_JSON_Error('At least one of name_cn or name_origin.')
     if 'duration' in clean_data:
         clean_data['duartion'] = clean_data['duration']
         del clean_data['duration']
