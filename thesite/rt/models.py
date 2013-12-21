@@ -382,9 +382,13 @@ class MyUser(models.Model):
         return re
 
     @staticmethod
-    def get_all_admin():
+    def get_admin_email():
         ad = Group.objects.get(name='Admin')
-        return MyUser.objects.filter(user__groups=ad, admin_type__in=[1,2])
+        mu =  MyUser.objects.filter(
+            user__groups=ad,
+            admin_type__in=[1,2]
+            ).values('user__email').distinct()
+        return [x['user__email'] for x in mu]
 
     @staticmethod
     def search(s):
