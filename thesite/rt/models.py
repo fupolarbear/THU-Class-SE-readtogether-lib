@@ -242,7 +242,7 @@ class MyUser(models.Model):
     )
     pending = models.IntegerField(choices=species_pending, default=1)
 
-    @transaction.atomic 
+    @transaction.atomic
     def reg_pass(self):
         """pass the register"""
         assert self.pending == 1, "User is not pending."
@@ -384,9 +384,9 @@ class MyUser(models.Model):
     @staticmethod
     def get_admin_email():
         ad = Group.objects.get(name='Admin')
-        mu =  MyUser.objects.filter(
+        mu = MyUser.objects.filter(
             user__groups=ad,
-            admin_type__in=[1,2]
+            admin_type__in=[1, 2]
             ).values('user__email').distinct()
         return [x['user__email'] for x in mu]
 
@@ -647,9 +647,9 @@ class Borrowing(models.Model):
     def notify():
         """
         the function will be called every day.
-        if the book will expire tomorrow, 
+        if the book will expire tomorrow,
         send a mail to him.
-        if the book expired over 5 days, 
+        if the book expired over 5 days,
         set the user to Blacklist.
         """
         bs = Borrowing.objects.filter(
