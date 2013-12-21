@@ -143,7 +143,7 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-shelf-num">0</span> 件</span></th>
+						  <th>info</th>
 						</tr>
 					  </thead>
 					  <tbody id="return-tbody2">
@@ -251,34 +251,14 @@
 				  
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">标准名</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder="标准名" id="name_cn">
 					</div>
 				  </div>
 				  
-
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="作者" id="author">
-					</div>
-				  </div>
-				  
-
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="出版社" id="press">
-					</div>
-				  </div>
-				  
-
-				  
-				  <div class="form-group">
+				 <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder="外文原名" id="name_origin">
 					</div>
 				  </div>
@@ -286,26 +266,17 @@
 
 				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">原版出版年</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="原版出版年" id="pub_year_origin">
+					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
+					<div class="col-sm-7">
+					  <input type="text" class="form-control" placeholder="作者" id="author">
 					</div>
 				  </div>
-				  
 
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin">
-					</div>
-				  </div>
-				  
 
-				  
+
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder="译者" id="translator">
 					</div>
 				  </div>
@@ -313,26 +284,60 @@
 
 				  
 				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
+					<div class="col-sm-7">
+					  <input type="text" class="form-control" placeholder="出版社" id="press">
+					</div>
+				  </div>
+				  
+
+
+				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder="出版年" id="pub_year">
 					</div>
 				  </div>
 				  
 
+				 
 				  
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
-					<div class="col-sm-9">
-					  <input type="number" class="form-control" placeholder="版次" id="revision">
+					<label for="inputTitle" class="col-sm-3 control-label">原版出版年</label>
+					<div class="col-sm-7">
+					  <input type="text" class="form-control" placeholder="原版出版年" id="pub_year_origin">
 					</div>
 				  </div>
 				  
 
+	  
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
+					<div class="col-sm-7">
+					  <input type="text" class="form-control" placeholder="版次" id="revision">
+					</div>
+				  </div>
+				  
+
+
+
+				  
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
+					<div class="col-sm-7">
+					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin">
+					</div>
+				  </div>
+			
+				  
+
+				  
+			
 				  
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder=" 借书期限" id="duration">
 					</div>
 				  </div>
@@ -341,15 +346,15 @@
 				  
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">ISBN</label>
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 					  <input type="text" class="form-control" placeholder="ISBN" id="ISBN">
 					</div>
 				  </div>
 				  {% csrf_token %}
 				  	<div class="row">
 						
-							<button class="btn btn-md btn-primary  " type="button"  id="super-submit" style="float:right; margin-right: 20px;" >
-						添加这本书</button>
+							<a href="#notice"><button class="btn btn-md btn-primary  " type="button"  id="super-submit" style="float:right; margin-right: 20px;" >
+						添加这本书</button></a>
 
 					
 					</div>
@@ -365,7 +370,7 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-shelf-num">0</span> 件</span></th>
+						  <th>info</th>
 						</tr>
 					  </thead>
 					  <tbody id="super-body">
@@ -401,7 +406,7 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>info<span class="label label-warning"  style="float:right;"><span id="return-book-num">0</span> 件</span></th>
+						  <th>info</th>
 						</tr>
 					  </thead>
 					  <tbody id="return-tbody">
@@ -435,7 +440,7 @@
 				  <table class="table table-hover "> <!-- table-bordered? -->
 					   <thead>
 						<tr>
-						  <th>info<span class="label label-warning"  style="float:right;"><span id="del-book-num">0</span> 件</span></th>
+						  <th>info</th>
 						</tr>
 					  </thead>
 					  <tbody id="return-tbody3">
@@ -479,10 +484,11 @@
 				} else if(obj.status == 'OK'){
 					txt = '<tr><td><div class="alert alert-success">' 
 							+ '<strong> OK！'
-							+ '</strong>permalink: <strong>' + '<a href="'+obj.permalink+'">new book</a>'
-							+ '</strong></div></td></tr>';
+							+ '</strong>到 <strong>' + '<a href="'+obj.permalink+'">这里</a>'
+							+ '</strong>添加《'+$("#name_cn").val()+'》的拷贝<a name="notice"></div></td></tr>';
 				}
 				$('#super-body').append(txt);
+				$('#super-body').focus();
 
         });
       });

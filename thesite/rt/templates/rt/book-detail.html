@@ -547,6 +547,15 @@
 				  </div>
 				  
 
+
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="外文原名" id="name_origin" value="{% if book.name_origin %}{{ book.name_origin }}{% endif %}">
+					</div>
+				  </div>
+				  
+
 				  
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">作者</label>
@@ -556,7 +565,15 @@
 				  </div>
 				  
 
+				    <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="译者" id="translator" value="{% if book.translator %}{{ book.translator }}{% endif %}">
+					</div>
+				  </div>
 				  
+
+
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">出版社</label>
 					<div class="col-sm-9">
@@ -565,11 +582,13 @@
 				  </div>
 				  
 
-				  
+				 
+
+
 				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">外文原名</label>
+					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
 					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="外文原名" id="name_origin" value="{% if book.name_origin %}{{ book.name_origin }}{% endif %}">
+					  <input type="text" class="form-control" placeholder="出版年" id="pub_year" value="{% if book.pub_year %}{{ book.pub_year }}{% endif %}">
 					</div>
 				  </div>
 				  
@@ -583,34 +602,7 @@
 				  </div>
 				  
 
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin" value="{% if book.revision_origin %}{{ book.revision_origin }}{% endif %}">
-					</div>
-				  </div>
-				  
-
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">译者</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="译者" id="translator" value="{% if book.translator %}{{ book.translator }}{% endif %}">
-					</div>
-				  </div>
-				  
-
-				  
-				  <div class="form-group">
-					<label for="inputTitle" class="col-sm-3 control-label">出版年</label>
-					<div class="col-sm-9">
-					  <input type="text" class="form-control" placeholder="出版年" id="pub_year" value="{% if book.pub_year %}{{ book.pub_year }}{% endif %}">
-					</div>
-				  </div>
-				  
-
-				  
+				   
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label">版次</label>
 					<div class="col-sm-9">
@@ -619,6 +611,18 @@
 				  </div>
 				  
 
+
+				  <div class="form-group">
+					<label for="inputTitle" class="col-sm-3 control-label">原版版次</label>
+					<div class="col-sm-9">
+					  <input type="text" class="form-control" placeholder="原版版次" id="revision_origin" value="{% if book.revision_origin %}{{ book.revision_origin }}{% endif %}">
+					</div>
+				  </div>
+				  
+
+				  		
+
+				 
 				  
 				  <div class="form-group">
 					<label for="inputTitle" class="col-sm-3 control-label"> 借书期限</label>
