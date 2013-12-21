@@ -182,7 +182,7 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading"><span class="glyphicon glyphicon-tasks"></span> 书籍状态</div>
 		  <div class="panel-body">
-		  	{% if copy and copy|length > 0%}
+		  	{% if copy and copy|length > 0 or is_book_admin %}
 			
 			当前馆藏 <strong>{{ copy|length }}</strong> 本。
 		  </div>
@@ -263,7 +263,7 @@
 			  	{% endif %}
 				{% empty %}
 				<tr>
-					<td>it's impossible! Copy list empty!</td>
+					<td>Copy list is empty now</td>
 				</tr>
 				{% endfor %}
 				{% if is_book_admin %}
