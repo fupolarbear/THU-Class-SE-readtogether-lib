@@ -297,14 +297,17 @@ def user_edit(request):
 
     Renders JSON: (besides 'status' or 'err')
     """
-    pass_mod = map(lambda f: f in request.POST, ['pass0', 'pass1', 'pass2'])
+    pass_mod = map(
+        lambda f: f in request.POST and request.POST[f] != '',
+        ['pass0', 'pass1', 'pass2'],
+        )
     pass_none = not reduce(bool.__or__, pass_mod)
     pass_all = reduce(bool.__and__, pass_mod)
     myuser = request.user.myuser
     if pass_none:
         myuser.update_user(request.POST['email'])
     elif pass_all:
-        assert request.POST['pass1'] != request.POST['pass2'], \
+        assert request.POST['pass1'] == request.POST['pass2'], \
             'New passwords does not match!'
         myuser.update_user(
             request.POST['email'],
