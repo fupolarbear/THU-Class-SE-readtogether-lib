@@ -259,7 +259,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="submit" class="btn btn-primary" data-loading-text="正在提交中请勿离开页面...">提交</button>
+        <button type="submit" class="btn btn-primary" data-loading-text="正在提交中请勿离开页面..." data-complete-text="出错了～请再尝试一次提交">提交</button>
       </div>
       </form>
     </div><!-- /.modal-content -->
@@ -438,7 +438,7 @@
             var obj = $.parseJSON(data);
             if(obj.status == 'Error'){
               alert('噢哟！ 提交失败！' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
-              location.reload();
+              $('#modal-feedback-form [type="submit"]').button('complete');
             } else if(obj.status == 'OK'){
               alert('问询单提交成功！有新消息我们将会及时与您联系！');
               location.reload();
