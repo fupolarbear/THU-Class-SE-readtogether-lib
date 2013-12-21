@@ -568,6 +568,7 @@ BOOK_FIELDS = [
 
 
 def book_fields_clean(post_data):
+    """Helper function to verify book field data."""
     clean_data = {}
     for field in BOOK_FIELDS:
         try:
@@ -680,6 +681,15 @@ def copy_del(request, copy_id):
 @login_required_JSON('book manager')
 @catch_404_JSON
 def comment_del(request, comment_id):
+    """Backend for AJAX comment deletion.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Can only be called by book admin.
+    """
     comment = get_object_or_404(Comment, pk=comment_id)
     comment.remove()
     return render_JSON_OK({})
@@ -780,10 +790,6 @@ def ajax_myuser(request):
     if admin == 'user':
         return render(request, 'rt/fetch_myuser_down.html', context)
     return render(request, 'rt/fetch_myuser.html', context)
-
-
-# def ajax_book(request, book_id):
-#     pass
 
 
 def info(request):
