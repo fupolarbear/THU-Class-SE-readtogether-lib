@@ -170,6 +170,7 @@ class BookCopy(models.Model):
             return s['expire']
 
     def set_dead(self, myuser):
+        """the copy is disappeared."""
         text = self.get_status()['text']
         assert text in {"on shelf", "arranging"}, "Copy not here."
         if text == "arranging":
@@ -241,8 +242,9 @@ class MyUser(models.Model):
     )
     pending = models.IntegerField(choices=species_pending, default=1)
 
-    @transaction.atomic
+    @transaction.atomic 
     def reg_pass(self):
+        """pass the register"""
         assert self.pending == 1, "User is not pending."
         self.pending = 0
         self.save()
@@ -250,6 +252,7 @@ class MyUser(models.Model):
 
     @transaction.atomic
     def upward(self):
+        """upward the permission."""
         assert self.pending == 2, "No upward request."
         self.pending = 0
         self.save()
@@ -263,6 +266,7 @@ class MyUser(models.Model):
 
     @transaction.atomic
     def downward(self):
+        """downward the permission"""
         group = self.get_group_name()
         if group == "AdvancedUser":
             self.set_group("NormalUser")
@@ -272,6 +276,7 @@ class MyUser(models.Model):
             assert 0, "User can't be downward."
 
     def upward_request(self):
+        """request to upward permission"""
         assert self.pending == 0, "You can't be upward."
         group = self.get_group_name()
         assert group in ["NormalUser", "Blacklist"], "You can't be upward."
@@ -301,6 +306,7 @@ class MyUser(models.Model):
 
     @transaction.atomic
     def update_user(self, email, pass_old=None, pass_new=None):
+        """update user information"""
         self.user.email = email
         if pass_old is not None:
             assert self.user.check_password(pass_old), "Wrong password."
@@ -333,6 +339,7 @@ class MyUser(models.Model):
             ).count()
 
     def remain_borrowing_num(self):
+        """the number of the book you can borrow now."""
         return self.get_perm('borrowing_num')-self.has_borrowing_num()
 
     def has_queue_num(self):
@@ -470,6 +477,7 @@ class Borrowing(models.Model):
         """
         User myuser return the book
         the book must be borrowed by someone.
+        if someone queues the book, send a email to him.
         """
         if (not Borrowing.objects.filter(
                 book_copy=book_copy, is_active=True,
@@ -594,6 +602,7 @@ class Borrowing(models.Model):
 
     @staticmethod
     def queue_del(myuser, book_copy):
+        """delete the queue"""
         bo = Borrowing.objects.filter(
             is_active=True, myuser=myuser, book_copy=book_copy, status=4
             )
@@ -627,6 +636,13 @@ class Borrowing(models.Model):
 
     @staticmethod
     def notify():
+        """
+        the function will be called every day.
+        if the book will expire tomorrow, 
+        send a mail to him.
+        if the book expired over 5 days, 
+        set the user to Blacklist.
+        """
         bs = Borrowing.objects.filter(
             is_active=True, status__in=[0, 1, 2]
             )
@@ -683,6 +699,7 @@ class Info(models.Model):
     species = models.IntegerField(choices=species_choice, default=0)
 
     class Meta:
+        """auto order by date"""
         ordering = ['-date']
 
     @staticmethod
@@ -742,6 +759,7 @@ class Comment(models.Model):
 
     @transaction.atomic
     def remove(self):
+        """reomve comment"""
         if self.book.rate_num == 1:
             self.book.rate = 0.0
         else:
