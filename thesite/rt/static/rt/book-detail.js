@@ -93,7 +93,7 @@ $(document).ready(
 			padding: 10,
 			callback: function(){
 				if($('a.scroll-next:last').length == 0){
-					$('#comment-panel').append('<button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 该书的所有评论都已经加载完毕喵=w=～</button>');
+					$('#comment-panel').append('<button class="btn btn-default btn-default btn-block" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> 啊类类～该书的所有评论都已经加载完毕了喵=w=～</button>');
 				}
 				$('div.spoiler-comment').mouseover(function(){
 					$(this).css('color', 'black');
@@ -158,7 +158,7 @@ $(document).ready(
 								$('#ordingModal').modal('hide');
 								location.reload();
 							},
-							2000
+							1500
 						);
 					} else {
 						$('#ordingModal').find(".alert-danger").find("#detailed-alert").html('<br>error: ' + got.err + '<br>message: ' + got.message);
@@ -168,7 +168,7 @@ $(document).ready(
 								$('#ordingModal').find(".alert").hide();
 								$('#ordingModal').modal('hide');
 							},
-							4000
+							3000
 						);
 					}
 				}
@@ -297,6 +297,7 @@ $(document).ready(
 					var obj = $.parseJSON(data);
 					if(obj.status == 'Error'){
 						alert('噢哟！ 提交失败！' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+						$('#askforbook-form [type="submit"]').button('complete');
 					} else if(obj.status == 'OK'){
 						alert('问询单提交成功！有新消息我们将会及时与您联系！');
 						location.reload();
