@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module rt.views</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="rt.html"><font color="#ffffff">rt</font></a>.views</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/taccoraw/work/PA-softEng/readtogether/thesite/rt/views.py">/home/taccoraw/work/PA-softEng/readtogether/thesite/rt/views.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="django.contrib.auth.html">django.contrib.auth</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-ad_book"><strong>ad_book</strong></a>(request, *args, **kwargs)</dt><dd><tt>Show&nbsp;the&nbsp;book&nbsp;admin&nbsp;panel&nbsp;page.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/book-manager-panel.html&nbsp;with:<br>
+&nbsp;<br>
+Redirect&nbsp;to&nbsp;rt:index&nbsp;if&nbsp;not&nbsp;logged&nbsp;in.<br>
+Redirect&nbsp;to&nbsp;rt:user&nbsp;if&nbsp;not&nbsp;book&nbsp;admin.<br>
+Redirect&nbsp;to&nbsp;admin:index&nbsp;if&nbsp;root.</tt></dd></dl>
+ <dl><dt><a name="-ad_user"><strong>ad_user</strong></a>(request, *args, **kwargs)</dt><dd><tt>Show&nbsp;the&nbsp;user&nbsp;admin&nbsp;panel&nbsp;page.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/user-manager-panel.html&nbsp;with:<br>
+user_register&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;MyUser&nbsp;objects&nbsp;waiting&nbsp;for&nbsp;reg_pass<br>
+user_advance&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;MyUser&nbsp;objects&nbsp;waiting&nbsp;for&nbsp;upward<br>
+&nbsp;<br>
+Redirect&nbsp;to&nbsp;rt:index&nbsp;if&nbsp;not&nbsp;logged&nbsp;in.<br>
+Redirect&nbsp;to&nbsp;rt:user&nbsp;if&nbsp;not&nbsp;user&nbsp;admin.<br>
+Redirect&nbsp;to&nbsp;admin:index&nbsp;if&nbsp;root.</tt></dd></dl>
+ <dl><dt><a name="-ajax_comment"><strong>ajax_comment</strong></a>(request, book_id)</dt><dd><tt>Fetch&nbsp;comments&nbsp;for&nbsp;the&nbsp;book&nbsp;specified&nbsp;by&nbsp;book_id.<br>
+&nbsp;<br>
+GET:<br>
+page&nbsp;--&nbsp;the&nbsp;desired&nbsp;page.&nbsp;0&nbsp;is&nbsp;reserved&nbsp;for&nbsp;the&nbsp;default&nbsp;ones&nbsp;returned&nbsp;on<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;book&nbsp;page.&nbsp;The&nbsp;first&nbsp;load&nbsp;operation&nbsp;should&nbsp;use&nbsp;1&nbsp;(default).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Large&nbsp;page&nbsp;numbers&nbsp;exceeds&nbsp;the&nbsp;total&nbsp;number&nbsp;returns&nbsp;empty&nbsp;list.<br>
+Other&nbsp;parameters&nbsp;may&nbsp;be&nbsp;used&nbsp;such&nbsp;as&nbsp;'last_date'&nbsp;or&nbsp;'last_id',&nbsp;so&nbsp;it's&nbsp;not<br>
+a&nbsp;good&nbsp;idea&nbsp;to&nbsp;put&nbsp;them&nbsp;into&nbsp;URL.<br>
+&nbsp;<br>
+Renders&nbsp;rt/fetch_comment.html&nbsp;for&nbsp;AJAX&nbsp;load&nbsp;with:<br>
+comment&nbsp;&amp;&nbsp;range5&nbsp;--&nbsp;(on&nbsp;'OK')&nbsp;a&nbsp;list&nbsp;of&nbsp;comments,&nbsp;and&nbsp;template&nbsp;helper<br>
+&nbsp;<br>
+Everyone&nbsp;can&nbsp;view&nbsp;comments.</tt></dd></dl>
+ <dl><dt><a name="-ajax_myuser"><strong>ajax_myuser</strong></a>(request)</dt><dd><tt>Search&nbsp;myuser&nbsp;according&nbsp;to&nbsp;query&nbsp;string.<br>
+&nbsp;<br>
+GET:<br>
+q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;query&nbsp;string,&nbsp;default&nbsp;''<br>
+admin&nbsp;&nbsp;--&nbsp;(optional)&nbsp;parameter&nbsp;that&nbsp;determines&nbsp;which&nbsp;template&nbsp;to&nbsp;render<br>
+&nbsp;<br>
+if&nbsp;admin&nbsp;==&nbsp;'user':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rt/fetch_myuser_down.html<br>
+else:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rt/fetch_myuser.html<br>
+&nbsp;<br>
+Renders&nbsp;template&nbsp;for&nbsp;AJAX&nbsp;load&nbsp;with:<br>
+myuser_list&nbsp;--&nbsp;(on&nbsp;'OK')&nbsp;a&nbsp;list&nbsp;of&nbsp;matched&nbsp;myuser<br>
+&nbsp;<br>
+No&nbsp;error&nbsp;check&nbsp;whether&nbsp;called&nbsp;by&nbsp;book&nbsp;admin.</tt></dd></dl>
+ <dl><dt><a name="-book"><strong>book</strong></a>(request, book_id)</dt><dd><tt>Show&nbsp;the&nbsp;detail&nbsp;page&nbsp;for&nbsp;a&nbsp;certain&nbsp;book.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/book-detail.html&nbsp;with:<br>
+book&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;book&nbsp;object<br>
+copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;copies&nbsp;of&nbsp;this&nbsp;book<br>
+comment_count&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;number&nbsp;of&nbsp;comments&nbsp;on&nbsp;this&nbsp;book<br>
+comment&nbsp;&amp;&nbsp;range5&nbsp;--&nbsp;latest&nbsp;comment&nbsp;list,&nbsp;and&nbsp;template&nbsp;helper</tt></dd></dl>
+ <dl><dt><a name="-book_fields_clean"><strong>book_fields_clean</strong></a>(post_data)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;verify&nbsp;book&nbsp;field&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-index"><strong>index</strong></a>(request)</dt><dd><tt>Show&nbsp;index&nbsp;page.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/index.html&nbsp;with:<br>
+rank&nbsp;&nbsp;--&nbsp;latest&nbsp;rank&nbsp;list&nbsp;by&nbsp;rate<br>
+news&nbsp;&nbsp;--&nbsp;latest&nbsp;5&nbsp;pieces&nbsp;of&nbsp;news<br>
+guide&nbsp;--&nbsp;latest&nbsp;5&nbsp;pieces&nbsp;of&nbsp;guide</tt></dd></dl>
+ <dl><dt><a name="-info"><strong>info</strong></a>(request)</dt><dd><tt>Show&nbsp;news&nbsp;and&nbsp;guide&nbsp;list.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/info.html&nbsp;with:<br>
+news&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;news<br>
+guide&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;guide</tt></dd></dl>
+ <dl><dt><a name="-info_detail"><strong>info_detail</strong></a>(request, info_id)</dt><dd><tt>Show&nbsp;the&nbsp;content&nbsp;of&nbsp;the&nbsp;specific&nbsp;news&nbsp;or&nbsp;guide.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/info.html&nbsp;with:<br>
+info&nbsp;&nbsp;--&nbsp;current&nbsp;info&nbsp;object<br>
+news&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;news<br>
+guide&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;guide</tt></dd></dl>
+ <dl><dt><a name="-logout"><strong>logout</strong></a>(request)</dt><dd><tt>Backend&nbsp;for&nbsp;AJAX&nbsp;logout.<br>
+&nbsp;<br>
+GET&nbsp;or&nbsp;POST:<br>
+&nbsp;<br>
+Renders&nbsp;JSON:&nbsp;(besides&nbsp;'status'&nbsp;or&nbsp;'err')<br>
+&nbsp;<br>
+Always&nbsp;returns&nbsp;OK.</tt></dd></dl>
+ <dl><dt><a name="-rank"><strong>rank</strong></a>(request, ver<font color="#909090">=0</font>)</dt><dd><tt>Show&nbsp;the&nbsp;rank&nbsp;page.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/rank.html&nbsp;with:<br>
+ver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;version&nbsp;of&nbsp;the&nbsp;rank,&nbsp;0&nbsp;(default)&nbsp;for&nbsp;latest<br>
+rank_by_borrow&nbsp;&nbsp;--&nbsp;rank&nbsp;list&nbsp;by&nbsp;borrow&nbsp;count<br>
+rank_by_comment&nbsp;--&nbsp;rank&nbsp;list&nbsp;by&nbsp;comment&nbsp;count<br>
+rank_by_rate&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;rank&nbsp;list&nbsp;by&nbsp;rate<br>
+range5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;template&nbsp;helper</tt></dd></dl>
+ <dl><dt><a name="-search"><strong>search</strong></a>(request)</dt><dd><tt>Search&nbsp;for&nbsp;books.<br>
+&nbsp;<br>
+GET:<br>
+q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;query&nbsp;string<br>
+lucky&nbsp;--&nbsp;whether&nbsp;the&nbsp;lucky&nbsp;button&nbsp;is&nbsp;clicked<br>
+&nbsp;<br>
+Renders&nbsp;rt/searchResult.html&nbsp;with:<br>
+q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;the&nbsp;query&nbsp;string<br>
+result&nbsp;--&nbsp;search&nbsp;result,&nbsp;as&nbsp;a&nbsp;list&nbsp;of&nbsp;books</tt></dd></dl>
+ <dl><dt><a name="-user"><strong>user</strong></a>(request, *args, **kwargs)</dt><dd><tt>Show&nbsp;the&nbsp;user&nbsp;panel&nbsp;page.<br>
+&nbsp;<br>
+GET:<br>
+&nbsp;<br>
+Renders&nbsp;rt/user-panel.html&nbsp;with:<br>
+profile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;myuser&nbsp;object&nbsp;of&nbsp;the&nbsp;current&nbsp;user<br>
+book_borrowing&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;borrowing&nbsp;copies<br>
+book_queue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;queuing&nbsp;copies<br>
+book_borrowed&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;borrowed&nbsp;copies<br>
+comment&nbsp;&amp;&nbsp;range5&nbsp;--&nbsp;list&nbsp;of&nbsp;all&nbsp;comments&nbsp;posted,&nbsp;and&nbsp;template&nbsp;helper<br>
+&nbsp;<br>
+Redirect&nbsp;to&nbsp;rt:index&nbsp;if&nbsp;not&nbsp;logged&nbsp;in.<br>
+Redirect&nbsp;to&nbsp;rt:ad_book&nbsp;if&nbsp;book&nbsp;admin&nbsp;logged&nbsp;in.<br>
+Redirect&nbsp;to&nbsp;rt:ad_user&nbsp;if&nbsp;user&nbsp;admin&nbsp;logged&nbsp;in.<br>
+Redirect&nbsp;to&nbsp;admin:index&nbsp;if&nbsp;root.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>BOOK_FIELDS</strong> = ['duration', 'name_cn', 'author', 'press', 'pub_year', 'revision', 'ISBN', 'name_origin', 'translator', 'pub_year_origin', 'revision_origin']<br>
+<strong>COMMENT_PAGE_SIZE</strong> = 2<br>
+<strong>COMMENT_PAGE_SIZE_0</strong> = 0</td></tr></table>
+</body></html>
