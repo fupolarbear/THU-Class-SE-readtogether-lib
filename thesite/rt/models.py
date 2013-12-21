@@ -382,6 +382,11 @@ class MyUser(models.Model):
         return re
 
     @staticmethod
+    def get_all_admin():
+        ad = Group.objects.get(name='Admin')
+        return MyUser.objects.filter(user__groups=ad, admin_type__in=[1,2])
+
+    @staticmethod
     def search(s):
         """search for string in name, nameuser, email, userid"""
         re1 = MyUser.objects.filter(name__contains=s)
