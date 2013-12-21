@@ -347,8 +347,9 @@ def feedback(request):
     Renders JSON: (besides 'status' or 'err')
     """
     send_mail(
-        request.POST['title'],
-        request.POST['content'],
+        '[ReadTogether] Feedback: ' + request.POST['title'],
+        request.POST['content'] + \
+        '\n\n Sent from ' + request.META.get('HTTP_REFERER', 'unknown page.'),
         request.user.email,
         ['admin@rt.com'],  # Which admin to send to?
         fail_silently=False,
@@ -534,13 +535,15 @@ def book_fields_clean(post_data):
                     'duration', 'pub_year', 'revision', 'pub_year_origin',
                     'revision_origin',
                     ]:
-                clean_data[field] = int(post_data[field])
+                if post_data[field] != '':
+                    clean_data[field] = int(post_data[field])
             else:
                 clean_data[field] = post_data[field]
         except ValueError as err:
                 return render_JSON_Error('Field not int: {}.'.format(field))
-    clean_data['duartion'] = clean_data['duration']
-    del clean_data['duration']
+    if 'duration' in clean_data:
+        clean_data['duartion'] = clean_data['duration']
+        del clean_data['duration']
     return clean_data
 
 
