@@ -22,7 +22,7 @@ urlpatterns = patterns(
 
     url(r'^queue/(\d+)/$', views.queue, name='queue'),
     url(r'^reborrow/(\d+)/$', views.reborrow, name='reborrow'),
-#    url(r'^queue/(\d+)/del/$', views.queue_del, name='queue_del'),
+    url(r'^queue/(\d+)/del/$', views.queue_del, name='queue_del'),
 
     url(r'^borrow/(\d+)/u(\d+)/$', views.borrow, name='borrow'),
     url(r'^return/(\d+)/$', views.back, name='return'),

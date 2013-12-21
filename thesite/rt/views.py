@@ -349,6 +349,7 @@ def feedback(request):
         ['admin@rt.com'],  # Which admin to send to?
         fail_silently=False,
         )
+    return render_JSON_OK({})
 
 
 @POST_required()
@@ -356,7 +357,7 @@ def feedback(request):
 @catch_404_JSON
 @catch_PermException_JSON
 def queue(request, copy_id):
-    """Backend for AJAX book queueing.
+    """Backend for AJAX copy queueing.
 
     POST:
 
@@ -380,7 +381,7 @@ def queue(request, copy_id):
 @catch_404_JSON
 @catch_PermException_JSON
 def reborrow(request, copy_id):
-    """Backend for AJAX book reborrow.
+    """Backend for AJAX copy reborrow.
 
     POST:
 
@@ -397,6 +398,25 @@ def reborrow(request, copy_id):
         'username': request.user.username,
         'copy_id': copy_id,
         })
+
+
+@POST_required()
+@login_required_JSON()
+@catch_404_JSON
+@catch_Assertion_JSON
+def queue_del(request, copy_id):
+    """Backend for AJAX queue deletion.
+
+    POST:
+
+    Renders JSON: (besides 'status' or 'err')
+    message  -- (on 'Error') detailed message for 404
+
+    Queue deletion is done by myuser itself.
+    """
+    copy = get_object_or_404(BookCopy, pk=copy_id)
+    Borrowing.queue_del(request.user.myuser, copy)
+    return render_JSON_OK({})
 
 
 @POST_required()
