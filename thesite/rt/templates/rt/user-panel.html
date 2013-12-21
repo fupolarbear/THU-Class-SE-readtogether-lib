@@ -150,7 +150,7 @@
 						{% for copy in book_borrowing %}
 						<tr>
 						  <td>{{ copy.id }}</td>
-						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}" target="_blank">{{ copy.book.simple_name }}</a></td>
 						  <td>{{ copy.book.ISBN }}</td>
 						  <td>{{ copy.get_status.expire }}</td>
 						  <td>{{ copy.get_status.expire|timeuntil }}</td>
@@ -200,7 +200,7 @@
 						{% for copy in book_queue %}
 						<tr>
 						  <td>{{ copy.id }}</td>
-						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}" target="_blank">{{ copy.book.simple_name }}</a></td>
 						  <td>{{ copy.book.ISBN }}</td>
 						  <td>{% if copy.get_status.expire %}{{ copy.get_status.expire }}{% else %}正在整理状态{% endif %}</td>
 						  <td>{% if copy.get_status.expire|timeuntil %}{{ copy.get_status.expire|timeuntil }}{% else %}正在整理状态{% endif %}</td>
@@ -246,8 +246,8 @@
 						{% for copy in book_borrowed %}
 						<tr>
 						  <td>{{ copy.id }}</td>
-						  <td><a href="{% url 'rt:book' copy.book.id %}">{{ copy.book.simple_name }}</a></td>
-						  <td><a href="{% url 'rt:search' %}?q={{ copy.book.author }}">{{ copy.book.author }}</a></td>
+						  <td><a href="{% url 'rt:book' copy.book.id %}" target="_blank">{{ copy.book.simple_name }}</a></td>
+						  <td><a href="{% url 'rt:search' %}?q={{ copy.book.author }}" target="_blank">{{ copy.book.author }}</a></td>
 						  <td>{{ copy.book.simple_version }}</td>
 						  <td>{{ copy.book.ISBN }}</td>
 						  <td>{{ copy.book.rate|floatformat:1 }}</td>
@@ -280,9 +280,9 @@
 							</div>
 							<div class="col-xs-10 col-md-11">
 								<div>
-									<strong>{{ item.title }} (<a href="{% url 'rt:book' item.book.id %}">{{ item.book.simple_name }})</a></strong>
+									<strong>{{ item.title }} (<a href="{% url 'rt:book' item.book.id %}" target="_blank">{{ item.book.simple_name }})</a></strong>
 									<div class="mic-info">
-										By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }} {{ item.content|wordcount }} words.
+										By: <a href="{% url 'rt:search' %}?q={{ item.myuser.name }}" target="_blank">{{ item.myuser.name }}</a> on {{ item.datetime|date:"Y M d D P" }} {{ item.content|wordcount }} words.
 									</div>
 								</div>
 								{% if item.spoiler %}
