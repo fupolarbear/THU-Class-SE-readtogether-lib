@@ -361,6 +361,12 @@
                   $("[name='rRespondD']").show();
                   $("[name='rRespondD']").text(Obj.status+": 密码不匹配");
               }
+              else if(Obj.detail.password&&Obj.detail.password!="This field is required.")
+              {
+                  $("[name='rRespondS']").hide();
+                  $("[name='rRespondD']").show();
+                  $("[name='rRespondD']").text(Obj.status+": 密码过短 "+Obj.detail.password);
+              }
               else if(Obj.detail.email=="Enter a valid email address.")
               {
                   $("[name='rRespondS']").hide();
@@ -381,7 +387,7 @@
             {
                 $("[name='rRespondS']").hide();
                 $("[name='rRespondD']").show();
-                $("[name='rRespondD']").text(Obj.err);
+                $("[name='rRespondD']").text(Obj.status+": "+Obj.err);
             }
         });
       });

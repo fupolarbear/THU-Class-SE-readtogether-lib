@@ -390,6 +390,28 @@ class MyUser(models.Model):
             ).values('user__email').distinct()
         return [x['user__email'] for x in mu]
 
+    @transaction.atomic
+    def reset_password(self):
+        p = self.user.password[34:42]
+        self.user.set_password(p)
+        self.user.save()
+        send_mail(
+                u'[ReadTogether] Change Passward',
+                dedent(u'''\
+                Dear reader {},
+
+                Your passward is changed now.
+                Please change it after you login in.
+
+                Passward: {}
+
+                Sent from ReadTogether.
+                ''').format(self.name, p),
+                'ReadTogether NoReply <rt_noreply@int01.com>',
+                [self.user.email],
+                fail_silently=False,
+                )
+
     @staticmethod
     def search(s):
         """search for string in name, nameuser, email, userid"""
