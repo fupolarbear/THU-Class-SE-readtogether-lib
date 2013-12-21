@@ -316,7 +316,7 @@ def user_edit(request):
         if f.is_valid():
             myuser.update_user(request.POST['email'])
         else:
-            render_JSON_Error('Invalid email address.')
+            return render_JSON_Error('Invalid email address.')
     elif pass_all:
         fake_register['password'] = request.POST['pass1']
         fake_register['password2'] = request.POST['pass2']
@@ -329,13 +329,13 @@ def user_edit(request):
                 )
         else:
             if 'email' in f.errors:
-                render_JSON_Error('Invalid email address.')
+                return render_JSON_Error('Invalid email address.')
             elif 'password' in f.errors:
-                render_JSON_Error('New password is too short.')
+                return render_JSON_Error('New password is too short.')
             elif 'password2' in f.errors:
-                render_JSON_Error('New passwords do not match.')
+                return render_JSON_Error('New passwords do not match.')
             else:
-                render_JSON_Error('Syntax error.', {'detail': f.errors})
+                return render_JSON_Error('Syntax error.', {'detail': f.errors})
     else:
         return render_JSON_Error('Password fields incomplete.')
     return render_JSON_OK({})
