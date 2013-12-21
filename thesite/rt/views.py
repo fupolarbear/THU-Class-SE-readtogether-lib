@@ -372,7 +372,7 @@ def feedback(request):
         request.POST['content'] +
         '\n\n Sent from ' + request.META.get('HTTP_REFERER', 'unknown page.'),
         request.user.email,
-        ['admin@rt.com'],  # Which admin to send to?
+        MyUser.get_admin_email(),  # Which admin to send to?
         fail_silently=False,
         )
     return render_JSON_OK({})
