@@ -438,6 +438,7 @@
             var obj = $.parseJSON(data);
             if(obj.status == 'Error'){
               alert('噢哟！ 提交失败！' + 'Error: ' + obj.err + (obj.message?(' Message: ' + obj.message):""));
+              location.reload();
             } else if(obj.status == 'OK'){
               alert('问询单提交成功！有新消息我们将会及时与您联系！');
               location.reload();
