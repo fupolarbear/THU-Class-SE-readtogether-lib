@@ -49,5 +49,4 @@ urlpatterns = patterns(
 
     url(r'^rank/$', views.rank, name='rank'),
     url(r'^rank/(\d+)/$', views.rank, name='rank_old'),
-#    url(r'^test/$', views.test, name='test'),
     )
