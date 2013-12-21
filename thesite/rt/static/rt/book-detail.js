@@ -158,7 +158,7 @@ $(document).ready(
 								$('#ordingModal').modal('hide');
 								location.reload();
 							},
-							2000
+							1500
 						);
 					} else {
 						$('#ordingModal').find(".alert-danger").find("#detailed-alert").html('<br>error: ' + got.err + '<br>message: ' + got.message);
@@ -168,7 +168,7 @@ $(document).ready(
 								$('#ordingModal').find(".alert").hide();
 								$('#ordingModal').modal('hide');
 							},
-							4000
+							3000
 						);
 					}
 				}
