@@ -1,4 +1,4 @@
-﻿# ReadTogether Library Management System
+# ReadTogether Library Management System
 
 -------------
 
