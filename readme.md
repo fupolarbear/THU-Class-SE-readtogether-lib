@@ -1,5 +1,9 @@
 # ReadTogether Library Management System
 
+A Django, MySQL, jQuery-based full online library web server (A project in Software Engineering in Tsinghua Uni, Beijing. ) 
+
+Owned by _MarkAsRead SE Group_ (member list as follow) 
+
 -------------
 
 ## 0. 当前进度：第三阶段 - 这个阶段是干嘛来着`o(*￣3￣)o` ？
